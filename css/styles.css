@@ -1,0 +1,1024 @@
+/* ==========================================================================
+   JACOB DAVIS — OBSIDIAN & EMERALD DESIGN SYSTEM (styles.css)
+   State-of-the-art Dark UI + Living Resume & Print-Ready Stylesheet
+   ========================================================================== */
+
+:root {
+  /* HSL-Tailored Obsidian Surfaces */
+  --bg-canvas: hsl(156, 24%, 4%);
+  --bg-surface: hsl(156, 18%, 7%);
+  --bg-surface-hover: hsl(156, 17%, 9.5%);
+  --bg-elevated: hsl(156, 16%, 11%);
+  --bg-glass: hsla(156, 22%, 5.5%, 0.82);
+
+  /* Typography Hierarchy */
+  --text-primary: hsl(150, 20%, 96%);
+  --text-secondary: hsl(154, 12%, 72%);
+  --text-muted: hsl(154, 10%, 52%);
+
+  /* Curated Emerald Accents */
+  --emerald-bright: hsl(152, 82%, 54%);
+  --emerald-core: hsl(152, 76%, 44%);
+  --emerald-deep: hsl(153, 72%, 28%);
+  --emerald-subtle: hsla(152, 78%, 48%, 0.11);
+  --emerald-subtle-hover: hsla(152, 78%, 48%, 0.18);
+
+  /* Hairline Borders & Subtle Luminance */
+  --border-subtle: hsla(154, 20%, 85%, 0.08);
+  --border-strong: hsla(152, 60%, 60%, 0.24);
+
+  /* Typography Families */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing & Layout */
+  --container-max: 1140px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition-fast: 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-smooth: 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  /* Subtle ambient top-Down radial emerald atmospheric light */
+  background-image:
+    radial-gradient(ellipse 80% 45% at 50% -10%, hsla(152, 78%, 38%, 0.14), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 85% 20%, hsla(156, 65%, 28%, 0.07), transparent 65%);
+}
+
+/* Tactile Micro-Noise Surface Texture */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ==========================================================================
+   STICKY GLASSMORPHIC NAVIGATION BAR
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.25rem;
+  gap: 1rem;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 1.05rem;
+}
+
+.brand-monogram {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-sm);
+  background: var(--emerald-subtle);
+  border: 1px solid var(--border-strong);
+  color: var(--emerald-bright);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-domain {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Segmented View Switcher (Portfolio vs Living Resume) */
+.view-switcher {
+  display: inline-flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem;
+}
+
+.view-btn {
+  padding: 0.38rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.view-btn.active {
+  background: var(--emerald-subtle);
+  color: var(--emerald-bright);
+}
+
+.view-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.62rem 1.15rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--emerald-core);
+  color: hsl(156, 30%, 4%);
+}
+
+.btn-primary:hover {
+  background: var(--emerald-bright);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 0.44rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   SPOTLIGHT SURFACE CARDS (Cursor-Tracking Subtle Luminance)
+   ========================================================================== */
+.surface-card {
+  position: relative;
+  background: linear-gradient(180deg, hsla(156, 18%, 8.5%, 0.9) 0%, hsla(156, 18%, 6.5%, 0.95) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  overflow: hidden;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), background-color var(--transition-smooth);
+}
+
+.surface-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    520px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    hsla(152, 80%, 50%, 0.075),
+    transparent 45%
+  );
+  pointer-events: none;
+  z-index: 0;
+   transition: opacity var(--transition-smooth);
+}
+
+.surface-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.surface-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   HERO SECTION & BENTO METRICS
+   ========================================================================== */
+.hero-section {
+  padding: 5rem 0 3.5rem;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--emerald-bright);
+  margin-bottom: 1.1rem;
+  display: block;
+}
+
+.hero-title {
+  font-size: clamp(2.25rem, 4.6vw, 3.65rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+  max-width: 19ch;
+  margin-bottom: 1.35rem;
+}
+
+.hero-lead {
+  font-size: clamp(1.02rem, 1.35vw, 1.16rem);
+  color: var(--text-secondary);
+  max-width: 68ch;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 3.5rem;
+}
+
+.metrics-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1.35rem 1.4rem;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--emerald-bright);
+  margin-bottom: 0.3rem;
+}
+
+.metric-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.metric-detail {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   SECTION HEADERS
+   ========================================================================== */
+.section-block {
+  padding: 4rem 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 2.25rem;
+}
+
+.section-index {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--emerald-bright);
+}
+
+.section-title {
+  font-size: clamp(1.55rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  max-width: 65ch;
+}
+
+/* ==========================================================================
+   CORE COMPETENCY PILLARS (2x2 Bento)
+   ========================================================================== */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.pillar-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--emerald-bright);
+  margin-bottom: 0.65rem;
+  display: block;
+}
+
+.pillar-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.65rem;
+}
+
+.pillar-desc {
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  margin-bottom: 1.25rem;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  padding: 0.28rem 0.62rem;
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.tech-tag:hover,
+.tech-tag.highlighted {
+  background: var(--emerald-subtle);
+  border-color: var(--border-strong);
+  color: var(--emerald-bright);
+}
+
+/* ==========================================================================
+   REAL-WORLD PROBLEM SOLVING (Interactive Case Studies)
+   ========================================================================== */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.case-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.case-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.case-org {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--emerald-bright);
+  font-weight: 600;
+}
+
+.case-category {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.case-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 1rem;
+  line-height: 1.35;
+}
+
+.case-stage-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem;
+  margin-bottom: 0.95rem;
+}
+
+.stage-tab {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 4px;
+  color: var(--text-muted);
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.stage-tab.active {
+  background: var(--emerald-subtle);
+  color: var(--emerald-bright);
+  font-weight: 600;
+}
+
+.case-stage-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 6.8rem;
+  margin-bottom: 1.1rem;
+}
+
+.case-impact-banner {
+  background: var(--emerald-subtle);
+  border-left: 2px solid var(--emerald-bright);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  margin-bottom: 1.1rem;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   CAREER HISTORY & BACKGROUND NARRATIVE
+   ========================================================================== */
+.experience-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+}
+
+.exp-card {
+  padding: 1.65rem 1.85rem;
+}
+
+.exp-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.exp-role-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.exp-role {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+}
+
+.exp-company {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--emerald-bright);
+  font-weight: 600;
+}
+
+.exp-period {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.exp-summary {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.9rem;
+  font-style: italic;
+}
+
+.exp-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.15rem;
+}
+
+.exp-bullets li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.exp-bullets li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: var(--emerald-bright);
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   TECHNICAL STACK & RECOGNITION GRIDS
+   ========================================================================== */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.stack-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.stack-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.stack-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--emerald-bright);
+}
+
+.recognition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.rec-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--emerald-bright);
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.rec-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.rec-org {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.65rem;
+}
+
+.rec-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Philosophy & Upcoming Micro-Tools Split */
+.narrative-split {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1.25rem;
+}
+
+.narrative-paragraphs p + p {
+  margin-top: 1rem;
+}
+
+.narrative-paragraphs p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.lab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.lab-item {
+  padding: 0.95rem 1.1rem;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.lab-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.lab-item-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.lab-item-status {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--emerald-bright);
+  background: var(--emerald-subtle);
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+}
+
+.lab-item-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   CONTACT & FOOTER
+   ========================================================================== */
+.contact-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.25rem;
+}
+
+.contact-email-display {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  color: var(--emerald-bright);
+  margin-top: 0.4rem;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.site-footer {
+  padding: 2.5rem 0 3.5rem;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   LIVING RESUME VIEW ([data-view="resume"])
+   ========================================================================== */
+[data-view="portfolio"] #resume-view-container {
+  display: none;
+}
+
+[data-view="resume"] #portfolio-view-container {
+  display: none;
+}
+
+.resume-view-wrapper {
+  padding: 2.5rem 0 4rem;
+}
+
+.resume-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+.resume-toolbar-info {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+
+.resume-toolbar-info strong {
+  color: var(--emerald-bright);
+  font-family: var(--font-mono);
+}
+
+.resume-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 3rem 3.25rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.resume-sheet-header {
+  border-bottom: 2px solid var(--emerald-core);
+  padding-bottom: 1.35rem;
+  margin-bottom: 1.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.resume-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.resume-role-title {
+  color: var(--emerald-bright);
+  font-weight: 600;
+  font-size: 1.02rem;
+  margin-top: 0.3rem;
+}
+
+.resume-contact-list {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: right;
+  line-height: 1.6;
+}
+
+.resume-section {
+  margin-bottom: 1.65rem;
+}
+
+.resume-section-heading {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--emerald-bright);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+
+.resume-summary-text {
+  font-size: 0.93rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.resume-skills-table {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  row-gap: 0.45rem;
+  column-gap: 1rem;
+  font-size: 0.88rem;
+}
+
+.resume-skill-cat {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.resume-skill-items {
+  color: var(--text-secondary);
+}
+
+.resume-exp-item {
+  margin-bottom: 1.25rem;
+}
+
+.resume-exp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.resume-exp-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--text-primary);
+}
+
+.resume-exp-org {
+  color: var(--emerald-bright);
+  font-weight: 600;
+}
+
+.resume-exp-dates {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.resume-exp-bullets {
+  list-style: disc;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 960px) {
+  .metrics-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cases-grid {
+    grid-template-columns: 1fr;
+  }
+  .narrative-split {
+    grid-template-columns: 1fr;
+  }
+  .nav-links {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .pillars-grid,
+  .stack-grid,
+  .recognition-grid,
+  .metrics-bento {
+    grid-template-columns: 1fr;
+  }
+  .resume-sheet {
+    padding: 1.75rem 1.25rem;
+  }
+  .resume-sheet-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .resume-contact-list {
+    text-align: left;
+  }
+  .resume-skills-table {
+    grid-template-columns: 1fr;
+  }
+  .brand-domain {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT / ATS PDF STYLESHEET (Clean High-Contrast Paper Output)
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 10pt;
+    line-height: 1.42;
+  }
+  body::after,
+  .site-header,
+  .site-footer,
+  #portfolio-view-container,
+  .resume-toolbar {
+    display: none !important;
+  }
+  #resume-view-container {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .resume-sheet {
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .resume-name,
+  .resume-exp-title,
+  .resume-skill-cat {
+    color: #064e3b !important;
+  }
+  .resume-role-title,
+  .resume-section-heading,
+  .resume-exp-org {
+    color: #047857 !important;
+  }
+  .resume-summary-text,
+  .resume-skill-items,
+  .resume-exp-bullets,
+  .resume-contact-list,
+  .resume-exp-dates {
+    color: #1f2937 !important;
+  }
+}
