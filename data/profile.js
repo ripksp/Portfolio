@@ -11,11 +11,10 @@ window.PORTFOLIO_DATA = {
     title: "Technical Support Specialist & Systems IT Professional",
     tagline: "Full-Stack SMB Web Lifecycle, DNS/SSL Operations, POS & API Diagnostics, and AI-Enabled Support Workflows",
     location: "Omaha, NE",
-    availability: "Flexible availability · Remote & On-Site",
+    availability: "Flexible availability, any hours · Remote & On-Site",
     domain: "jacobdavis.tech",
     websiteUrl: "https://jacobdavis.tech",
     email: "jacobdavissupport@gmail.com",
-    phone: "(402) 637-9234",
     githubUrl: "https://github.com/ripksp",
     githubHandle: "github.com/ripksp",
     linkedinLabel: "LinkedIn · Jacob Davis",
@@ -25,7 +24,7 @@ window.PORTFOLIO_DATA = {
   },
 
   hero: {
-    eyebrow: "JACOB DAVIS · OMAHA, NE · SYSTEMS & TECHNICAL SUPPORT",
+    eyebrow: "JACOB DAVIS · JACOBDAVIS.TECH · JACOBDAVISSUPPORT@GMAIL.COM",
     headline: "Bridging deep technical diagnostics with human-centered support.",
     lead: "Technical Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash managing end-to-end white-label AI websites, DNS & SSL lifecycles, branded mobile apps, and SQL operational analytics for hundreds of SMB storefronts.",
     metrics: [

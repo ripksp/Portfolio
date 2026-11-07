@@ -139,7 +139,7 @@ def build_resume_pdf(output_path: str) -> None:
     )
     story.append(
         Paragraph(
-            "Omaha, NE &nbsp;|&nbsp; jacobdavis.tech &nbsp;|&nbsp; jacobdavissupport@gmail.com &nbsp;|&nbsp; (402) 637-9234 &nbsp;|&nbsp; Flexible Availability",
+            "Omaha, NE &nbsp;|&nbsp; <a href='https://jacobdavis.tech' color='#059669'>jacobdavis.tech</a> &nbsp;|&nbsp; <a href='mailto:jacobdavissupport@gmail.com' color='#059669'>jacobdavissupport@gmail.com</a> &nbsp;|&nbsp; Flexible availability, any hours",
             contact_style,
         )
     )

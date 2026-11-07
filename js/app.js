@@ -282,8 +282,8 @@
         </div>
         <div class="resume-contact-list">
           <div>${escapeHtml(m.location)} · ${escapeHtml(m.availability)}</div>
-          <div><a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a> · ${escapeHtml(m.phone)}</div>
-          <div><a href="${escapeHtml(m.websiteUrl)}" target="_blank" rel="noopener">${escapeHtml(m.domain)}</a> · <a href="${escapeHtml(m.githubUrl)}" target="_blank" rel="noopener">${escapeHtml(m.githubHandle)}</a></div>
+          <div><a href="${escapeHtml(m.websiteUrl)}" target="_blank" rel="noopener">${escapeHtml(m.domain)}</a> · <a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a></div>
+          <div><a href="${escapeHtml(m.githubUrl)}" target="_blank" rel="noopener">${escapeHtml(m.githubHandle)}</a></div>
         </div>
       </header>
 
