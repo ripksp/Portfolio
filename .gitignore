@@ -1,0 +1,14 @@
+# Local environment and secrets
+.env
+.env.*
+.env.local
+api/config.php
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS Files
+.DS_Store
+Thumbs.db

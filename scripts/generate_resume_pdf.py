@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Generates a modern, ATS-friendly, emerald-accented PDF Resume
-(`assets/Jacob_Davis_Resume.pdf`) matching the Obsidian & Emerald portfolio site.
+Generates a modern, ATS-friendly, emerald-accented 1-page PDF Resume
+(`assets/Jacob_Davis_Resume.pdf`) matching the Obsidian & Emerald portfolio site
+and all single-source Living Resume constraints.
+
 Run with:
     uv run --with reportlab python3 scripts/generate_resume_pdf.py
 """
@@ -33,7 +35,7 @@ def build_resume_pdf(output_path: str) -> None:
         rightMargin=0.48 * inch,
         topMargin=0.34 * inch,
         bottomMargin=0.34 * inch,
-        title="Jacob Davis - Technical Support Specialist Resume",
+        title="Jacob Davis - Online Ordering Support Specialist Resume",
         author="Jacob Davis",
     )
 
@@ -72,7 +74,7 @@ def build_resume_pdf(output_path: str) -> None:
         "ResumeContact",
         parent=base_styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.6,
+        fontSize=8.5,
         leading=11,
         textColor=slate_700,
         alignment=1,
@@ -103,7 +105,7 @@ def build_resume_pdf(output_path: str) -> None:
         "RoleLeft",
         parent=base_styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=9.1,
+        fontSize=9.05,
         leading=11.1,
         textColor=slate_900,
     )
@@ -133,13 +135,13 @@ def build_resume_pdf(output_path: str) -> None:
     story.append(Paragraph("JACOB DAVIS", name_style))
     story.append(
         Paragraph(
-            "Technical Support Specialist &amp; Systems IT Professional",
+            "Online Ordering Support Specialist &amp; Systems IT Professional",
             subtitle_style,
         )
     )
     story.append(
         Paragraph(
-            "Omaha, NE &nbsp;|&nbsp; <a href='https://jacobdavis.tech' color='#059669'>jacobdavis.tech</a> &nbsp;|&nbsp; <a href='mailto:jacobdavissupport@gmail.com' color='#059669'>jacobdavissupport@gmail.com</a> &nbsp;|&nbsp; Flexible availability, any hours",
+            "Omaha, NE (Remote / Hybrid) &nbsp;|&nbsp; <a href='https://jacobdavis.tech' color='#059669'>jacobdavis.tech</a> &nbsp;|&nbsp; <a href='mailto:jacobdavissupport@gmail.com' color='#059669'>jacobdavissupport@gmail.com</a> &nbsp;|&nbsp; <a href='https://www.linkedin.com/in/jacobdavistech' color='#059669'>linkedin.com/in/jacobdavistech</a>",
             contact_style,
         )
     )
@@ -169,11 +171,10 @@ def build_resume_pdf(output_path: str) -> None:
     add_section_header("Professional Summary")
     story.append(
         Paragraph(
-            "Technical Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure platforms. "
-            "Currently at DoorDash supporting SMB restaurant clients with a full-stack online ordering solution—spanning white-label AI websites, "
-            "branded iOS/Android mobile apps, end-to-end DNS &amp; SSL lifecycle management, menu operations, loyalty programs, and Mode Analytics SQL reporting. "
-            "Repeatedly recognized as a top performer in VOC, NPS, and CSAT across every role held, bridging deep root-cause diagnostics with clear "
-            "customer communication and cross-functional engineering advocacy.",
+            "Online Ordering Support Specialist with 8+ years of progressive experience across SaaS, POS, fintech, and broadband infrastructure platforms. "
+            "Currently at DoorDash supporting SMB restaurant partners—querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and "
+            "map multi-unit merchant locations, coordinating with product engineering squads via Slack and Intercom side-conversations, championing Scribe "
+            "technical SOP runbooks, and managing end-to-end DNS/SSL lifecycles and white-label iOS/Android storefronts.",
             body_style,
         )
     )
@@ -183,35 +184,35 @@ def build_resume_pdf(output_path: str) -> None:
     add_section_header("Core Technical Competencies")
     skills_data = [
         [
-            Paragraph("<b>AI, LLMs &amp; Knowledge Ops:</b>", bullet_style),
+            Paragraph("<b>Data, APIs &amp; Menu Ingestion:</b>", bullet_style),
             Paragraph(
-                "Prompt Engineering, LLM Performance Monitoring, Human-in-the-Loop (HITL) Workflows, Knowledge Base Curation, Scribe SOPs",
+                "Snowflake (Mode Analytics SQL), Raw Menu JSON Payload Inspection, Postman REST API Debugging, Webhook Validation, Multi-Unit Mapping, Python, HTML/CSS",
                 bullet_style,
             ),
         ],
         [
-            Paragraph("<b>Web, DNS &amp; Data / APIs:</b>", bullet_style),
+            Paragraph("<b>Web, DNS &amp; Storefront Ops:</b>", bullet_style),
             Paragraph(
-                "DNS Lifecycle (A, CNAME, TXT, MX), SSL/TLS Provisioning, Mode Analytics (SQL), Postman REST APIs, Webhook Debugging, Python, HTML/CSS",
+                "DNS Provisioning (A, CNAME, TXT, MX), SSL/TLS Lifecycles, White-Label iOS &amp; Android Storefronts, Scribe Technical SOP Runbooks, Knowledge Base Curation",
                 bullet_style,
             ),
         ],
         [
             Paragraph("<b>Networks, POS &amp; Hardware:</b>", bullet_style),
             Paragraph(
-                "TCP/IP, DHCP, Subnets &amp; VLANs, Android POS &amp; Kiosks, Thermal Kitchen Printers (KDS), EMV Card Readers, Log Analysis, RDP/TeamViewer/AnyDesk",
+                "TCP/IP, DHCP, Subnets &amp; VLANs, DOCSIS Provisioning &amp; SNR Diagnostics, Android POS Terminals, Epson Thermal Printers, Remote CLI OS Recovery",
                 bullet_style,
             ),
         ],
         [
-            Paragraph("<b>Enterprise, ITSM &amp; OS:</b>", bullet_style),
+            Paragraph("<b>Collaboration &amp; Platforms:</b>", bullet_style),
             Paragraph(
-                "Salesforce, Zendesk, Atlassian Jira &amp; Confluence, Okta IAM, Google Workspace, Microsoft 365, Windows, macOS, Android, iOS, Linux",
+                "Slack &amp; Intercom Side-Conversations, Product Engineering Escalations, Salesforce, Zendesk, Prompt Engineering, Windows, macOS, Android, iOS, Linux",
                 bullet_style,
             ),
         ],
     ]
-    skills_table = Table(skills_data, colWidths=[1.65 * inch, 5.85 * inch])
+    skills_table = Table(skills_data, colWidths=[1.75 * inch, 5.75 * inch])
     skills_table.setStyle(
         TableStyle(
             [
@@ -231,48 +232,49 @@ def build_resume_pdf(output_path: str) -> None:
 
     experiences = [
         (
-            "Technical Support Specialist – Storefront (SMB)",
+            "Online Ordering Support Specialist",
             "DoorDash · Remote",
-            "Oct 2025 – Present",
+            "Jan 2026 – Present",
             [
-                "Manage the end-to-end website and domain lifecycle for hundreds of SMB restaurant storefronts—handling custom domain provisioning, DNS configuration (A, CNAME, TXT, MX), SSL/TLS certificate troubleshooting, and hosting operations.",
-                "Support full-stack online ordering packages spanning custom white-label AI websites and branded iOS/Android mobile apps across Apple App Store and Google Play.",
-                "Author SQL queries in Mode Analytics to analyze order throughput trends, detect platform error spikes, and drive data-backed engineering escalations.",
-                "Design and troubleshoot automated SMS/email marketing campaigns and loyalty rewards programs to boost merchant retention.",
+                "Query Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit merchant storefront locations accurately.",
+                "Coordinate directly with product engineering squads via Slack threads and Intercom side-conversations to isolate bugs, verify edge cases, and expedite fixes.",
+                "Championed Scribe and authored step-by-step technical SOP runbooks for menu workflows, payload inspection, and support onboarding.",
+                "Manage end-to-end domain lifecycles (DNS provisioning: A, CNAME, TXT, MX, and SSL/TLS certificates) and troubleshoot white-label iOS and Android storefronts.",
             ],
         ),
         (
             "Technical Support Specialist",
             "365 Retail Markets · Remote",
-            "Jul 2023 – Jan 2024",
+            "2024 – 2025",
             [
-                "Provided enterprise support for unattended micro-market vending POS kiosks—resolving payment processing, card reader firmware, cloud reporting, and OS-level escalations.",
-                "Leveraged Postman API to test payment gateway endpoints, validate JSON webhook payloads, and isolate transaction timeout failures via remote desktop diagnostics.",
+                "Performed Postman API payment gateway debugging to validate transaction payloads, inspect response codes, and isolate webhook timeout failures.",
+                "Executed remote CLI kiosk OS recovery and hardware diagnostics across unattended POS terminals, card readers, and local network interfaces.",
             ],
         ),
         (
-            "Tier 2 Customer Care Expert (Kitchen & Network Escalations)",
-            "Toast · Omaha, NE",
-            "Dec 2019 – Nov 2022",
+            "Tier II Technical Support Engineer / POS Specialist",
+            "Toast, Inc. · Omaha, NE",
+            "2021 – 2024",
             [
-                "Owned Tier 2 technical escalations via Salesforce queues, live phone transfers, and Slack—resolving mission-critical Android POS, thermal kitchen printer, TCP/IP subnet, VLAN, and DHCP issues.",
-                "Coached Tier 1 agents in real time and partnered with engineering, product, and onboarding teams by filing reproducible API and SaaS bug escalations in Jira.",
+                "Handled 3 years of escalated Tier II POS incidents for enterprise and multi-unit restaurant groups experiencing live service disruptions.",
+                "Diagnosed complex networking and hardware issues across Android POS terminals, Epson thermal kitchen printers, DHCP scopes, subnetting, and VLANs.",
+                "Coached frontline specialists on network isolation workflows and partnered with engineering teams on reproducible bug escalations.",
             ],
         ),
         (
-            "Global Financial Customer Solutions Teammate",
+            "Customer Operations Specialist",
             "PayPal · Omaha, NE",
-            "Dec 2017 – Mar 2019",
+            "2019 – 2021",
             [
-                "Investigated complex account inquiries, transaction histories, identity verification workflows, and fraud claims in strict compliance with banking and PII regulations.",
+                "Managed escalated payment disputes, chargeback investigations, and fraud/risk triage while maintaining strict adherence to banking and PII standards.",
             ],
         ),
         (
-            "Field Service Technician & Tier II Data Support",
-            "Bear Communications (2017) & Cox Communications (2015 – 2016) · Omaha, NE",
-            "2015 – 2017",
+            "Technical Support Specialist",
+            "Cox Communications · Omaha, NE",
+            "2017 – 2019",
             [
-                "Resolved Tier 2 residential/commercial broadband connectivity escalations, diagnosed regional node outages, installed field infrastructure, and supported frontline agents on internal diagnostic tools.",
+                "Executed DOCSIS modem provisioning, signal-to-noise ratio (SNR) diagnostics, and residential/commercial gateway routing troubleshooting.",
             ],
         ),
     ]
@@ -320,16 +322,15 @@ def build_resume_pdf(output_path: str) -> None:
                 start="bulletchar",
                 leftIndent=8,
                 spaceBefore=0,
-                spaceAfter=3,
+                spaceAfter=2.5,
             )
         )
 
-    # AWARDS, KPI TRACK RECORD & COMMUNITY MENTORSHIP
-    add_section_header("Awards, KPI Distinctions & Community Leadership")
+    # COMMUNITY & AWARDS
+    add_section_header("Community Leadership & Recognition")
     awards_bullets = [
-        "<b>Top Performer in Customer Satisfaction KPIs (VOC, NPS &amp; CSAT):</b> Consistently ranked at the top with multiple performance awards across every support role held.",
-        "<b>\"Lead with Humility Toasty\" Peer Recognition Award (Toast, 2022) &amp; 2x Spot Awards (PayPal, 2018 &amp; 2019):</b> Honored for Tier 1 agent mentorship, cross-team collaboration, and calm execution during high-severity outages.",
-        "<b>Community Technology Mentor — Do Space Omaha (5+ Years):</b> Hosted Tech Help Tuesdays, mentoring citizens of all ages through hardware diagnostics, networking, malware removal, and coding basics.",
+        "<b>Do Space Volunteer Technology Mentor (2018 – 2024, 6 Years):</b> Hosted Tech Help Tuesdays in Omaha, mentoring citizens on hardware diagnostics, networking, and coding basics.",
+        "<b>Awards &amp; KPI Leadership:</b> Top Performer in Customer Satisfaction KPIs (VOC, NPS &amp; CSAT); \"Lead with Humility Toasty\" Award (Toast, 2022); 2x Spot Awards for Collaboration &amp; Inclusion (PayPal).",
     ]
     story.append(
         ListFlowable(
@@ -346,7 +347,7 @@ def build_resume_pdf(output_path: str) -> None:
             bulletType="bullet",
             leftIndent=8,
             spaceBefore=0,
-            spaceAfter=3,
+            spaceAfter=2.5,
         )
     )
 
@@ -354,8 +355,7 @@ def build_resume_pdf(output_path: str) -> None:
     add_section_header("Education")
     story.append(
         Paragraph(
-            "<b>University of Nebraska at Omaha</b> — Political Science &amp; General Studies Coursework (2010 – 2011) &nbsp;&nbsp;|&nbsp;&nbsp; "
-            "<b>Omaha North High Magnet School</b> — High School Diploma · 3.5 GPA · Top 25% of Class",
+            "<b>University of Nebraska at Omaha &amp; Metropolitan Community College</b> — Information Technology &amp; Cybersecurity Coursework",
             bullet_style,
         )
     )

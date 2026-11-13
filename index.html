@@ -38,6 +38,7 @@
       "addressCountry": "US"
     },
     "sameAs": [
+      "https://www.linkedin.com/in/jacobdavistech",
       "https://github.com/ripksp"
     ]
   }
@@ -48,18 +49,17 @@
   <!-- Sticky Glassmorphic Navigation -->
   <header class="site-header" id="top-nav">
     <div class="container nav-inner">
-      <a href="#top" class="brand-link" id="brand-home-link">
+      <a href="/" class="brand-link" id="brand-home-link">
         <span class="brand-monogram">JD</span>
         <span>Jacob Davis</span>
         <span class="brand-domain">// jacobdavis.tech</span>
       </a>
 
       <nav class="nav-links" aria-label="Primary Navigation">
-        <a href="#pillars" class="nav-link" id="nav-link-pillars">Competencies</a>
-        <a href="#case-studies" class="nav-link" id="nav-link-cases">Case Studies</a>
         <a href="#experience" class="nav-link" id="nav-link-experience">Experience</a>
-        <a href="#tech-stack" class="nav-link" id="nav-link-stack">Tech Stack</a>
-        <a href="#recognition" class="nav-link" id="nav-link-recognition">Recognition</a>
+        <a href="/projects" class="nav-link" id="nav-link-projects">Projects</a>
+        <a href="/tools" class="nav-link" id="nav-link-tools">DNS Tool</a>
+        <a href="/stellar" class="nav-link" id="nav-link-stellar">Stellar APK</a>
         <a href="#contact" class="nav-link" id="nav-link-contact">Contact</a>
       </nav>
 
@@ -72,7 +72,7 @@
             Living Resume
           </button>
         </div>
-        <a href="assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="nav-download-pdf-btn">
+        <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="nav-download-pdf-btn">
           Download PDF
         </a>
       </div>
@@ -94,15 +94,18 @@
           Bridging deep technical diagnostics with human-centered support.
         </h1>
         <p class="hero-lead" id="hero-lead">
-          Technical Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash managing end-to-end white-label AI websites, DNS &amp; SSL lifecycles, branded mobile apps, and SQL operational analytics for hundreds of SMB storefronts.
+          Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack &amp; Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.
         </p>
 
         <div class="hero-cta-row">
-          <button type="button" class="btn btn-primary" id="hero-open-resume-btn">
+          <a href="/resume" class="btn btn-primary" id="hero-open-resume-btn">
             Open Living Resume
-          </button>
-          <a href="assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-secondary" id="hero-download-pdf-btn">
+          </a>
+          <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-secondary" id="hero-download-pdf-btn">
             Download Resume (PDF)
+          </a>
+          <a href="/tools" class="btn btn-secondary" id="hero-dns-tool-btn">
+            Live DNS &amp; SSL Tool
           </a>
           <button type="button" class="btn btn-secondary" data-copy-email id="hero-copy-email-btn">
             Copy jacobdavissupport@gmail.com
@@ -246,8 +249,8 @@
             <a href="mailto:jacobdavissupport@gmail.com" class="btn btn-secondary" id="footer-mailto-btn">
               Open Email Client
             </a>
-            <a href="https://jacobdavis.tech" target="_blank" rel="noopener" class="btn btn-secondary" id="footer-domain-btn">
-              jacobdavis.tech
+            <a href="https://www.linkedin.com/in/jacobdavistech" target="_blank" rel="noopener" class="btn btn-secondary" id="footer-linkedin-btn">
+              LinkedIn
             </a>
             <a href="https://github.com/ripksp" target="_blank" rel="noopener" class="btn btn-secondary" id="footer-github-btn">
               GitHub
@@ -272,7 +275,7 @@
           <button type="button" class="btn btn-secondary btn-sm" id="resume-print-btn">
             Print / Save as ATS PDF
           </button>
-          <a href="assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="resume-direct-download-btn">
+          <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="resume-direct-download-btn">
             Download Pre-Built PDF
           </a>
         </div>
@@ -288,16 +291,17 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
-        &copy; 2026 Jacob Davis · <a href="https://jacobdavis.tech">jacobdavis.tech</a> · <a href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a> · Omaha, Nebraska
+        &copy; 2026 Jacob Davis · <a href="https://jacobdavis.tech">jacobdavis.tech</a> · <a href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a> · Omaha, NE (Remote / Hybrid)
       </div>
       <div>
-        Single-Source Living Resume (<code>data/profile.js</code>)
+        <a href="/projects">Projects</a> · <a href="/tools">DNS Tool</a> · <a href="/stellar">Stellar APK</a> · <a href="/resume">Resume</a>
       </div>
     </div>
   </footer>
 
   <!-- Data & Application Scripts -->
-  <script src="data/profile.js"></script>
-  <script src="js/app.js"></script>
+  <script src="/data/profile.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/assistant.js"></script>
 </body>
 </html>

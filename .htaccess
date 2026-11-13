@@ -1,0 +1,62 @@
+# Set default document to index.html
+DirectoryIndex index.html index.php
+
+# Disable directory browsing
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Route /tools and /tools/ to tools/index.html cleanly
+RewriteRule ^tools/?$ tools/index.html [L]
+
+# Route /projects and /projects/ to projects/index.html cleanly
+RewriteRule ^projects/?$ projects/index.html [L]
+
+# Route /resume and /resume/ to resume/index.html cleanly
+RewriteRule ^resume/?$ resume/index.html [L]
+
+# Route /stellar and /stellar/ to stellar/index.html cleanly
+RewriteRule ^stellar/?$ stellar/index.html [L]
+
+# Route /traveller and /traveller/ to traveller/index.html cleanly
+RewriteRule ^traveller/?$ traveller/index.html [L]
+</IfModule>
+
+# Deny direct browser access to sensitive config files, env, scripts, git
+<FilesMatch "(^\.env|\.py$|\.json$|\.lock$|config\.php|\.git)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# Cache-Control: prevent browsers from serving stale cached HTML
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+
+    # Cache static assets with revalidation
+    <FilesMatch "\.(css|js|png|jpg|jpeg|svg|gif|ico|woff|woff2)$">
+        Header set Cache-Control "public, max-age=86400, stale-while-revalidate=604800"
+    </FilesMatch>
+</IfModule>

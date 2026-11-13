@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live DNS &amp; SSL Diagnostics Suite | Jacob Davis — jacobdavis.tech</title>
+  <meta name="description" content="Real-time authoritative DNS (A, AAAA, CNAME, NS, MX, TXT) and port 443 SSL certificate inspector powered by api/dns-lookup.php." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a href="/" class="brand-link">
+        <span class="brand-monogram">JD</span>
+        <span>Jacob Davis</span>
+        <span class="brand-domain">// jacobdavis.tech/tools</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="/" class="nav-link">Portfolio</a>
+        <a href="/projects" class="nav-link">Projects</a>
+        <a href="/tools" class="nav-link" style="color: var(--emerald-bright);">DNS Tool</a>
+        <a href="/stellar" class="nav-link">Stellar APK</a>
+        <a href="/resume" class="nav-link">Resume</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/" class="btn btn-secondary btn-sm">Portfolio</a>
+        <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm">Resume PDF</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="subpage-hero">
+      <div class="container">
+        <span class="hero-eyebrow">LIVE DIAGNOSTICS · AUTHORITATIVE DNS &amp; PORT 443 SSL INSPECTOR</span>
+        <h1 class="hero-title">Live DNS &amp; Domain Diagnostics Suite</h1>
+        <p class="hero-lead">
+          Query real-time authoritative DNS records (<code>A</code>, <code>AAAA</code>, <code>CNAME</code>, <code>NS</code>, <code>MX</code>, <code>TXT</code>) and inspect live port 443 TLS/SSL certificate chains via <code>/api/dns-lookup.php</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-block" style="padding-top: 2rem;">
+      <div class="container">
+        <article class="surface-card">
+          <form class="dns-form-row" id="dns-lookup-form">
+            <input type="text" class="text-input" id="dns-domain-input" value="jacobdavis.tech" placeholder="Enter domain (e.g. jacobdavis.tech)" required />
+            <button type="submit" class="btn btn-primary" id="dns-run-btn">Run Live Audit</button>
+            <button type="button" class="btn btn-secondary" data-quick-domain="doordash.com">doordash.com</button>
+            <button type="button" class="btn btn-secondary" data-quick-domain="github.com">github.com</button>
+          </form>
+
+          <div id="dns-status-bar" style="margin-bottom: 1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
+            <span class="status-pill" id="dns-status-pill">Ready to query /api/dns-lookup.php</span>
+            <span style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-muted);" id="dns-timing"></span>
+          </div>
+
+          <div class="subpage-grid-2">
+            <div>
+              <h2 style="font-size:1.05rem; margin-bottom:0.75rem;">Authoritative DNS Records</h2>
+              <table class="dns-record-table" id="dns-records-table">
+                <tbody>
+                  <tr><th>Status</th><td>Enter a domain above and click <strong>Run Live Audit</strong>.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div>
+              <h2 style="font-size:1.05rem; margin-bottom:0.75rem;">SSL / TLS Handshake (Port 443)</h2>
+              <table class="dns-record-table" id="ssl-cert-table">
+                <tbody>
+                  <tr><th>Certificate</th><td>Awaiting live TLS handshake check...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>&copy; 2026 Jacob Davis · <a href="https://jacobdavis.tech">jacobdavis.tech</a> · <a href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a></div>
+      <div><a href="/">Portfolio</a> · <a href="/projects">Projects</a> · <a href="/stellar">Stellar APK</a> · <a href="/resume">Resume</a></div>
+    </div>
+  </footer>
+
+  <script src="/data/profile.js"></script>
+  <script src="/js/assistant.js"></script>
+  <script>
+    window.runLiveDnsLookup = async function (domainInput) {
+      const domain = String(domainInput || "").trim();
+      if (!domain) return;
+
+      const input = document.getElementById("dns-domain-input");
+      const pill = document.getElementById("dns-status-pill");
+      const timing = document.getElementById("dns-timing");
+      const dnsTable = document.getElementById("dns-records-table").querySelector("tbody");
+      const sslTable = document.getElementById("ssl-cert-table").querySelector("tbody");
+
+      input.value = domain;
+      pill.className = "status-pill";
+      pill.textContent = `Querying ${domain}...`;
+      timing.textContent = "";
+
+      try {
+        const res = await fetch(`/api/dns-lookup.php?domain=${encodeURIComponent(domain)}`);
+        const data = await res.json();
+
+        if (!res.ok || data.status !== "success") {
+          pill.className = "status-pill warn";
+          pill.textContent = data.message || "DNS query returned an error";
+          return;
+        }
+
+        pill.textContent = `✓ ${data.domain} Resolved`;
+        timing.textContent = `${data.query_time_ms} ms · ${data.server_resolver || "Live Resolver"}`;
+
+        const d = data.dns || {};
+        const formatRecs = (arr, fn) => (arr && arr.length ? arr.map(fn).join("<br>") : "<span style='color:var(--text-muted)'>None</span>");
+
+        dnsTable.innerHTML = `
+          <tr><th>A</th><td>${formatRecs(d.a, (r) => `${r.ip} (TTL ${r.ttl})`)}</td></tr>
+          <tr><th>AAAA</th><td>${formatRecs(d.aaaa, (r) => `${r.ipv6} (TTL ${r.ttl})`)}</td></tr>
+          <tr><th>CNAME</th><td>${formatRecs(d.cname, (r) => `${r.target} (TTL ${r.ttl})`)}</td></tr>
+          <tr><th>NS</th><td>${formatRecs(d.ns, (r) => r.target)}</td></tr>
+          <tr><th>MX</th><td>${formatRecs(d.mx, (r) => `[${r.pri}] ${r.target}`)}</td></tr>
+          <tr><th>TXT</th><td>${formatRecs(d.txt, (r) => r.txt)}</td></tr>
+        `;
+
+        const s = data.ssl || {};
+        sslTable.innerHTML = `
+          <tr><th>Status</th><td><span class="status-pill ${s.status === "ACTIVE" ? "" : "warn"}">${s.status || "NONE"}</span></td></tr>
+          <tr><th>Issuer</th><td>${s.issuer || "N/A"}</td></tr>
+          <tr><th>Subject</th><td>${s.subject || "N/A"}</td></tr>
+          <tr><th>Valid</th><td>${s.valid_from || "—"} → ${s.valid_to || "—"} (${s.days_remaining ?? "?"} days left)</td></tr>
+          <tr><th>SANs</th><td>${(s.san && s.san.length) ? s.san.join(", ") : "None"}</td></tr>
+        `;
+      } catch (_err) {
+        pill.className = "status-pill warn";
+        pill.textContent = "PHP backend unavailable in static preview (live on Bluehost)";
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("dns-lookup-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        window.runLiveDnsLookup(document.getElementById("dns-domain-input").value);
+      });
+
+      document.querySelectorAll("[data-quick-domain]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          window.runLiveDnsLookup(btn.getAttribute("data-quick-domain"));
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("domain")) {
+        window.runLiveDnsLookup(params.get("domain"));
+      }
+    });
+  </script>
+</body>
+</html>
