@@ -20,7 +20,7 @@
     fab.id = "ai-assistant-fab";
     fab.className = "ai-fab";
     fab.setAttribute("aria-label", "Open Jacob Davis AI Assistant");
-    fab.innerHTML = `<span>✦</span><span>Ask AI Assistant</span>`;
+    fab.innerHTML = `<img src="/assets/jacob-davis.png" alt="" class="ai-fab-avatar" width="24" height="24" /><span>Ask AI Assistant</span>`;
 
     const drawer = document.createElement("aside");
     drawer.id = "ai-assistant-drawer";
@@ -28,9 +28,12 @@
     drawer.setAttribute("aria-label", "Gemini AI Portfolio Assistant");
     drawer.innerHTML = `
       <div class="ai-drawer-header">
-        <div>
-          <div class="ai-drawer-title">Portfolio AI Assistant</div>
-          <div class="ai-drawer-sub">Gemini · Function Calling Ready</div>
+        <div class="ai-drawer-brand">
+          <img src="/assets/jacob-davis.png" alt="Jacob Davis" class="ai-avatar" width="36" height="36" />
+          <div>
+            <div class="ai-drawer-title">Portfolio AI Assistant</div>
+            <div class="ai-drawer-sub">Gemini · Function Calling Ready</div>
+          </div>
         </div>
         <button type="button" class="btn btn-secondary btn-sm" id="ai-close-btn">Close</button>
       </div>

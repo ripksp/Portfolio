@@ -489,6 +489,17 @@ a.tech-tag:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), var(--shadow-em);
 }
 
+.brand-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 1.5px solid var(--line-em);
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.12);
+  flex-shrink: 0;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -2629,13 +2640,23 @@ details[open] > summary .chev {
   background: var(--surface-3);
 }
 
+.ai-fab-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 1px solid var(--line-em);
+  flex-shrink: 0;
+}
+
 .ai-drawer {
   position: fixed;
   right: 1.25rem;
   bottom: 5.25rem;
   z-index: 71;
   width: min(410px, calc(100vw - 2rem));
-  height: min(600px, calc(100vh - 7.5rem));
+  height: min(460px, calc(100vh - 7.5rem));
   display: flex;
   flex-direction: column;
   border-radius: var(--r-lg);
@@ -2660,8 +2681,24 @@ details[open] > summary .chev {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.1rem;
+  padding: 0.9rem 1.1rem;
   border-bottom: 1px solid var(--line);
+}
+
+.ai-drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.ai-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 1.5px solid var(--line-em);
+  flex-shrink: 0;
 }
 
 .ai-drawer-title {
