@@ -841,7 +841,10 @@ a.tech-tag:hover {
 }
 
 .hero-float-grid {
-  display: contents;
+  display: grid;
+  grid-template-columns: 1.45fr 0.85fr;
+  gap: 0.65rem;
+  margin-top: 0.65rem;
 }
 
 .portrait-arch img {
@@ -860,21 +863,20 @@ a.tech-tag:hover {
 }
 
 .float-card {
-  position: absolute;
+  position: static;
   background: rgba(13, 21, 18, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--line-2);
   border-radius: var(--r-md);
-  padding: 0.8rem 1rem;
+  padding: 0.78rem 0.95rem;
   box-shadow: var(--shadow-lg);
   font-size: 0.82rem;
-  animation: float 7s ease-in-out infinite;
 }
 
 .float-card .fc-label {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.65rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -892,18 +894,19 @@ a.tech-tag:hover {
 
 .float-card .fc-sub {
   color: var(--text-2);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
 }
 
 .fc-role {
-  left: -12%;
-  bottom: 12%;
-  max-width: 250px;
+  max-width: none;
 }
 
 .fc-checks {
-  right: -8%;
-  top: 10%;
+  position: absolute;
+  right: -6%;
+  top: 2%;
+  z-index: 3;
+  animation: float 7s ease-in-out infinite;
   animation-delay: -3s;
   font-family: var(--font-mono);
 }
@@ -911,7 +914,7 @@ a.tech-tag:hover {
 .fc-checks ul {
   display: grid;
   gap: 0.2rem;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
 }
 
 .fc-checks li::before {
@@ -921,18 +924,19 @@ a.tech-tag:hover {
 }
 
 .fc-mentor {
-  right: -4%;
-  bottom: -4%;
-  animation-delay: -5s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
 .fc-mentor .fc-big {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--em);
-  line-height: 1;
+  line-height: 1.1;
 }
 
 @keyframes float {
