@@ -760,19 +760,20 @@ a.tech-tag:hover {
 }
 
 .hero-3d-caption {
-  position: absolute;
-  left: 0.9rem;
-  right: 0.9rem;
-  bottom: 0.85rem;
+  position: relative;
   z-index: 2;
+  margin-top: 0.75rem;
+  padding: 0.48rem 0.55rem 0.48rem 0.9rem;
+  border-radius: var(--r-pill);
+  background: rgba(13, 21, 18, 0.88);
+  border: 1px solid var(--line-2);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.67rem;
+  font-size: 0.68rem;
   color: var(--text-2);
-  pointer-events: none;
 }
 
 .hero-3d-actions {
