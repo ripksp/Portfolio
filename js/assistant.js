@@ -111,7 +111,7 @@
         if (!res.ok || payload.error) {
           thinkingEl.textContent =
             payload.error ||
-            "AI endpoint requires live PHP hosting (Bluehost). You can still explore all portfolio sections, /projects, /tools, /stellar, and /resume!";
+            "AI endpoint requires live PHP hosting (Bluehost). You can still explore all portfolio sections, /projects, /tools, and /resume!";
           return;
         }
 

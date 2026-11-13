@@ -4,13 +4,28 @@ DirectoryIndex index.html index.php
 # Disable directory browsing
 Options -Indexes
 
+# Custom 404 Error Page
+ErrorDocument 404 /404.html
+
+# Explicit MIME types so X-Content-Type-Options: nosniff never breaks downloads or SVGs
+<IfModule mod_mime.c>
+    AddType image/svg+xml .svg .svgz
+    AddType application/vnd.android.package-archive .apk
+    AddType application/pdf .pdf
+    AddType font/woff2 .woff2
+</IfModule>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 
-# Force HTTPS
+# Block direct HTTP access to non-public directories, dotfiles, config files, and Playwright artifacts
+RewriteRule (?:^|/)(?:\.git[^/]*|\.env[^/]*|\.ht[^/]*|\.agents|\.github|tests|e2e|node_modules|scripts|playwright[^/]*|test-results|blob-report|config(?:\.example)?\.php)(?:/|$) - [F,L,NC]
+
+# Force HTTPS behind Cloudflare / reverse proxies without redirect loops
 RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Route /tools and /tools/ to tools/index.html cleanly
 RewriteRule ^tools/?$ tools/index.html [L]
@@ -23,13 +38,10 @@ RewriteRule ^resume/?$ resume/index.html [L]
 
 # Route /stellar and /stellar/ to stellar/index.html cleanly
 RewriteRule ^stellar/?$ stellar/index.html [L]
-
-# Route /traveller and /traveller/ to traveller/index.html cleanly
-RewriteRule ^traveller/?$ traveller/index.html [L]
 </IfModule>
 
-# Deny direct browser access to sensitive config files, env, scripts, git
-<FilesMatch "(^\.env|\.py$|\.json$|\.lock$|config\.php|\.git)">
+# Deny direct browser access to sensitive config, env, markdown, scripts, JSON, lockfiles, YAML, logs, and git metadata
+<FilesMatch "(?i)(^\.env|^\.git|^\.ht|^config(\.example)?\.php$|^playwright|\.(md|py|json|lock|log|ya?ml)$)">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -39,12 +51,16 @@ RewriteRule ^traveller/?$ traveller/index.html [L]
     </IfModule>
 </FilesMatch>
 
-# Security Headers
+# Security Headers (unset prevents duplicates from PHP headers while always set covers 200/403/404)
 <IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
-    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header unset X-Content-Type-Options
+    Header unset X-Frame-Options
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 </IfModule>
 
 # Cache-Control: prevent browsers from serving stale cached HTML
@@ -55,8 +71,9 @@ RewriteRule ^traveller/?$ traveller/index.html [L]
         Header set Expires 0
     </FilesMatch>
 
-    # Cache static assets with revalidation
-    <FilesMatch "\.(css|js|png|jpg|jpeg|svg|gif|ico|woff|woff2)$">
+    # Cache static assets, resume PDF, and Android APK with revalidation
+    <FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|gif|ico|woff|woff2|pdf|apk)$">
         Header set Cache-Control "public, max-age=86400, stale-while-revalidate=604800"
     </FilesMatch>
 </IfModule>
+

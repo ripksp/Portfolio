@@ -3,34 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jacob Davis | Technical Support Specialist & Systems IT Professional</title>
-  <meta name="description" content="Portfolio & Living Resume of Jacob Davis — Technical Support Specialist & Systems IT Professional with 8+ years specializing in SaaS support, DNS/SSL hosting lifecycle, POS/IoT diagnostics, SQL analytics, and AI workflows." />
+  <title>Jacob Davis | Online Ordering Support Specialist &amp; Systems IT Professional</title>
+  <meta name="description" content="Jacob Davis — Online Ordering Support Specialist in Omaha, NE with 8+ years across SaaS, POS, fintech, and broadband support. DNS &amp; SSL lifecycles, Snowflake &amp; Mode Analytics SQL, API diagnostics, and technical SOP runbooks." />
   <meta name="author" content="Jacob Davis" />
+  <meta name="theme-color" content="#060a08" />
   <link rel="canonical" href="https://jacobdavis.tech/" />
 
-  <!-- Open Graph / Social Meta -->
+  <!-- Open Graph / Social -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Jacob Davis | Technical Support Specialist & Systems IT Professional" />
-  <meta property="og:description" content="8+ years in SaaS, DNS/SSL web lifecycle, POS & API diagnostics, Mode Analytics SQL, and AI-enabled support workflows." />
+  <meta property="og:title" content="Jacob Davis | Online Ordering Support Specialist &amp; Systems IT Professional" />
+  <meta property="og:description" content="8+ years in SaaS, POS, fintech &amp; broadband support — DNS/SSL lifecycles, Snowflake &amp; Mode SQL, API diagnostics, and SOP runbooks." />
   <meta property="og:url" content="https://jacobdavis.tech/" />
+  <meta property="og:image" content="https://jacobdavis.tech/assets/jacob-davis.png" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Typography: Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
 
-  <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preload" as="image" href="/assets/jacob-davis.png" />
+  <link rel="stylesheet" href="/css/styles.css" />
 
-  <!-- Structured Data (JSON-LD) -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Jacob Davis",
-    "jobTitle": "Technical Support Specialist & Systems IT Professional",
+    "jobTitle": "Online Ordering Support Specialist",
+    "worksFor": { "@type": "Organization", "name": "DoorDash" },
     "url": "https://jacobdavis.tech",
     "email": "mailto:jacobdavissupport@gmail.com",
+    "image": "https://jacobdavis.tech/assets/jacob-davis.png",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Omaha",
@@ -44,262 +49,331 @@
   }
   </script>
 </head>
-<body data-view="portfolio">
+<body class="has-mobile-cta" data-page="home">
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Sticky Glassmorphic Navigation -->
-  <header class="site-header" id="top-nav">
+  <!-- Announcement bar (storefront promo strip) -->
+  <div class="announce-bar" role="note">
+    <span>Now: Online Ordering Support Specialist @ DoorDash</span>
+    <span class="hide-sm"> · Omaha, NE · Open to remote &amp; hybrid conversations</span>
+    <a href="#contact">Get in touch</a>
+  </div>
+
+  <!-- Sticky header -->
+  <header class="site-header" id="top-nav" data-header>
     <div class="container nav-inner">
-      <a href="/" class="brand-link" id="brand-home-link">
-        <span class="brand-monogram">JD</span>
+      <a href="/" class="brand-link" aria-label="Jacob Davis — home">
+        <span class="brand-monogram" aria-hidden="true">JD</span>
         <span>Jacob Davis</span>
-        <span class="brand-domain">// jacobdavis.tech</span>
       </a>
 
-      <nav class="nav-links" aria-label="Primary Navigation">
-        <a href="#experience" class="nav-link" id="nav-link-experience">Experience</a>
-        <a href="/projects" class="nav-link" id="nav-link-projects">Projects</a>
-        <a href="/tools" class="nav-link" id="nav-link-tools">DNS Tool</a>
-        <a href="/stellar" class="nav-link" id="nav-link-stellar">Stellar APK</a>
-        <a href="#contact" class="nav-link" id="nav-link-contact">Contact</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#story" class="nav-link" data-spy="story">Story</a>
+        <a href="#work" class="nav-link" data-spy="work">Work</a>
+        <a href="#experience" class="nav-link" data-spy="experience">Experience</a>
+        <a href="#faq" class="nav-link" data-spy="faq">FAQ</a>
+        <a href="/tools" class="nav-link">DNS Tool</a>
       </nav>
 
       <div class="nav-actions">
-        <div class="view-switcher" role="group" aria-label="View Mode Switcher">
-          <button type="button" class="view-btn active" id="switch-portfolio-btn">
-            Portfolio
-          </button>
-          <button type="button" class="view-btn" id="switch-resume-btn">
-            Living Resume
-          </button>
-        </div>
-        <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="nav-download-pdf-btn">
-          Download PDF
-        </a>
+        <a href="/resume" class="btn btn-ghost btn-sm hide-md">Resume</a>
+        <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="nav-download-pdf-btn">Download PDF</a>
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- ====================================================================
-       VIEW 1: INTERACTIVE PORTFOLIO VIEW
-       ==================================================================== -->
-  <main id="portfolio-view-container">
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
+    <a href="#story">Story</a>
+    <a href="#work">Work</a>
+    <a href="#experience">Experience</a>
+    <a href="#faq">FAQ</a>
+    <a href="/projects">Projects</a>
+    <a href="/tools">DNS Tool</a>
+    <a href="/resume" class="btn btn-secondary">Open Living Resume</a>
+  </nav>
 
-    <!-- HERO & BENTO METRICS -->
-    <section class="hero-section" id="top">
-      <div class="container">
-        <span class="hero-eyebrow" id="hero-eyebrow">
-          JACOB DAVIS · JACOBDAVIS.TECH · JACOBDAVISSUPPORT@GMAIL.COM
-        </span>
-        <h1 class="hero-title" id="hero-title">
-          Bridging deep technical diagnostics with human-centered support.
-        </h1>
-        <p class="hero-lead" id="hero-lead">
-          Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack &amp; Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.
-        </p>
+  <main id="main">
 
-        <div class="hero-cta-row">
-          <a href="/resume" class="btn btn-primary" id="hero-open-resume-btn">
-            Open Living Resume
-          </a>
-          <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-secondary" id="hero-download-pdf-btn">
-            Download Resume (PDF)
-          </a>
-          <a href="/tools" class="btn btn-secondary" id="hero-dns-tool-btn">
-            Live DNS &amp; SSL Tool
-          </a>
-          <button type="button" class="btn btn-secondary" data-copy-email id="hero-copy-email-btn">
-            Copy jacobdavissupport@gmail.com
-          </button>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="script-eyebrow reveal">mapping domains &amp; debugging menus</span>
+          <h1 class="display hero-title reveal" id="hero-title">
+            Support that finds the <em>root cause</em> — and fixes it for good.
+          </h1>
+          <p class="hero-lead reveal" id="hero-lead">
+            I'm Jacob, an Online Ordering Support Specialist at DoorDash with 8+ years across SaaS, POS, fintech, and broadband. I keep restaurant storefronts, custom domains, and menus running — and write the runbooks so they stay that way.
+          </p>
+
+          <div class="hero-cta-row reveal">
+            <a href="#work" class="btn btn-primary btn-lg">See my work <span class="arrow" aria-hidden="true">→</span></a>
+            <a href="/resume" class="btn btn-secondary btn-lg" id="hero-open-resume-btn">View resume</a>
+          </div>
+
+          <div class="proof-row reveal">
+            <span class="proof-pill star"><span class="proof-icon" aria-hidden="true">★</span><span><strong>Top performer</strong> · CSAT, NPS &amp; VOC</span></span>
+            <span class="proof-pill"><span class="proof-icon" aria-hidden="true">8+</span><span><strong>Years</strong> in technical support</span></span>
+            <span class="proof-pill"><span class="proof-icon" aria-hidden="true">⌖</span><span><strong>Omaha, NE</strong> · Remote / Hybrid</span></span>
+          </div>
         </div>
 
-        <div class="metrics-bento" id="hero-metrics-grid">
-          <!-- Populated dynamically from data/profile.js -->
+        <div class="hero-visual reveal" aria-label="Portrait of Jacob Davis">
+          <div class="portrait-ring" aria-hidden="true"></div>
+          <div class="portrait-arch">
+            <img src="/assets/jacob-davis.png" alt="Jacob Davis, Online Ordering Support Specialist" width="440" height="550" fetchpriority="high" />
+          </div>
+
+          <div class="float-card fc-role">
+            <div class="fc-label"><span class="live-dot" aria-hidden="true"></span>Currently</div>
+            <div class="fc-value">Online Ordering Support Specialist</div>
+            <div class="fc-sub">DoorDash · Jan 2026 – Present</div>
+          </div>
+
+          <div class="float-card fc-checks" aria-label="Daily checks">
+            <div class="fc-label">storefront.health</div>
+            <ul>
+              <li>DNS resolved</li>
+              <li>SSL valid</li>
+              <li>Menu synced</li>
+            </ul>
+          </div>
+
+          <div class="float-card fc-mentor">
+            <div class="fc-big">6 yrs</div>
+            <div class="fc-sub">Do Space mentor</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CORE COMPETENCY PILLARS -->
-    <section class="section-block" id="pillars">
+    <!-- MARQUEE -->
+    <div class="marquee" aria-label="Core skills">
+      <div class="marquee-track" id="marquee-track">
+        <!-- Rendered from data/profile.js -->
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <section class="section" id="story">
       <div class="container">
-        <div class="section-header">
-          <span class="section-index">01 // CORE ARCHITECTURE</span>
-          <h2 class="section-title">Operational Pillars</h2>
-          <p class="section-subtitle">
-            End-to-end technical ownership spanning custom web domains, SQL telemetry, AI-assisted support workflows, and cross-functional engineering advocacy.
-          </p>
+        <div class="story-grid">
+          <div>
+            <div class="section-head reveal">
+              <span class="script-eyebrow">the story so far</span>
+              <h2 class="section-title">Root-cause curiosity, <em>since day one.</em></h2>
+            </div>
+            <div class="story-copy reveal" id="philosophy-paragraphs">
+              <!-- Rendered from data/profile.js -->
+            </div>
+          </div>
+          <div class="stats-grid reveal" id="hero-metrics-grid">
+            <!-- Rendered from data/profile.js -->
+          </div>
         </div>
 
         <div class="pillars-grid" id="pillars-grid">
-          <!-- Populated dynamically from data/profile.js -->
+          <!-- Rendered from data/profile.js -->
         </div>
       </div>
     </section>
 
-    <!-- REAL-WORLD PROBLEM SOLVING (INTERACTIVE CASE STUDIES) -->
-    <section class="section-block" id="case-studies">
+    <!-- SIGNATURE WORK ("house favorites") -->
+    <section class="section" id="work">
       <div class="container">
-        <div class="section-header">
-          <span class="section-index">02 // ROOT-CAUSE DIAGNOSTICS</span>
-          <h2 class="section-title">Real-World Problem Solving</h2>
-          <p class="section-subtitle">
-            Select each stage (Incident → Diagnosis → Fix) to inspect how complex production escalations were isolated and permanently resolved.
-          </p>
+        <div class="menu-head">
+          <div class="section-head reveal">
+            <span class="script-eyebrow">house favorites</span>
+            <h2 class="section-title">Signature <em>work</em></h2>
+            <p class="section-sub">Real escalations I've isolated and fixed, plus the systems projects I've designed around restaurant ordering pain points.</p>
+          </div>
+          <div class="menu-filters reveal" role="group" aria-label="Filter work">
+            <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter-chip" data-filter="case" aria-pressed="false">Case studies</button>
+            <button type="button" class="filter-chip" data-filter="project" aria-pressed="false">Systems projects</button>
+          </div>
         </div>
 
-        <div class="cases-grid" id="cases-grid">
-          <!-- Populated dynamically from data/profile.js -->
+        <div class="menu-grid" id="work-grid">
+          <!-- Rendered from data/profile.js -->
+        </div>
+
+        <div class="menu-more reveal">
+          <a href="/projects" class="btn btn-secondary">Explore full project breakdowns <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
 
-    <!-- CAREER HISTORY -->
-    <section class="section-block" id="experience">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-index">03 // CAREER TRAJECTORY</span>
-          <h2 class="section-title">Technical Experience</h2>
-          <p class="section-subtitle">
-            Over eight years of progressive frontline and Tier 2 technical escalation ownership across SaaS, POS, fintech, and high-speed telecom infrastructure.
-          </p>
+    <!-- Case study dialog -->
+    <dialog class="case-dialog" id="case-dialog" aria-labelledby="case-dialog-title">
+      <div class="dialog-inner">
+        <div class="dialog-top">
+          <div>
+            <span class="mono-eyebrow" id="case-dialog-org"></span>
+            <h3 class="dialog-title" id="case-dialog-title"></h3>
+          </div>
+          <button type="button" class="dialog-close" data-dialog-close aria-label="Close case study">✕</button>
         </div>
-
-        <div class="experience-layout" id="experience-list">
-          <!-- Populated dynamically from data/profile.js -->
+        <div class="stepper" role="tablist" aria-label="Diagnostic stages">
+          <button type="button" class="step-tab" role="tab" data-stage="problem" aria-selected="true"><span class="step-n">01</span><span class="step-l">Incident</span></button>
+          <button type="button" class="step-tab" role="tab" data-stage="diagnostics" aria-selected="false"><span class="step-n">02</span><span class="step-l">Diagnosis</span></button>
+          <button type="button" class="step-tab" role="tab" data-stage="resolution" aria-selected="false"><span class="step-n">03</span><span class="step-l">Fix</span></button>
         </div>
+        <p class="step-panel" id="case-dialog-panel" role="tabpanel" aria-live="polite"></p>
+        <div class="impact-banner" id="case-dialog-impact"></div>
+        <div class="tag-row" id="case-dialog-tags"></div>
       </div>
-    </section>
+    </dialog>
 
-    <!-- TECHNICAL STACK -->
-    <section class="section-block" id="tech-stack">
+    <!-- LIVE WORKBENCH -->
+    <section class="section" id="workbench">
       <div class="container">
-        <div class="section-header">
-          <span class="section-index">04 // CAPABILITIES MATRIX</span>
-          <h2 class="section-title">Technical Stack &amp; Tooling</h2>
-          <p class="section-subtitle">
-            Production tools, protocols, and platforms used daily to diagnose systems and support merchants at scale.
-          </p>
-        </div>
-
-        <div class="stack-grid" id="stack-grid">
-          <!-- Populated dynamically from data/profile.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- AWARDS, KPI TRACK RECORD & DO SPACE MENTORSHIP -->
-    <section class="section-block" id="recognition">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-index">05 // DISTINCTIONS &amp; COMMUNITY</span>
-          <h2 class="section-title">Awards, KPIs &amp; Community Mentorship</h2>
-          <p class="section-subtitle">
-            Consistently recognized for customer satisfaction leadership (VOC, NPS, CSAT), peer mentorship, and 5+ years of volunteer tech instruction in Omaha.
-          </p>
-        </div>
-
-        <div class="recognition-grid" id="recognition-grid">
-          <!-- Populated dynamically from data/profile.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- BACKGROUND PHILOSOPHY & MICRO-TOOLS LAB ROADMAP -->
-    <section class="section-block" id="philosophy">
-      <div class="container">
-        <div class="narrative-split">
-          <article class="surface-card" id="background-philosophy-card">
-            <span class="section-index">06 // BACKGROUND &amp; PHILOSOPHY</span>
-            <h2 class="section-title" style="margin: 0.4rem 0 1rem;">Root-Cause Curiosity</h2>
-            <div class="narrative-paragraphs" id="philosophy-paragraphs">
-              <!-- Populated dynamically from data/profile.js -->
+        <div class="workbench reveal">
+          <div>
+            <span class="mono-eyebrow">Live workbench</span>
+            <h2>Don't take my word for it — <em>run a check.</em></h2>
+            <p>My DNS &amp; SSL inspector runs real authoritative lookups (A, CNAME, NS, MX, TXT) and a live port 443 certificate handshake. Or ask my AI assistant anything about my background.</p>
+          </div>
+          <div>
+            <form class="wb-form" id="wb-dns-form" action="/tools" method="get">
+              <label for="wb-domain" class="visually-hidden">Domain to inspect</label>
+              <input type="text" id="wb-domain" name="domain" placeholder="example.com" value="jacobdavis.tech" autocomplete="off" spellcheck="false" />
+              <button type="submit" class="btn btn-primary">Run live audit</button>
+            </form>
+            <div class="wb-alt">
+              <span>Or:</span>
+              <button type="button" class="wb-chip" data-open-assistant>✦ Ask my AI assistant</button>
+              <a href="/tools" class="wb-chip">Open full tool</a>
             </div>
-          </article>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <aside class="surface-card" id="micro-tools-lab-card">
-            <span class="section-index">07 // UPCOMING WORKBENCH</span>
-            <h2 class="section-title" style="margin: 0.4rem 0 0.5rem;">AI &amp; Diagnostic Micro-Tools</h2>
-            <p class="pillar-desc" style="margin-bottom: 1rem;">
-              Modular utilities in development for SMB online ordering, DNS verification, and webhook schema testing:
-            </p>
-            <div class="lab-list" id="lab-preview-list">
-              <!-- Populated dynamically from data/profile.js -->
-            </div>
-          </aside>
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="script-eyebrow">the journey</span>
+          <h2 class="section-title">Where I've <em>worked</em></h2>
+          <p class="section-sub">Eight-plus years moving from broadband and payments into POS, kiosks, and restaurant online ordering — each role a little closer to the systems underneath.</p>
+        </div>
+        <ol class="timeline" id="experience-list">
+          <!-- Rendered from data/profile.js -->
+        </ol>
+      </div>
+    </section>
+
+    <!-- RECOGNITION -->
+    <section class="section" id="recognition">
+      <div class="container">
+        <div class="section-head center reveal">
+          <span class="script-eyebrow">word from the table</span>
+          <h2 class="section-title">Recognition &amp; <em>community</em></h2>
+          <p class="section-sub">Peer awards, customer satisfaction track record, and six years teaching tech to my Omaha neighbors.</p>
+        </div>
+        <div class="review-grid" id="recognition-grid">
+          <!-- Rendered from data/profile.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLKIT -->
+    <section class="section" id="toolkit">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="script-eyebrow">tools of the trade</span>
+          <h2 class="section-title">What's in the <em>kitchen</em></h2>
+        </div>
+        <div class="toolkit-grid" id="stack-grid">
+          <!-- Rendered from data/profile.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container faq-layout">
+        <div class="faq-aside reveal">
+          <span class="script-eyebrow">good to know</span>
+          <h2 class="section-title">Questions &amp; <em>answers</em></h2>
+          <p class="section-sub">The things recruiters and hiring managers usually ask first.</p>
+          <a href="/resume" class="btn btn-secondary">Read the full resume <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div class="faq-list" id="faq-list">
+          <!-- Rendered from data/profile.js -->
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="section-block" id="contact">
+    <section class="section" id="contact">
       <div class="container">
-        <div class="surface-card contact-card" id="contact-cta-card">
-          <div>
-            <span class="section-index">08 // DIRECT CHANNEL · JACOBDAVIS.TECH</span>
-            <h2 class="section-title" style="margin-top: 0.35rem;">Ready to solve complex problems together.</h2>
-            <div class="contact-email-display">jacobdavissupport@gmail.com · jacobdavis.tech</div>
-            <p class="pillar-desc" style="margin: 0.5rem 0 0;">
-              Based in Omaha, Nebraska · Open to remote &amp; hybrid Technical Support, Systems, and Operations roles.
-            </p>
+        <div class="cta-card reveal">
+          <span class="script-eyebrow">pull up a chair</span>
+          <h2 class="section-title">Let's solve something <em>together.</em></h2>
+          <a class="cta-email" href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a>
+          <div class="cta-actions">
+            <button type="button" class="btn btn-primary btn-lg" data-copy-email>Copy email</button>
+            <a href="https://www.linkedin.com/in/jacobdavistech" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">LinkedIn</a>
+            <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-secondary btn-lg">Resume PDF</a>
           </div>
-
-          <div class="contact-actions">
-            <button type="button" class="btn btn-primary" data-copy-email id="footer-copy-email-btn">
-              Copy jacobdavissupport@gmail.com
-            </button>
-            <a href="mailto:jacobdavissupport@gmail.com" class="btn btn-secondary" id="footer-mailto-btn">
-              Open Email Client
-            </a>
-            <a href="https://www.linkedin.com/in/jacobdavistech" target="_blank" rel="noopener" class="btn btn-secondary" id="footer-linkedin-btn">
-              LinkedIn
-            </a>
-            <a href="https://github.com/ripksp" target="_blank" rel="noopener" class="btn btn-secondary" id="footer-github-btn">
-              GitHub
-            </a>
-          </div>
+          <p class="cta-note">Based in Omaha, Nebraska · Open to remote &amp; hybrid Technical Support, Systems, and Operations roles.</p>
         </div>
       </div>
     </section>
-
   </main>
-
-  <!-- ====================================================================
-       VIEW 2: INTERACTIVE LIVING RESUME & PRINT-READY VIEW
-       ==================================================================== -->
-  <section class="resume-view-wrapper" id="resume-view-container" aria-label="Living Resume View">
-    <div class="container">
-      <div class="resume-toolbar">
-        <div class="resume-toolbar-info">
-          <strong>LIVING RESUME MODE</strong> — <code>jacobdavis.tech</code> · <code>jacobdavissupport@gmail.com</code>
-        </div>
-        <div class="nav-actions">
-          <button type="button" class="btn btn-secondary btn-sm" id="resume-print-btn">
-            Print / Save as ATS PDF
-          </button>
-          <a href="/assets/Jacob_Davis_Resume.pdf" download="Jacob_Davis_Resume.pdf" class="btn btn-primary btn-sm" id="resume-direct-download-btn">
-            Download Pre-Built PDF
-          </a>
-        </div>
-      </div>
-
-      <article class="resume-sheet" id="resume-sheet-content">
-        <!-- Populated dynamically from data/profile.js -->
-      </article>
-    </div>
-  </section>
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        &copy; 2026 Jacob Davis · <a href="https://jacobdavis.tech">jacobdavis.tech</a> · <a href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a> · Omaha, NE (Remote / Hybrid)
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="brand-link"><span class="brand-monogram" aria-hidden="true">JD</span><span>Jacob Davis</span></a>
+          <p>Online Ordering Support Specialist · DNS &amp; SSL, SQL, API &amp; POS diagnostics. Omaha, NE.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#story">Story</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="/resume">Living Resume</a></li>
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/tools">DNS &amp; SSL Tool</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:jacobdavissupport@gmail.com">Email</a></li>
+            <li><a href="https://www.linkedin.com/in/jacobdavistech" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://github.com/ripksp" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <a href="/projects">Projects</a> · <a href="/tools">DNS Tool</a> · <a href="/stellar">Stellar APK</a> · <a href="/resume">Resume</a>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year>2026</span> Jacob Davis · jacobdavis.tech</span>
+        <span>Omaha, NE · Remote / Hybrid</span>
       </div>
     </div>
   </footer>
 
-  <!-- Data & Application Scripts -->
+  <!-- Mobile sticky CTA -->
+  <div class="mobile-cta" aria-label="Quick actions">
+    <a href="/resume" class="btn btn-secondary">Resume</a>
+    <a href="mailto:jacobdavissupport@gmail.com" class="btn btn-primary">Email me</a>
+  </div>
+
   <script src="/data/profile.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/assistant.js"></script>

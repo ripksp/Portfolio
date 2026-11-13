@@ -28,8 +28,35 @@ jobs:
             **/.git*/**
             .github/**
             .env*
+            **/.env*
             api/config.php
             api/config.example.php
             scripts/**
             README.md
+            *.md
+            **/*.md
             CNAME
+            tests/**
+            e2e/**
+            package*.json
+            **/package*.json
+            *.lock
+            **/*.lock
+            playwright*
+            playwright*/**
+            playwright-report/**
+            test-results/**
+            blob-report/**
+            node_modules/**
+            **/node_modules/**
+            .agents/**
+            **/.agents/**
+            *.py
+            **/*.py
+            .DS_Store
+            **/.DS_Store
+            Thumbs.db
+            **/Thumbs.db
+            *.log
+            **/*.log
+

@@ -17,9 +17,12 @@ window.PORTFOLIO_DATA = {
     email: "jacobdavissupport@gmail.com",
     githubUrl: "https://github.com/ripksp",
     githubHandle: "github.com/ripksp",
+    githubLabel: "github.com/ripksp",
     linkedinLabel: "linkedin.com/in/jacobdavistech",
     linkedinUrl: "https://www.linkedin.com/in/jacobdavistech",
     resumePdfPath: "/assets/Jacob_Davis_Resume.pdf",
+    portraitPath: "/assets/jacob-davis.png",
+    portraitAlt: "Jacob Davis — Online Ordering Support Specialist & Systems IT Professional",
     lastUpdated: "2026"
   },
 
@@ -27,6 +30,20 @@ window.PORTFOLIO_DATA = {
     eyebrow: "JACOB DAVIS · JACOBDAVIS.TECH · JACOBDAVISSUPPORT@GMAIL.COM",
     headline: "Bridging deep technical diagnostics with human-centered support.",
     lead: "Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack & Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.",
+    subheadline: "Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack & Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.",
+    statusCard: {
+      eyebrow: "CURRENT ROLE · OMAHA, NE (REMOTE / HYBRID)",
+      role: "Online Ordering Support Specialist",
+      company: "DoorDash",
+      period: "Jan 2026 – Present",
+      status: "Active in Production Support",
+      focusTags: [
+        "Snowflake / Mode SQL",
+        "DNS & SSL Lifecycles",
+        "White-Label Storefronts",
+        "Scribe SOP Runbooks"
+      ]
+    },
     metrics: [
       {
         value: "8+ Yrs",
@@ -76,7 +93,7 @@ window.PORTFOLIO_DATA = {
       tags: ["Snowflake (Mode Analytics)", "Raw Menu JSON Payloads", "Postman API", "Webhook Debugging"]
     },
     {
-      id: "pillar-ai",
+      id: "scribe-docs",
       code: "03 // SOPs & KNOWLEDGE CURATION",
       title: "Scribe Runbooks & AI-Enabled Support",
       description: "Championing Scribe and authoring step-by-step technical SOP runbooks for menu ingestion, payload inspection, and onboarding—paired with prompt engineering and HITL workflow curation.",
@@ -258,6 +275,7 @@ window.PORTFOLIO_DATA = {
 
   recognitionAndCommunity: [
     {
+      id: "dospace",
       type: "Community Leadership",
       title: "Do Space Volunteer Technology Mentor",
       org: "Do Space · Omaha, NE",
@@ -265,6 +283,7 @@ window.PORTFOLIO_DATA = {
       description: "Volunteered for six years hosting Tech Help Tuesdays—mentoring Omaha citizens of all skill levels on hardware diagnostics, networking, software troubleshooting, and coding basics."
     },
     {
+      id: "kpi-leadership",
       type: "KPI Track Record",
       title: "Top Performer in Customer Satisfaction KPIs (VOC, NPS & CSAT)",
       org: "Career-Wide Distinction",
@@ -272,6 +291,7 @@ window.PORTFOLIO_DATA = {
       description: "Consistently ranked among top performers in Voice of the Customer (VOC), Net Promoter Score (NPS), and CSAT across support organizations."
     },
     {
+      id: "toast-award",
       type: "Peer Recognition Award",
       title: "\"Lead with Humility Toasty\" Award",
       org: "Toast, Inc.",
@@ -279,6 +299,7 @@ window.PORTFOLIO_DATA = {
       description: "Peer-nominated recognition honoring Tier II mentorship, collaborative escalation ownership, and calm execution during high-volume restaurant outages."
     },
     {
+      id: "paypal-awards",
       type: "Corporate Recognition (2x)",
       title: "Spot Awards for Collaboration & Inclusion",
       org: "PayPal",
@@ -296,9 +317,80 @@ window.PORTFOLIO_DATA = {
     }
   ],
 
+  /* Storefront-style homepage extras (marquee ticker + "Good To Know" FAQ) */
+  marquee: [
+    "Snowflake & Mode Analytics",
+    "DNS · A / CNAME / TXT / MX",
+    "SSL / TLS Lifecycles",
+    "White-Label iOS & Android Storefronts",
+    "Raw Menu JSON Payloads",
+    "Postman API Debugging",
+    "Toast Tier II POS",
+    "DHCP · Subnets · VLANs",
+    "Scribe SOP Runbooks",
+    "Slack & Intercom Escalations",
+    "Do Space Tech Mentor"
+  ],
+
+  faq: [
+    {
+      q: "What role are you in right now?",
+      a: "I'm an Online Ordering Support Specialist at DoorDash (Jan 2026 – Present), supporting restaurant partners across white-label web and mobile storefronts, custom domains, SSL, and menu ingestion."
+    },
+    {
+      q: "Are you open to remote or hybrid roles?",
+      a: "Yes. I'm based in Omaha, NE and open to remote or hybrid Technical Support, Systems Support, and Operations conversations."
+    },
+    {
+      q: "What does your day-to-day technical toolkit look like?",
+      a: "SQL against Snowflake via Mode Analytics to inspect raw menu JSON payloads, Postman for API and webhook debugging, DNS record provisioning (A, CNAME, TXT, MX), SSL lifecycle checks, and Slack / Intercom threads with product engineering squads."
+    },
+    {
+      q: "Can you actually troubleshoot DNS and SSL issues?",
+      a: "It's a core part of my work. You can try the same style of checks yourself in my live DNS & SSL inspector — it runs real authoritative lookups and a port 443 certificate handshake.",
+      link: { href: "/tools", label: "Open the live DNS tool" }
+    },
+    {
+      q: "Do you have hands-on POS and hardware experience?",
+      a: "Three years of escalated Tier II POS support at Toast — Android terminals, Epson thermal printers, DHCP scopes, subnetting, and VLAN segmentation — plus remote CLI kiosk OS recovery at 365 Retail Markets."
+    },
+    {
+      q: "How do you make sure fixes stick?",
+      a: "I document them. I championed Scribe and author step-by-step technical SOP runbooks so the next person can resolve the same issue faster and more consistently."
+    },
+    {
+      q: "What's your education and community background?",
+      a: "Information Technology & Cybersecurity coursework at UNO and Metropolitan Community College, plus six years (2018 – 2024) as a volunteer Technology Mentor at Do Space in Omaha."
+    }
+  ],
+
+  roadmapPreview: [
+    {
+      name: "Merchant Domain & DNS Pre-Flight Checker",
+      status: "Live at /tools",
+      description: "Authoritative A, AAAA, CNAME, NS, MX, and TXT record inspection paired with live port 443 SSL/TLS chain verification prior to custom domain cutover."
+    },
+    {
+      name: "Menu Ingestion JSON Payload Validator",
+      status: "In Development",
+      description: "Interactive schema linter that inspects restaurant menu JSON payloads to flag unmapped modifier groups, missing tax rules, and multi-unit storefront identifiers."
+    },
+    {
+      name: "POS Webhook & Idempotency Replay Tester",
+      status: "Planned Lab Tool",
+      description: "Diagnostic sandbox for validating HMAC-signed order webhooks, testing retry backoff policies, and previewing ESC/POS kitchen thermal ticket output."
+    },
+    {
+      name: "Scribe-Style Technical SOP Builder",
+      status: "Prototype",
+      description: "AI-assisted workflow draft helper that structures root-cause triage notes and terminal diagnostics into repeatable support runbooks."
+    }
+  ],
+
   projects: [
     {
       id: "orderflow",
+      sandboxId: "sandbox-orderflow",
       name: "OrderFlow Hub",
       category: "Full Storefront & POS Lifecycle",
       badge: "Toast / DoorDash Bridge",
@@ -312,10 +404,76 @@ window.PORTFOLIO_DATA = {
         "Real-time 4-step state machine (Received → POS → Prep → Fulfilled).",
         "Automated allergen highlighting on thermal tickets."
       ],
-      stack: ["JavaScript ES6", "ESC/POS Thermal Protocol", "REST Webhooks", "Idempotency Keys", "Epson TM-T88VI"]
+      stack: ["JavaScript ES6", "ESC/POS Thermal Protocol", "REST Webhooks", "Idempotency Keys", "Epson TM-T88VI"],
+      sandbox: {
+        title: "OrderFlow Idempotent Queue & ESC/POS Pipeline Inspector",
+        subtitle: "Simulate transient POS network drops and inspect idempotent retry recovery + thermal receipt output.",
+        sampleOrder: {
+          orderId: "ORD-88412",
+          idempotencyKey: "idem_9f2a7c41b0e8",
+          merchant: "Riverfront Bistro",
+          channel: "Direct Web Storefront",
+          retryAttempts: 2,
+          printerTarget: "Epson TM-T88VI (192.168.40.22:9100)",
+          items: [
+            {
+              qty: 2,
+              name: "Smoked Brisket Melt",
+              modifiers: ["Extra Cheddar", "Sourdough"],
+              allergens: ["Dairy", "Gluten"]
+            },
+            {
+              qty: 1,
+              name: "Crispy Garlic Fries",
+              modifiers: ["No Parsley"],
+              allergens: []
+            }
+          ],
+          escPosPreview: [
+            "*** KITCHEN TICKET #ORD-88412 ***",
+            "CHANNEL: DIRECT WEB | RETRIES: 2 (IDEMPOTENT OK)",
+            "2x SMOKED BRISKET MELT",
+            "   + Extra Cheddar | + Sourdough",
+            "   [ALLERGY ALERT: DAIRY, GLUTEN]",
+            "1x CRISPY GARLIC FRIES",
+            "   - No Parsley"
+          ]
+        },
+        pipelineStages: [
+          {
+            step: "01",
+            stage: "Received",
+            status: "Completed",
+            latencyMs: 14,
+            detail: "Storefront POST validated; idempotency hash idem_9f2a7c41b0e8 persisted to local queue."
+          },
+          {
+            step: "02",
+            stage: "POS",
+            status: "Recovered (2 Retries)",
+            latencyMs: 185,
+            detail: "Transient Wi-Fi packet drop handled cleanly via exponential backoff with zero duplicate order injection."
+          },
+          {
+            step: "03",
+            stage: "Prep",
+            status: "Dispatched",
+            latencyMs: 9,
+            detail: "ESC/POS command frame flushed to Epson TM-T88VI over dedicated POS VLAN."
+          },
+          {
+            step: "04",
+            stage: "Fulfilled",
+            status: "Ready",
+            latencyMs: 4,
+            detail: "Kitchen bump event synced back to storefront live order tracker."
+          }
+        ]
+      }
     },
     {
       id: "omniorder",
+      sandboxId: "sandbox-omniorder",
       name: "OmniOrder Aggregator",
       category: "Ingestion & Kitchen Normalizer",
       badge: "12ms Ingestion Latency",
@@ -329,10 +487,94 @@ window.PORTFOLIO_DATA = {
         "Bidirectional 86'd stock broadcast with 18ms propagation time.",
         "HMAC authentication blocking forged webhook payloads."
       ],
-      stack: ["Node.js / FastAPI", "HMAC SHA-256", "JSON Schema Mapping", "WebSockets / KDS", "Inventory Sync"]
+      stack: ["Node.js / FastAPI", "HMAC SHA-256", "JSON Schema Mapping", "WebSockets / KDS", "Inventory Sync"],
+      sandbox: {
+        title: "OmniOrder Canonical JSON Normalizer & 86'd Sync Inspector",
+        subtitle: "Inspect HMAC-verified channel payloads transforming into the Canonical KDS v1 schema.",
+        channels: [
+          {
+            id: "marketplace-a",
+            channelName: "Marketplace Partner A",
+            hmacStatus: "HMAC SHA-256 Verified",
+            latencyMs: 11,
+            rawPayload: {
+              event: "order.created",
+              partner_order_ref: "MPA-40921",
+              store_external_id: "loc_omaha_01",
+              line_items: [
+                {
+                  sku_code: "BURGER_01",
+                  label: "Classic Smashburger",
+                  count: 1,
+                  options: [{ group: "Temp", val: "Medium Well" }]
+                }
+              ]
+            },
+            normalizedPayload: {
+              schemaVersion: "canonical-kds-v1",
+              orderId: "KDS-40921",
+              sourceChannel: "marketplace-a",
+              locationId: "loc_omaha_01",
+              items: [
+                {
+                  sku: "BURGER_01",
+                  name: "Classic Smashburger",
+                  quantity: 1,
+                  modifiers: ["Temp: Medium Well"]
+                }
+              ]
+            }
+          },
+          {
+            id: "catering-b",
+            channelName: "Direct Catering Webhook",
+            hmacStatus: "HMAC SHA-256 Verified",
+            latencyMs: 13,
+            rawPayload: {
+              type: "CATERING_DISPATCH",
+              ticketNumber: "CAT-772",
+              unitCode: "loc_omaha_01",
+              entries: [
+                {
+                  itemKey: "TRAY_TACOS",
+                  title: "Street Taco Tray (12pc)",
+                  qty: 2,
+                  notes: "Salsa Verde on side"
+                }
+              ]
+            },
+            normalizedPayload: {
+              schemaVersion: "canonical-kds-v1",
+              orderId: "KDS-CAT-772",
+              sourceChannel: "catering-b",
+              locationId: "loc_omaha_01",
+              items: [
+                {
+                  sku: "TRAY_TACOS",
+                  name: "Street Taco Tray (12pc)",
+                  quantity: 2,
+                  modifiers: ["Note: Salsa Verde on side"]
+                }
+              ]
+            }
+          }
+        ],
+        inventoryBroadcast: {
+          sku: "BURGER_01",
+          itemName: "Classic Smashburger",
+          action: "MARK_86_OUT_OF_STOCK",
+          propagationMs: 18,
+          syncedTargets: [
+            "Marketplace Partner A",
+            "Direct Catering Webhook",
+            "First-Party Web Storefront"
+          ]
+        }
+      }
     },
     {
       id: "brandsync",
+      sandboxId: "sandbox-brandsync",
       name: "BrandSync Engine",
       category: "DNS & White-Label Hosting",
       badge: "Automated DNS & TLS 1.3",
@@ -346,16 +588,201 @@ window.PORTFOLIO_DATA = {
         "Interactive white-label storefront theming & embed code generation.",
         "Eliminates expired certificate browser warnings."
       ],
-      stack: ["Authoritative DNS", "ACME / TLS 1.3", "White-Label Storefronts", "HTML / CSS / JS"]
+      stack: ["Authoritative DNS", "ACME / TLS 1.3", "White-Label Storefronts", "HTML / CSS / JS"],
+      sandbox: {
+        title: "White-Label Storefront Customizer",
+        subtitle: "Preview custom domain CNAME routing, theme colors, status badges, and live menu items."
+      }
     }
   ],
 
+  brandSync: {
+    defaultStorefront: {
+      brandName: "Prairie Smoke BBQ",
+      subdomain: "order.prairiesmokebbq.com",
+      tagline: "Direct commission-free online ordering with real-time POS menu sync and automated SSL provisioning.",
+      themeColor: "#10b981",
+      statusBadge: "CNAME Verified · Open for Delivery & Pickup",
+      items: [
+        {
+          name: "12-Hour Smoked Beef Brisket Plate",
+          description: "Post-oak smoked prime brisket, pickled red onions, Texas toast, and house espresso BBQ glaze.",
+          price: "$19.50"
+        },
+        {
+          name: "Burnt Ends Mac & Cheese",
+          description: "Cavatappi pasta folded in aged white cheddar sauce topped with caramelized brisket burnt ends.",
+          price: "$14.75"
+        },
+        {
+          name: "Hickory Pulled Pork Sandwich",
+          description: "Slow-pulled shoulder on toasted brioche with apple cider slaw and house mustard sauce.",
+          price: "$13.50"
+        }
+      ]
+    },
+    themePresets: [
+      { name: "Emerald", hex: "#10b981" },
+      { name: "Crimson", hex: "#dc2626" },
+      { name: "Sky", hex: "#0ea5e9" },
+      { name: "Amber", hex: "#f59e0b" },
+      { name: "Indigo", hex: "#6366f1" },
+      { name: "Violet", hex: "#8b5cf6" }
+    ],
+    storePresets: [
+      {
+        brandName: "Prairie Smoke BBQ",
+        subdomain: "order.prairiesmokebbq.com",
+        tagline: "Direct commission-free online ordering with real-time POS menu sync and automated SSL provisioning.",
+        themeColor: "#10b981",
+        statusBadge: "CNAME Verified · Open for Delivery & Pickup",
+        items: [
+          {
+            name: "12-Hour Smoked Beef Brisket Plate",
+            description: "Post-oak smoked prime brisket, pickled red onions, Texas toast, and house espresso BBQ glaze.",
+            price: "$19.50"
+          },
+          {
+            name: "Burnt Ends Mac & Cheese",
+            description: "Cavatappi pasta folded in aged white cheddar sauce topped with caramelized brisket burnt ends.",
+            price: "$14.75"
+          },
+          {
+            name: "Hickory Pulled Pork Sandwich",
+            description: "Slow-pulled shoulder on toasted brioche with apple cider slaw and house mustard sauce.",
+            price: "$13.50"
+          }
+        ]
+      },
+      {
+        brandName: "Heartland Taco Cantina",
+        subdomain: "order.heartlandcantina.com",
+        tagline: "Hand-pressed heirloom corn tortillas, slow-braised carnitas, and house-roasted salsas.",
+        themeColor: "#dc2626",
+        statusBadge: "Open for Delivery & Pickup",
+        items: [
+          {
+            name: "Birria Quesa-Taco Trio",
+            description: "Crispy seared corn tortillas filled with braised beef, Oaxaca cheese, cilantro, and rich consomme.",
+            price: "$16.25"
+          },
+          {
+            name: "Street Corn Esquites Bowl",
+            description: "Charred sweet corn tossed with lime crema, cotija cheese, tajin, and fresh cilantro.",
+            price: "$7.50"
+          },
+          {
+            name: "Carne Asada Burrito",
+            description: "Wood-grilled skirt steak, black beans, cilantro-lime rice, guacamole, and salsa roja.",
+            price: "$14.95"
+          }
+        ]
+      },
+      {
+        brandName: "Old Market Wood-Fired Pizza",
+        subdomain: "order.oldmarketpizza.com",
+        tagline: "72-hour cold-fermented sourdough crusts baked at 850 degrees with local Midwest toppings.",
+        themeColor: "#f59e0b",
+        statusBadge: "Taking Catering Orders",
+        items: [
+          {
+            name: "Hot Honey & Cup-and-Char Pepperoni",
+            description: "San Marzano tomato base, fresh fior di latte, crispy pepperoni, and wildflower chili honey.",
+            price: "$18.00"
+          },
+          {
+            name: "Roasted Mushroom & Truffle Bianca",
+            description: "Whipped ricotta, cremini & oyster mushrooms, caramelized shallots, thyme, and garlic oil.",
+            price: "$17.50"
+          },
+          {
+            name: "Garlic Knots (6pc)",
+            description: "Brick-oven dough knots brushed with roasted garlic herb butter and aged parmesan.",
+            price: "$8.00"
+          }
+        ]
+      }
+    ]
+  },
+
+  tools: {
+    defaultDomain: "jacobdavis.tech",
+    quickDomains: ["jacobdavis.tech", "doordash.com", "github.com", "toasttab.com"],
+    outageScenarios: [
+      {
+        id: "scenario-dns-conflict",
+        title: "Apex A-Record & CNAME Cutover Loop",
+        category: "DNS & Routing",
+        severity: "High",
+        symptom: "Custom restaurant ordering subdomain returns intermittent NXDOMAIN or routes visitors to an outdated registrar parking page after DNS migration.",
+        diagnosticSteps: [
+          "Run authoritative A, AAAA, and CNAME lookup against public resolvers to isolate stale registrar records.",
+          "Check for conflicting apex A-records or proxy flags blocking ACME validation on the order subdomain.",
+          "Verify TTL decay window and confirm CNAME points cleanly to the managed storefront edge target."
+        ],
+        sampleArtifact: "order.merchantbistro.com. 300 IN CNAME edge.storefront-host.net. (Removed conflicting A 198.51.100.42)",
+        rootCause: "Legacy parking A-record and proxied CNAME at the DNS registrar prevented edge routing convergence.",
+        resolution: "Removed conflicting legacy records, aligned CNAME target without proxy interference, and confirmed live edge resolution."
+      },
+      {
+        id: "scenario-ssl-caa",
+        title: "SSL/TLS Provisioning Blocked by CAA Policy",
+        category: "SSL / TLS Lifecycle",
+        severity: "High",
+        symptom: "White-label storefront displays ERR_CERT_COMMON_NAME_INVALID or pending certificate issuance for over 24 hours.",
+        diagnosticSteps: [
+          "Inspect port 443 TLS handshake to compare certificate Subject Alternative Names (SANs) against requested custom domain.",
+          "Query TXT and CAA DNS records to identify restrictive Certificate Authority Authorization policies.",
+          "Validate HTTP-01 / DNS-01 challenge path reachability."
+        ],
+        sampleArtifact: "merchantbistro.com. 300 IN CAA 0 issue \"letsencrypt.org\" (Added missing issuer authorization)",
+        rootCause: "Root domain CAA record restricted issuance exclusively to a prior enterprise CA, blocking automated Let's Encrypt renewal.",
+        resolution: "Added authorized CAA issue entry with merchant DNS admin, re-triggered automated ACME issuance, and verified TLS 1.3 handshake."
+      },
+      {
+        id: "scenario-menu-webhook",
+        title: "Menu Ingestion JSON Payload & Modifier Mismatch",
+        category: "SQL & API Payloads",
+        severity: "Medium",
+        symptom: "Multi-unit restaurant menu updates fail to sync updated item prices and modifier options to white-label iOS/Android storefronts.",
+        diagnosticSteps: [
+          "Query analytics warehouse logs to inspect the raw menu ingestion JSON payload and confirm target store location mapping.",
+          "Replay webhook payload in Postman against validation endpoint to check HTTP status and schema error codes.",
+          "Isolate malformed modifier group references or missing required price fields."
+        ],
+        sampleArtifact: "{\"location_id\": \"unit_04\", \"status\": 422, \"error\": \"modifier_group[2].min_selections exceeds option count\"}",
+        rootCause: "POS menu export emitted a modifier group requiring 2 selections when only 1 active option remained in stock.",
+        resolution: "Corrected modifier constraint bounds in POS catalog, verified clean JSON ingestion payload, and documented check in a Scribe SOP."
+      },
+      {
+        id: "scenario-pos-vlan",
+        title: "Peak Service Kitchen Printer Packet Loss",
+        category: "Network & POS Hardware",
+        severity: "Critical",
+        symptom: "Epson thermal kitchen printers silently drop online order tickets during peak Friday dinner service while tablets stay online.",
+        diagnosticSteps: [
+          "Audit local router DHCP lease table and subnet mask allocation across guest Wi-Fi and POS terminals.",
+          "Ping printer static IP under load and check for IP address collisions from guest device leases.",
+          "Verify POS VLAN tagging and port isolation rules on managed switch."
+        ],
+        sampleArtifact: "VLAN 20 (POS_PROD): 10.20.40.0/24 | Reserved Printer Pool: .20-.39 | Guest Wi-Fi moved to VLAN 99",
+        rootCause: "Shared flat subnet allowed guest Wi-Fi devices to exhaust DHCP leases and collide with static kitchen printer IPs.",
+        resolution: "Segmented POS terminals and Epson thermal printers onto dedicated VLAN 20 with reserved DHCP bindings, eliminating ticket drops."
+      }
+    ]
+  },
+
   stellar: {
     name: "Stellar Industries",
+    title: "Stellar Industries",
     subtitle: "Mobile Aerospace Tycoon & Systems Simulation",
+    eyebrow: "ANDROID NATIVE RELEASE · BUILD V1.0.6 · OFFLINE READY",
     version: "Build v1.0.6",
     requirements: "Android 7.0+ (API 24+)",
+    minAndroid: "Android 7.0+ (API 24+)",
     size: "8.3 MB",
+    apkSize: "8.3 MB",
+    statusBadge: "Android 7.0+ (API 24+) · Signed & Offline Ready",
     apkPath: "/stellar/StellarIndustries.apk",
     description: "Stellar Industries is a native Android aerospace simulation and tycoon game that blends industrial manufacturing, resource logistics, and space exploration into a single cohesive experience. Step into the role of an aerospace founder—managing shop-floor tooling, precision fabrication, orbital launch operations, and deep-space missions.",
     features: [
@@ -372,6 +799,23 @@ window.PORTFOLIO_DATA = {
         detail: "Establish orbital research stations, deploy planetary surface outposts, and advance next-generation propulsion science."
       }
     ],
-    stack: ["Kotlin 1.9", "Jetpack Compose", "Room SQLite", "Kotlinx.Serialization", "Compose Canvas 2D", "Offline Progression"]
+    stack: ["Kotlin 1.9", "Jetpack Compose", "Room SQLite", "Kotlinx.Serialization", "Compose Canvas 2D", "Offline Progression"],
+    installSteps: [
+      {
+        step: "1",
+        title: "Download the APK",
+        detail: "Tap Download for Android (.APK) above on your Android phone or tablet."
+      },
+      {
+        step: "2",
+        title: "Open the File",
+        detail: "Tap the completed download in notifications or your device's Files / Downloads folder."
+      },
+      {
+        step: "3",
+        title: "Allow Installation",
+        detail: "If prompted, tap Settings -> Allow from this source and tap Install."
+      }
+    ]
   }
 };

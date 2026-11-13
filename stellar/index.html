@@ -5,47 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stellar Industries — Android Aerospace Tycoon | Jacob Davis</title>
   <meta name="description" content="Download Stellar Industries (Android APK) — a native Android aerospace manufacturing and simulation game built by Jacob Davis." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#060a08" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
-<body>
+<body data-page="stellar">
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
+  <header class="site-header" id="top-nav" data-header>
     <div class="container nav-inner">
-      <a href="/" class="brand-link">
-        <span class="brand-monogram">JD</span>
+      <a href="/" class="brand-link" aria-label="Jacob Davis — home">
+        <span class="brand-monogram" aria-hidden="true">JD</span>
         <span>Jacob Davis</span>
-        <span class="brand-domain">// jacobdavis.tech/stellar</span>
       </a>
 
-      <nav class="nav-links" aria-label="Primary Navigation">
+      <nav class="nav-links" aria-label="Primary">
         <a href="/" class="nav-link">Portfolio</a>
         <a href="/projects" class="nav-link">Projects</a>
         <a href="/tools" class="nav-link">DNS Tool</a>
-        <a href="/stellar" class="nav-link" style="color: var(--emerald-bright);">Stellar APK</a>
         <a href="/resume" class="nav-link">Resume</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="/stellar/StellarIndustries.apk" download="StellarIndustries.apk" class="btn btn-primary btn-sm">
-          Download APK
-        </a>
+        <a href="/stellar/StellarIndustries.apk" download="StellarIndustries.apk" class="btn btn-primary btn-sm">Download APK</a>
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
 
-  <main>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
+    <a href="/">Portfolio</a>
+    <a href="/projects">Projects</a>
+    <a href="/tools">DNS Tool</a>
+    <a href="/resume">Resume</a>
+    <a href="/stellar/StellarIndustries.apk" download="StellarIndustries.apk" class="btn btn-primary">Download APK</a>
+  </nav>
+
+  <main id="main">
     <section class="subpage-hero">
       <div class="container">
-        <span class="hero-eyebrow" id="stellar-meta">ANDROID NATIVE RELEASE · BUILD V1.0.6 · OFFLINE READY</span>
-        <h1 class="hero-title" id="stellar-title">Stellar Industries</h1>
+        <span class="script-eyebrow">android native release · build v1.0.6</span>
+        <h1 class="display hero-title" id="stellar-title">Stellar <em>Industries</em></h1>
         <p class="hero-lead" id="stellar-desc">
           A native Android aerospace simulation and tycoon game. Design precision components, balance industrial production lines, build reusable rocket fleets, and guide an aerospace enterprise from workshop prototype to interplanetary flight.
         </p>
         <div class="hero-cta-row">
-          <a href="/stellar/StellarIndustries.apk" download="StellarIndustries.apk" class="btn btn-primary" id="stellar-download-btn">
+          <a href="/stellar/StellarIndustries.apk" download="StellarIndustries.apk" class="btn btn-primary btn-lg" id="stellar-download-btn">
             Download for Android (.APK · 8.3 MB)
           </a>
           <span class="status-pill">Android 7.0+ (API 24+) · Signed &amp; Offline Ready</span>
@@ -53,18 +63,18 @@
       </div>
     </section>
 
-    <section class="section-block" style="padding-top: 2rem;">
+    <section class="subpage-section">
       <div class="container">
-        <div class="subpage-grid-3" id="stellar-features-grid"></div>
+        <div class="grid-3" id="stellar-features-grid"></div>
 
-        <article class="surface-card" style="margin-top: 1.5rem;">
-          <span class="section-index">DIRECT SIDELOAD GUIDE</span>
-          <h2 class="section-title" style="margin: 0.35rem 0 0.9rem;">How to Install on Your Android Device</h2>
-          <ul class="exp-bullets" style="margin-bottom: 1.15rem;">
-            <li><strong>1. Download the APK:</strong> Tap <em>Download for Android (.APK)</em> above on your Android phone or tablet.</li>
-            <li><strong>2. Open the File:</strong> Tap the completed download in notifications or your device's <code>Files / Downloads</code> folder.</li>
-            <li><strong>3. Allow Installation:</strong> If prompted, tap <code>Settings → Allow from this source</code> and tap <strong>Install</strong>.</li>
-          </ul>
+        <article class="panel">
+          <span class="mono-eyebrow">Direct sideload guide</span>
+          <h2 class="panel-title">How to Install on Your Android Device</h2>
+          <ol class="steps">
+            <li><div><strong>Download the APK:</strong> Tap <em>Download for Android (.APK)</em> above on your Android phone or tablet.</div></li>
+            <li><div><strong>Open the File:</strong> Tap the completed download in notifications or your device's <code>Files / Downloads</code> folder.</div></li>
+            <li><div><strong>Allow Installation:</strong> If prompted, tap <code>Settings → Allow from this source</code> and tap <strong>Install</strong>.</div></li>
+          </ol>
           <div class="tag-row" id="stellar-stack-tags"></div>
         </article>
       </div>
@@ -72,28 +82,16 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>&copy; 2026 Jacob Davis · <a href="https://jacobdavis.tech">jacobdavis.tech</a> · <a href="mailto:jacobdavissupport@gmail.com">jacobdavissupport@gmail.com</a></div>
-      <div><a href="/">Portfolio</a> · <a href="/projects">Projects</a> · <a href="/tools">DNS Tool</a> · <a href="/resume">Resume</a></div>
+    <div class="container">
+      <div class="footer-bottom">
+        <span>&copy; <span data-year>2026</span> Jacob Davis · jacobdavis.tech</span>
+        <span><a href="/">Portfolio</a> · <a href="/resume">Resume</a></span>
+      </div>
     </div>
   </footer>
 
   <script src="/data/profile.js"></script>
-  <script src="/js/assistant.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const s = window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.stellar;
-      if (!s) return;
-      document.getElementById("stellar-features-grid").innerHTML = s.features
-        .map((f) => `
-          <article class="surface-card">
-            <h3 class="pillar-title">${f.title}</h3>
-            <p class="pillar-desc" style="margin-bottom:0;">${f.detail}</p>
-          </article>
-        `).join("");
-      document.getElementById("stellar-stack-tags").innerHTML = s.stack
-        .map((t) => `<span class="tech-tag">${t}</span>`).join("");
-    });
-  </script>
+  <script src="/js/app.js"></script>
+  <script src="/js/stellar.js"></script>
 </body>
 </html>
