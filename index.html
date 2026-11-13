@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/css/styles.css?v=20261113c" />
+  <link rel="stylesheet" href="/css/styles.css?v=20261113d" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -48,21 +48,21 @@
   }
   </script>
 </head>
-<body class="has-mobile-cta" data-page="home">
+<body data-page="home">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- Announcement bar (storefront promo strip) -->
   <div class="announce-bar" role="note">
-    <span>Now: Online Ordering Support Specialist @ DoorDash</span>
-    <span class="hide-sm"> · Omaha, NE · Open to remote &amp; hybrid conversations</span>
-    <a href="#contact">Get in touch</a>
+    <span>Heyyo! 👋 Currently: Online Ordering Support Specialist @ DoorDash</span>
+    <span class="hide-sm"> · Culture Committee · Omaha, NE</span>
+    <a href="#contact">Pull up a chair</a>
   </div>
 
-  <!-- Sticky header -->
+  <!-- Sticky floating pill header -->
   <header class="site-header" id="top-nav" data-header>
     <div class="container nav-inner">
       <a href="/" class="brand-link" aria-label="Jacob Davis — home">
-        <img src="/assets/jacob-davis.png" alt="" class="brand-avatar" width="38" height="38" />
+        <img src="/assets/jacob-davis.png" alt="" class="brand-avatar" width="36" height="36" />
         <span>Jacob Davis</span>
       </a>
 
@@ -100,12 +100,12 @@
     <section class="hero" id="top">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="script-eyebrow reveal">mapping domains &amp; debugging menus</span>
+          <span class="script-eyebrow reveal">heyyo! · mapping domains &amp; debugging menus</span>
           <h1 class="display hero-title reveal" id="hero-title">
             Support that finds the <em>root cause</em> — and fixes it for good.
           </h1>
           <p class="hero-lead reveal" id="hero-lead">
-            I'm Jacob, an Online Ordering Support Specialist at DoorDash with 8+ years across SaaS, POS, fintech, and broadband. I keep restaurant storefronts, custom domains, and menus running — and write the runbooks so they stay that way.
+            Heyyo! I'm Jacob, an Online Ordering Support Specialist at DoorDash with 8+ years across SaaS, POS, fintech, and broadband. I'm the guy who opens tickets with a friendly greeting and a well-timed GIF, helps lead Culture Committee meetings before department-wide MSO training, and still tracks down the exact DNS record or Snowflake JSON bug before lunch. No horsing around when a Friday dinner rush is on the line.
           </p>
 
           <div class="hero-cta-row reveal">
@@ -125,8 +125,8 @@
           <div class="portrait-arch portrait-arch--3d">
             <canvas id="hero-3d-canvas" aria-label="Interactive 3D orbital network core"></canvas>
             <div class="hero-3d-caption">
-              <span>Systems &amp; Storefront Core</span>
-              <span class="hero-3d-hint">Interactive 3D</span>
+              <span id="hero-3d-label">Systems &amp; Storefront Core</span>
+              <button type="button" class="hero-juan-btn" id="hero-juan-toggle" aria-pressed="false">🐴 Horsin' Around</button>
             </div>
           </div>
 
@@ -239,8 +239,8 @@
         <div class="workbench reveal">
           <div>
             <span class="mono-eyebrow">Live workbench</span>
-            <h2>Don't take my word for it — <em>run a check.</em></h2>
-            <p>My DNS &amp; SSL inspector runs real authoritative lookups (A, CNAME, NS, MX, TXT) and a live port 443 certificate handshake. Or ask my AI assistant anything about my background.</p>
+            <h2>Hold your horses — <em>run a live check.</em></h2>
+            <p>My DNS &amp; SSL inspector runs real authoritative lookups (A, CNAME, NS, MX, TXT) and a live port 443 certificate handshake. Or ask <strong>Juan-Bot (Tier 1.5)</strong> to troubleshoot right in chat — or escalate straight to me.</p>
           </div>
           <div>
             <form class="wb-form" id="wb-dns-form" action="/tools" method="get">
@@ -250,7 +250,7 @@
             </form>
             <div class="wb-alt">
               <span>Or:</span>
-              <button type="button" class="wb-chip" data-open-assistant>✦ Ask my AI assistant</button>
+              <button type="button" class="wb-chip" data-open-assistant>✦ Ask Juan-Bot (Tier 1.5)</button>
               <a href="/tools" class="wb-chip">Open full tool</a>
             </div>
           </div>
@@ -373,15 +373,9 @@
     </div>
   </footer>
 
-  <!-- Mobile sticky CTA -->
-  <div class="mobile-cta" aria-label="Quick actions">
-    <a href="/resume" class="btn btn-secondary">Resume</a>
-    <a href="mailto:jacobdavissupport@gmail.com" class="btn btn-primary">Email me</a>
-  </div>
-
-  <script src="/data/profile.js?v=20261113c"></script>
-  <script src="/js/app.js?v=20261113c"></script>
-  <script src="/js/hero3d.js?v=20261113c"></script>
-  <script src="/js/assistant.js?v=20261113c"></script>
+  <script src="/data/profile.js?v=20261113d"></script>
+  <script src="/js/app.js?v=20261113d"></script>
+  <script src="/js/hero3d.js?v=20261113d"></script>
+  <script src="/js/assistant.js?v=20261113d"></script>
 </body>
 </html>

@@ -27,10 +27,10 @@ window.PORTFOLIO_DATA = {
   },
 
   hero: {
-    eyebrow: "JACOB DAVIS · JACOBDAVIS.TECH · JACOBDAVISSUPPORT@GMAIL.COM",
-    headline: "Bridging deep technical diagnostics with human-centered support.",
-    lead: "Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack & Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.",
-    subheadline: "Online Ordering Support Specialist with 8+ years of experience across SaaS, POS, fintech, and broadband infrastructure. Currently at DoorDash querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads, coordinating with product engineering squads via Slack & Intercom, authoring Scribe SOP runbooks, and managing DNS/SSL lifecycles and white-label iOS/Android storefronts.",
+    eyebrow: "heyyo! · jacobdavis.tech · omaha, ne",
+    headline: "Support that finds the root cause — and fixes it for good.",
+    lead: "Heyyo! I'm Jacob, an Online Ordering Support Specialist at DoorDash with 8+ years across SaaS, POS, fintech, and broadband. I'm the guy who opens tickets with a friendly greeting and a well-timed GIF, helps lead Culture Committee meetings before department-wide MSO training, and still tracks down the exact DNS record or Snowflake JSON bug before lunch. No horsing around when a Friday dinner rush is on the line.",
+    subheadline: "Heyyo! I'm Jacob, an Online Ordering Support Specialist at DoorDash with 8+ years across SaaS, POS, fintech, and broadband.",
     statusCard: {
       eyebrow: "CURRENT ROLE · OMAHA, NE (REMOTE / HYBRID)",
       role: "Online Ordering Support Specialist",
@@ -69,11 +69,11 @@ window.PORTFOLIO_DATA = {
   },
 
   summary: {
-    resumeSummary: "Online Ordering Support Specialist with 8+ years of progressive experience across SaaS, POS, fintech, and broadband infrastructure platforms. Currently at DoorDash supporting SMB restaurant partners—querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit merchant locations, coordinating with product engineering squads via Slack and Intercom side-conversations, championing Scribe technical SOP runbooks, and managing end-to-end DNS/SSL lifecycles and white-label iOS/Android storefronts. Proven track record across Tier II POS network escalations (Toast), payment gateway API debugging (365 Retail Markets), fraud/risk triage (PayPal), and DOCSIS routing (Cox).",
+    resumeSummary: "Online Ordering Support Specialist with 8+ years of progressive experience across SaaS, POS, fintech, and broadband infrastructure platforms. Currently at DoorDash supporting SMB restaurant partners—querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit merchant locations, coordinating with product engineering squads via Slack and Intercom side-conversations, championing Scribe technical SOP runbooks, co-leading Culture Committee sessions ahead of MSO training meetings, and managing end-to-end DNS/SSL lifecycles and white-label iOS/Android storefronts. Proven track record across Tier II POS network escalations (Toast), payment gateway API debugging (365 Retail Markets), fraud/risk triage (PayPal), and DOCSIS routing (Cox).",
     philosophyParagraphs: [
-      "Helping people understand and succeed with technology has been my driving focus from day one. In an era where software powers everything from neighborhood dining to global payment networks, the human element of technical troubleshooting is more vital than ever. Growing up, I was the go-to person whenever computers, networks, or hardware broke down. Answering those questions sparked a lifelong habit: I never just want to apply a quick patch—I want to isolate the root cause and empower the user with clear, lasting answers.",
-      "Over the past decade, my work has spanned the full technical support spectrum: from DOCSIS provisioning and SNR diagnostics at Cox Communications, to payment dispute and fraud/risk triage at PayPal, resolving escalated Tier II Android POS, Epson thermal printer, and VLAN/DHCP escalations at Toast, debugging payment gateway APIs via Postman and recovering kiosk OSes via remote CLI at 365 Retail Markets, to now supporting DoorDash online ordering storefronts, DNS/SSL lifecycles, and Snowflake menu ingestion diagnostics.",
-      "Beyond my day job, I volunteered for 6 years (2018–2024) as a Technology Mentor at Do Space in Omaha—hosting Tech Help Tuesdays and mentoring community members of all ages through hardware diagnostics, networking, and coding fundamentals."
+      "Heyyo! Helping people understand and succeed with technology has been my focus from day one — just without the stiff, robotic helpdesk script. At work, I'm known for opening cases with \"Heyyo!\" and a well-timed GIF, and helping lead Culture Committee meetings ahead of our department-wide MSO training sessions so the team actually enjoys showing up.",
+      "Underneath the laid-back vibe, though, I'm relentless about root causes. Think of a stray CNAME record on a registrar like Juan the horse on a balcony: nobody knows how it got up there, but I'm the one safely getting it down. Over the past 8+ years, I've gone from DOCSIS provisioning at Cox and fraud/risk triage at PayPal, to Tier II POS & VLAN escalations at Toast, Postman API & remote CLI kiosk recovery at 365 Retail Markets, and now DoorDash online ordering storefronts, DNS/SSL lifecycles, and Snowflake menu diagnostics.",
+      "Outside the queue, I spent 6 years (2018–2024) volunteering as a Technology Mentor at Do Space in Omaha—hosting Tech Help Tuesdays and helping neighbors of all ages get comfortable with hardware, networking, and code."
     ]
   },
 
@@ -82,14 +82,14 @@ window.PORTFOLIO_DATA = {
       id: "pillar-dns",
       code: "01 // WEB & DNS LIFECYCLE",
       title: "Full Web, DNS & White-Label Storefronts",
-      description: "Managing end-to-end domain provisioning, DNS propagation troubleshooting (A, CNAME, TXT, MX), SSL/TLS certificate lifecycles, and white-label iOS & Android online ordering storefronts.",
+      description: "No horsing around with SSL: end-to-end domain provisioning, DNS propagation troubleshooting (A, CNAME, TXT, MX), TLS 1.3 lifecycles, and white-label iOS & Android storefronts.",
       tags: ["DNS (A / CNAME / TXT / MX)", "SSL/TLS Provisioning", "White-Label iOS & Android", "Storefront Lifecycle"]
     },
     {
       id: "pillar-data",
       code: "02 // SNOWFLAKE, SQL & API DIAGNOSTICS",
       title: "JSON Payload Inspection & API Debugging",
-      description: "Querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit merchant locations, paired with Postman REST API testing for payment gateway and webhook debugging.",
+      description: "Straight from the horse's mouth — querying Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit locations, paired with Postman API debugging.",
       tags: ["Snowflake (Mode Analytics)", "Raw Menu JSON Payloads", "Postman API", "Webhook Debugging"]
     },
     {
@@ -101,10 +101,10 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "pillar-advocacy",
-      code: "04 // ENGINEERING SQUAD COORDINATION",
-      title: "Cross-Functional Escalation & Advocacy",
-      description: "Coordinating directly with product engineering squads via Slack threads and Intercom side-conversations to reproduce edge cases, isolate root causes, and expedite permanent platform fixes.",
-      tags: ["Slack & Intercom", "Product Eng Escalation", "Multi-Unit Mapping", "VOC / CSAT Leadership"]
+      code: "04 // ENGINEERING & CULTURE",
+      title: "Engineering Escalation & Culture Committee",
+      description: "Coordinating with product engineering squads via Slack & Intercom to squash edge cases, while helping lead Culture Committee meetings before department-wide MSO training.",
+      tags: ["Slack & Intercom", "Product Eng Escalation", "Culture Committee", "VOC / CSAT Leadership"]
     }
   ],
 
@@ -157,7 +157,7 @@ window.PORTFOLIO_DATA = {
         "Query Snowflake via Mode Analytics to inspect raw menu ingestion JSON payloads and map multi-unit merchant storefront locations accurately.",
         "Coordinate directly with product engineering squads via Slack threads and Intercom side-conversations to isolate bugs, verify edge cases, and expedite platform fixes.",
         "Championed Scribe and authored step-by-step technical SOP runbooks for menu workflows, payload inspection, and support onboarding.",
-        "Manage end-to-end domain lifecycles (DNS provisioning: A, CNAME, TXT, MX, and SSL/TLS certificates) and troubleshoot white-label iOS and Android storefronts."
+        "Manage end-to-end domain lifecycles (DNS provisioning: A, CNAME, TXT, MX, and SSL/TLS certificates), troubleshoot white-label iOS/Android storefronts, and co-lead Culture Committee sessions ahead of department-wide MSO training meetings."
       ],
       skills: ["Snowflake (Mode Analytics)", "JSON Payloads", "DNS & SSL Lifecycle", "Slack & Intercom", "Scribe SOPs"]
     },
@@ -319,27 +319,27 @@ window.PORTFOLIO_DATA = {
 
   /* Storefront-style homepage extras (marquee ticker + "Good To Know" FAQ) */
   marquee: [
+    "Heyyo! 👋 Culture Committee",
     "Snowflake & Mode Analytics",
-    "DNS · A / CNAME / TXT / MX",
-    "SSL / TLS Lifecycles",
+    "Hold Your Horses · DNS Check",
+    "SSL / TLS 1.3 Lifecycles",
     "White-Label iOS & Android Storefronts",
     "Raw Menu JSON Payloads",
     "Postman API Debugging",
+    "No Horsing Around on VLAN 20",
     "Toast Tier II POS",
-    "DHCP · Subnets · VLANs",
     "Scribe SOP Runbooks",
-    "Slack & Intercom Escalations",
     "Do Space Tech Mentor"
   ],
 
   faq: [
     {
       q: "What role are you in right now?",
-      a: "I'm an Online Ordering Support Specialist at DoorDash (Jan 2026 – Present), supporting restaurant partners across white-label web and mobile storefronts, custom domains, SSL, and menu ingestion."
+      a: "Heyyo! I'm an Online Ordering Support Specialist at DoorDash (Jan 2026 – Present), supporting restaurant partners across white-label web and mobile storefronts, custom domains, SSL, and menu ingestion — plus helping lead Culture Committee meetings ahead of department-wide MSO training."
     },
     {
       q: "Are you open to remote or hybrid roles?",
-      a: "Yes. I'm based in Omaha, NE and open to remote or hybrid Technical Support, Systems Support, and Operations conversations."
+      a: "Yep! I'm based in Omaha, NE and always happy to chat about remote or hybrid Technical Support, Systems Support, and Operations roles."
     },
     {
       q: "What does your day-to-day technical toolkit look like?",
@@ -347,8 +347,12 @@ window.PORTFOLIO_DATA = {
     },
     {
       q: "Can you actually troubleshoot DNS and SSL issues?",
-      a: "It's a core part of my work. You can try the same style of checks yourself in my live DNS & SSL inspector — it runs real authoritative lookups and a port 443 certificate handshake.",
+      a: "No horsing around with SSL — it's a core part of my day. You can run the exact same style of checks in my live DNS & SSL inspector, or ask Juan-Bot (bottom right) to run one right in chat.",
       link: { href: "/tools", label: "Open the live DNS tool" }
+    },
+    {
+      q: "Wait... what's with the horse memes and 'Juan.'?",
+      a: "A stray CNAME record on a registrar is basically Juan the horse on a balcony — nobody knows how it got up there, but someone's gotta get it down safely. Try clicking the 🐴 button on the 3D hero (or typing 'horse' or 'juan' anywhere on the page) to see for yourself."
     },
     {
       q: "Do you have hands-on POS and hardware experience?",
@@ -356,11 +360,7 @@ window.PORTFOLIO_DATA = {
     },
     {
       q: "How do you make sure fixes stick?",
-      a: "I document them. I championed Scribe and author step-by-step technical SOP runbooks so the next person can resolve the same issue faster and more consistently."
-    },
-    {
-      q: "What's your education and community background?",
-      a: "Information Technology & Cybersecurity coursework at UNO and Metropolitan Community College, plus six years (2018 – 2024) as a volunteer Technology Mentor at Do Space in Omaha."
+      a: "Straight from the horse's mouth: I write them down. I championed Scribe and author step-by-step technical SOP runbooks so the next teammate can solve the same bug in half the time."
     }
   ],
 
