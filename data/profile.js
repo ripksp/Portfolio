@@ -61,9 +61,9 @@ window.PORTFOLIO_DATA = {
         detail: "Mode Analytics, Raw Menu Payloads & Postman"
       },
       {
-        value: "6 Yrs",
-        label: "Do Space Tech Mentor",
-        detail: "2018–2024 Community Mentor + Top CSAT / NPS"
+        value: "Top CSAT",
+        label: "VOC, NPS & Culture",
+        detail: "Career-Wide KPI Leader + Culture Committee"
       }
     ]
   },
@@ -73,7 +73,7 @@ window.PORTFOLIO_DATA = {
     philosophyParagraphs: [
       "Heyyo! Helping people understand and succeed with technology has been my focus from day one — just without the stiff, robotic helpdesk script. At work, I'm known for opening cases with \"Heyyo!\" and a well-timed GIF, and helping lead Culture Committee meetings ahead of our department-wide MSO training sessions so the team actually enjoys showing up.",
       "Underneath the laid-back vibe, though, I'm relentless about root causes. Think of a stray CNAME record on a registrar like Juan the horse on a balcony: nobody knows how it got up there, but I'm the one safely getting it down. Over the past 8+ years, I've gone from DOCSIS provisioning at Cox and fraud/risk triage at PayPal, to Tier II POS & VLAN escalations at Toast, Postman API & remote CLI kiosk recovery at 365 Retail Markets, and now DoorDash online ordering storefronts, DNS/SSL lifecycles, and Snowflake menu diagnostics.",
-      "Outside the queue, I spent 6 years (2018–2024) volunteering as a Technology Mentor at Do Space in Omaha—hosting Tech Help Tuesdays and helping neighbors of all ages get comfortable with hardware, networking, and code."
+      "When I solve a weird edge case, I make sure the fix sticks — championing Scribe technical SOP runbooks so teammates can resolve the same issue in half the time (a habit I've carried since my early pre-pandemic days volunteering at Do Space in Omaha)."
     ]
   },
 
@@ -275,14 +275,6 @@ window.PORTFOLIO_DATA = {
 
   recognitionAndCommunity: [
     {
-      id: "dospace",
-      type: "Community Leadership",
-      title: "Do Space Volunteer Technology Mentor",
-      org: "Do Space · Omaha, NE",
-      period: "2018 – 2024 (6 Years)",
-      description: "Volunteered for six years hosting Tech Help Tuesdays—mentoring Omaha citizens of all skill levels on hardware diagnostics, networking, software troubleshooting, and coding basics."
-    },
-    {
       id: "kpi-leadership",
       type: "KPI Track Record",
       title: "Top Performer in Customer Satisfaction KPIs (VOC, NPS & CSAT)",
@@ -305,6 +297,14 @@ window.PORTFOLIO_DATA = {
       org: "PayPal",
       period: "2019 & 2020",
       description: "Awarded twice for cross-team knowledge sharing, teammate coaching, and elevating dispute and fraud triage accuracy."
+    },
+    {
+      id: "dospace",
+      type: "Community Volunteering",
+      title: "Do Space Volunteer Technology Mentor",
+      org: "Do Space · Omaha, NE",
+      period: "2018 – 2024 (Active pre-pandemic)",
+      description: "Hosted Tech Help Tuesdays pre-pandemic—helping Omaha community members troubleshoot hardware, networking, and coding fundamentals."
     }
   ],
 
@@ -329,7 +329,7 @@ window.PORTFOLIO_DATA = {
     "No Horsing Around on VLAN 20",
     "Toast Tier II POS",
     "Scribe SOP Runbooks",
-    "Do Space Tech Mentor"
+    "Top CSAT · VOC · NPS"
   ],
 
   faq: [

@@ -1,14 +1,16 @@
 /**
- * HERO 3D ORBITAL CORE + JUAN. EASTER EGG (js/hero3d.js)
- * Pure Canvas 3D-projected geodesic core, orbital rings, and telemetry nodes
- * in Obsidian & Emerald — plus an interactive "Juan. / Horsin' Around" 3D wireframe
- * horse-on-a-balcony mode!
+ * INTERACTIVE 3D GLASS SERVER STACK (js/hero3d.js)
+ * Shaded 3D translucent glass prisms (DNS -> TLS -> SQL -> POS) with:
+ * - True 3D perspective & depth-sorted translucent faces + specular edge highlights
+ * - Live vertical fiber conduit + animated data packets
+ * - Tap/click any layer to elevate & inspect diagnostics
+ * - "Stress Test" (Friday Dinner Rush surge) + "Juan." easter egg
  */
 
 (function () {
   "use strict";
 
-  function showHorseToast(message) {
+  function showToast(message, isGold) {
     let toast = document.getElementById("horse-toast");
     if (!toast) {
       toast = document.createElement("div");
@@ -19,6 +21,7 @@
       document.body.appendChild(toast);
     }
     toast.textContent = message;
+    toast.classList.toggle("is-emerald", !isGold);
     toast.classList.add("is-visible");
     clearTimeout(toast._hideTimer);
     toast._hideTimer = setTimeout(() => {
@@ -38,94 +41,66 @@
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let targetTiltX = 0.22;
-    let targetTiltY = 0;
-    let tiltX = 0.22;
-    let tiltY = 0;
-    let angle = 0;
+    let targetTiltX = 0.52;
+    let targetTiltY = -0.58;
+    let tiltX = 0.52;
+    let tiltY = -0.58;
+    let time = 0;
     let rafId = null;
+
+    let selectedIdx = 0;
+    let stressTimer = 0;
     let juanMode = false;
 
-    // Golden ratio icosahedron vertices + edges for normal Systems Core
-    const phi = (1 + Math.sqrt(5)) / 2;
-    const rawVerts = [
-      [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
-      [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
-      [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
-    ].map(([x, y, z]) => {
-      const len = Math.hypot(x, y, z);
-      return [x / len, y / len, z / len];
-    });
-
-    const edges = [
-      [0, 11], [0, 5], [0, 1], [0, 7], [0, 10],
-      [1, 5], [5, 11], [11, 10], [10, 7], [7, 1],
-      [3, 9], [3, 4], [3, 2], [3, 6], [3, 8],
-      [4, 9], [2, 4], [6, 2], [8, 6], [9, 8],
-      [1, 9], [5, 4], [11, 2], [10, 6], [7, 8],
-      [4, 11], [2, 10], [6, 7], [8, 1], [9, 5]
+    const layers = [
+      {
+        id: "dns",
+        name: "DNS EDGE",
+        sub: "A · CNAME · MX · CAA",
+        readout: "DNS EDGE · CNAME verified · 14ms",
+        yBase: -0.96,
+        hue: "52, 211, 153",
+        accent: "#34d399"
+      },
+      {
+        id: "tls",
+        name: "TLS 1.3",
+        sub: "ACME · Port 443 · SANs",
+        readout: "TLS 1.3 · Handshake OK · Auto-Renew",
+        yBase: -0.32,
+        hue: "239, 230, 210",
+        accent: "#efe6d2"
+      },
+      {
+        id: "sql",
+        name: "SQL / JSON",
+        sub: "Snowflake · Mode · Webhooks",
+        readout: "SQL / JSON · Payload 200 OK · Synced",
+        yBase: 0.32,
+        hue: "52, 211, 153",
+        accent: "#34d399"
+      },
+      {
+        id: "pos",
+        name: "POS / VLAN",
+        sub: "Android · Epson · VLAN 20",
+        readout: "POS / VLAN 20 · 0 dropped tickets",
+        yBase: 0.96,
+        hue: "245, 197, 107",
+        accent: "#f5c56b"
+      }
     ];
 
-    // 3D wireframe horse standing on a balcony ("JUAN.")
-    // Coordinates roughly normalized to [-1, 1]
-    const juanVerts = [
-      // Balcony slab (0..3)
-      [-1.05, 0.72, -0.45], [1.05, 0.72, -0.45], [1.05, 0.72, 0.45], [-1.05, 0.72, 0.45],
-      // Balcony railing top (4..7)
-      [-1.05, 0.34, 0.45], [1.05, 0.34, 0.45], [-1.05, 0.34, -0.45], [1.05, 0.34, -0.45],
-      // Horse torso box / ribs (8..15)
-      [-0.48, -0.05, -0.18], [0.42, -0.05, -0.18], [0.42, -0.05, 0.18], [-0.48, -0.05, 0.18],
-      [-0.45, 0.24, -0.16], [0.38, 0.24, -0.16], [0.38, 0.24, 0.16], [-0.45, 0.24, 0.16],
-      // Hooves on balcony (16..19)
-      [-0.42, 0.70, -0.14], [-0.42, 0.70, 0.14], [0.36, 0.70, -0.14], [0.36, 0.70, 0.14],
-      // Neck & Chest (20..21)
-      [0.54, -0.42, 0.0], [0.38, -0.12, 0.0],
-      // Head & Snout & Ears (22..25)
-      [0.78, -0.52, 0.0], [0.92, -0.34, 0.0], [0.56, -0.64, -0.08], [0.56, -0.64, 0.08],
-      // Tail (26..27)
-      [-0.68, 0.08, 0.0], [-0.78, 0.36, 0.0]
-    ];
+    // Smooth elevation state per layer
+    const layerElev = layers.map(() => 0);
+    const layerScreenCenters = layers.map(() => ({ x: 0, y: 0 }));
 
-    const juanEdges = [
-      // Balcony floor + front/side railing
-      [0, 1], [1, 2], [2, 3], [3, 0],
-      [4, 5], [3, 4], [2, 5], [0, 6], [1, 7], [6, 4], [7, 5],
-      [-1, -1], // skipped if invalid; keep clean pairs below
-      // Horse torso
-      [8, 9], [9, 10], [10, 11], [11, 8],
-      [12, 13], [13, 14], [14, 15], [15, 12],
-      [8, 12], [9, 13], [10, 14], [11, 15],
-      // Legs
-      [12, 16], [15, 17], [13, 18], [14, 19],
-      // Neck + Head + Ears
-      [9, 20], [10, 20], [13, 21], [14, 21], [21, 20],
-      [20, 22], [22, 23], [23, 20],
-      [20, 24], [20, 25], [22, 24], [22, 25],
-      // Tail
-      [8, 26], [11, 26], [26, 27]
-    ].filter(([a, b]) => a >= 0 && b >= 0);
-
-    const normalNodes = [
-      { label: "DNS", r: 1.48, speed: 0.7, phase: 0.0, inc: 0.55, color: "#34d399" },
-      { label: "TLS 1.3", r: 1.56, speed: -0.52, phase: 1.8, inc: -0.65, color: "#efe6d2" },
-      { label: "SQL", r: 1.42, speed: 0.62, phase: 3.1, inc: 0.95, color: "#34d399" },
-      { label: "API", r: 1.62, speed: -0.45, phase: 4.5, inc: -0.35, color: "#f5c56b" },
-      { label: "POS", r: 1.5, speed: 0.55, phase: 5.2, inc: -0.88, color: "#34d399" }
-    ];
-
-    const juanNodes = [
-      { label: "JUAN.", r: 1.48, speed: 0.75, phase: 0.0, inc: 0.55, color: "#f5c56b" },
-      { label: "CNAME?", r: 1.56, speed: -0.52, phase: 1.8, inc: -0.65, color: "#efe6d2" },
-      { label: "HAY", r: 1.42, speed: 0.62, phase: 3.1, inc: 0.95, color: "#34d399" },
-      { label: "BALCONY", r: 1.62, speed: -0.45, phase: 4.5, inc: -0.35, color: "#f5c56b" },
-      { label: "HOOF", r: 1.5, speed: 0.55, phase: 5.2, inc: -0.88, color: "#34d399" }
-    ];
-
-    const stars = Array.from({ length: 42 }, (_, i) => ({
-      x: Math.abs((Math.sin(i * 12.9898) * 43758.5453) % 1),
-      y: Math.abs((Math.sin(i * 78.233) * 19341.123) % 1),
-      r: 0.7 + (i % 3) * 0.55,
-      a: 0.15 + (i % 5) * 0.08
+    // Light packets flowing along the central fiber conduit
+    const packets = Array.from({ length: 14 }, (_, i) => ({
+      t: i / 14,
+      speed: 0.0055 + (i % 3) * 0.0018,
+      dir: i % 2 === 0 ? 1 : -1,
+      gold: i % 4 === 0
     }));
 
     function resize() {
@@ -140,164 +115,204 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function rotatePoint([x, y, z], ax, ay) {
-      const cy = Math.cos(ay);
-      const sy = Math.sin(ay);
+    function rotate([x, y, z], ax, ay) {
+      const cy = Math.cos(ay), sy = Math.sin(ay);
       const x1 = x * cy - z * sy;
       const z1 = x * sy + z * cy;
-      const cx = Math.cos(ax);
-      const sx = Math.sin(ax);
+      const cx = Math.cos(ax), sx = Math.sin(ax);
       const y2 = y * cx - z1 * sx;
       const z2 = y * sx + z1 * cx;
       return [x1, y2, z2];
     }
 
     function project([x, y, z], scale, cx, cy) {
-      const fov = 3.4;
+      const fov = 4.6;
       const k = fov / (fov - z);
       return [cx + x * scale * k, cy + y * scale * k, z, k];
     }
 
-    function drawOrbitRing(radius, tiltA, tiltB, phaseShift, scale, cx, cy, strokeStyle) {
-      const steps = 64;
+    function drawPoly(pts, fill, stroke, lineWidth = 1.1) {
       ctx.beginPath();
-      for (let i = 0; i <= steps; i++) {
-        const t = (i / steps) * Math.PI * 2;
-        let p = [Math.cos(t) * radius, 0, Math.sin(t) * radius];
-        const c1 = Math.cos(tiltA), s1 = Math.sin(tiltA);
-        p = [p[0], p[1] * c1 - p[2] * s1, p[1] * s1 + p[2] * c1];
-        const c2 = Math.cos(tiltB), s2 = Math.sin(tiltB);
-        p = [p[0] * c2 - p[1] * s2, p[0] * s2 + p[1] * c2, p[2]];
-        p = rotatePoint(p, tiltX, tiltY + phaseShift * 0.15);
-        const [sx, sy] = project(p, scale, cx, cy);
-        if (i === 0) ctx.moveTo(sx, sy);
-        else ctx.lineTo(sx, sy);
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+      ctx.closePath();
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
       }
-      ctx.strokeStyle = strokeStyle;
-      ctx.lineWidth = 1.1;
-      ctx.stroke();
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      }
+    }
+
+    function drawGlassPrism(layer, idx, scale, cx, cy, ax, ay) {
+      const isSelected = idx === selectedIdx;
+      const targetElev = isSelected ? -0.14 : 0;
+      layerElev[idx] += (targetElev - layerElev[idx]) * 0.14;
+
+      const floatOffset = Math.sin(time * 1.4 + idx * 0.9) * 0.025;
+      const yCenter = layer.yBase + layerElev[idx] + floatOffset;
+
+      const w = 0.88;
+      const d = 0.88;
+      const h = 0.12;
+
+      const corners = [
+        [-w, yCenter - h, -d],
+        [w, yCenter - h, -d],
+        [w, yCenter - h, d],
+        [-w, yCenter - h, d],
+        [-w, yCenter + h, -d],
+        [w, yCenter + h, -d],
+        [w, yCenter + h, d],
+        [-w, yCenter + h, d]
+      ];
+
+      const proj = corners.map((c) => project(rotate(c, ax, ay), scale, cx, cy));
+      const centerP = project(rotate([0, yCenter, 0], ax, ay), scale, cx, cy);
+      layerScreenCenters[idx] = { x: centerP[0], y: centerP[1] };
+
+      const faces = [
+        { idx: [4, 5, 6, 7], type: "bottom" },
+        { idx: [0, 1, 5, 4], type: "side" },
+        { idx: [1, 2, 6, 5], type: "side" },
+        { idx: [2, 3, 7, 6], type: "side" },
+        { idx: [3, 0, 4, 7], type: "side" },
+        { idx: [0, 1, 2, 3], type: "top" }
+      ].map((f) => ({
+        ...f,
+        z: f.idx.reduce((acc, vi) => acc + proj[vi][2], 0) / 4
+      }));
+
+      faces.sort((a, b) => a.z - b.z);
+
+      const isStressed = stressTimer > 0;
+      const baseAlpha = isSelected ? 0.24 : 0.11;
+      const edgeAlpha = isSelected ? 0.92 : isStressed ? 0.72 : 0.38;
+
+      for (const f of faces) {
+        const pts = f.idx.map((vi) => proj[vi]);
+        if (f.type === "top") {
+          const grad = ctx.createLinearGradient(pts[0][0], pts[0][1], pts[2][0], pts[2][1]);
+          grad.addColorStop(0, `rgba(${layer.hue}, ${(baseAlpha + 0.08).toFixed(2)})`);
+          grad.addColorStop(1, `rgba(13, 21, 18, 0.72)`);
+          drawPoly(pts, grad, `rgba(${layer.hue}, ${edgeAlpha})`, isSelected ? 1.8 : 1.05);
+        } else if (f.type === "side") {
+          drawPoly(
+            pts,
+            `rgba(${layer.hue}, ${(baseAlpha * 0.65).toFixed(2)})`,
+            `rgba(${layer.hue}, ${(edgeAlpha * 0.55).toFixed(2)})`,
+            0.9
+          );
+        } else {
+          drawPoly(pts, `rgba(6, 10, 8, 0.45)`, null);
+        }
+      }
+
+      // Draw crisp floating label on the top face center
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = `700 ${Math.max(10, Math.round(scale * 0.125))}px "JetBrains Mono", monospace`;
+      ctx.fillStyle = isSelected ? layer.accent : "rgba(236, 244, 239, 0.88)";
+      ctx.fillText(layer.name, centerP[0], centerP[1] - 4);
+
+      ctx.font = `500 ${Math.max(8, Math.round(scale * 0.09))}px "Plus Jakarta Sans", sans-serif`;
+      ctx.fillStyle = isSelected ? "rgba(236, 244, 239, 0.85)" : "rgba(168, 187, 177, 0.65)";
+      ctx.fillText(layer.sub, centerP[0], centerP[1] + 9);
+      ctx.restore();
+    }
+
+    function updateReadout() {
+      const labelEl = document.getElementById("hero-3d-label");
+      if (!labelEl) return;
+      if (juanMode) {
+        labelEl.textContent = "JUAN. · Stray CNAME on the roof";
+      } else if (stressTimer > 0) {
+        labelEl.textContent = "⚡ FRIDAY RUSH · Stress testing 4 layers...";
+      } else {
+        labelEl.textContent = layers[selectedIdx].readout;
+      }
     }
 
     function render() {
       ctx.clearRect(0, 0, width, height);
 
       const cx = width * 0.5;
-      const cy = height * 0.48;
-      const scale = Math.min(width, height) * 0.255;
+      const cy = height * 0.47;
+      const scale = Math.min(width, height) * 0.25;
 
-      for (const s of stars) {
-        ctx.fillStyle = juanMode
-          ? `rgba(245, 197, 107, ${s.a})`
-          : `rgba(167, 243, 208, ${s.a})`;
-        ctx.beginPath();
-        ctx.arc(s.x * width, s.y * height, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      const glow = ctx.createRadialGradient(cx, cy, scale * 0.1, cx, cy, scale * 1.9);
-      if (juanMode) {
-        glow.addColorStop(0, "rgba(245, 197, 107, 0.26)");
-        glow.addColorStop(0.45, "rgba(52, 211, 153, 0.10)");
-      } else {
-        glow.addColorStop(0, "rgba(52, 211, 153, 0.28)");
-        glow.addColorStop(0.45, "rgba(16, 185, 129, 0.09)");
-      }
+      // Ambient emerald aura
+      const glow = ctx.createRadialGradient(cx, cy, scale * 0.1, cx, cy, scale * 2.1);
+      glow.addColorStop(0, stressTimer > 0 ? "rgba(245, 197, 107, 0.22)" : "rgba(52, 211, 153, 0.2)");
+      glow.addColorStop(0.55, "rgba(16, 185, 129, 0.06)");
       glow.addColorStop(1, "rgba(6, 10, 8, 0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(cx, cy, scale * 1.9, 0, Math.PI * 2);
+      ctx.arc(cx, cy, scale * 2.1, 0, Math.PI * 2);
       ctx.fill();
 
-      tiltX += (targetTiltX - tiltX) * 0.06;
-      tiltY += (targetTiltY - tiltY) * 0.06;
+      tiltX += (targetTiltX - tiltX) * 0.08;
+      tiltY += (targetTiltY - tiltY) * 0.08;
 
-      drawOrbitRing(1.48, 0.55, 0.35, angle, scale, cx, cy, juanMode ? "rgba(245, 197, 107, 0.3)" : "rgba(52, 211, 153, 0.28)");
-      drawOrbitRing(1.56, -0.65, -0.4, -angle, scale, cx, cy, "rgba(239, 230, 210, 0.16)");
-      drawOrbitRing(1.38, 1.15, -0.2, angle * 0.6, scale, cx, cy, "rgba(52, 211, 153, 0.14)");
+      const autoYaw = reduceMotion ? 0 : Math.sin(time * 0.45) * 0.12;
+      const ax = tiltX;
+      const ay = tiltY + autoYaw;
 
-      const activeVerts = juanMode ? juanVerts : rawVerts;
-      const activeEdges = juanMode ? juanEdges : edges;
-      const rotX = juanMode ? tiltX * 0.55 : tiltX + Math.sin(angle * 0.5) * 0.25;
+      // Central vertical fiber conduit
+      const topConduit = project(rotate([0, -1.25, 0], ax, ay), scale, cx, cy);
+      const botConduit = project(rotate([0, 1.25, 0], ax, ay), scale, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(topConduit[0], topConduit[1]);
+      ctx.lineTo(botConduit[0], botConduit[1]);
+      ctx.strokeStyle = stressTimer > 0 ? "rgba(245, 197, 107, 0.45)" : "rgba(52, 211, 153, 0.3)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
-      const rotVerts = activeVerts.map((v) => rotatePoint(v, rotX, angle + tiltY));
-      const projVerts = rotVerts.map((v) => project(v, scale, cx, cy));
-
-      const sortedEdges = activeEdges
-        .map(([a, b], idx) => ({
-          a,
-          b,
-          isBalcony: juanMode && idx < 11,
-          z: (projVerts[a][2] + projVerts[b][2]) * 0.5
-        }))
-        .sort((e1, e2) => e1.z - e2.z);
-
-      for (const e of sortedEdges) {
-        const [x1, y1] = projVerts[e.a];
-        const [x2, y2] = projVerts[e.b];
-        const depth = Math.max(0.18, Math.min(0.95, (e.z + 1) * 0.48));
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        if (juanMode) {
-          ctx.strokeStyle = e.isBalcony
-            ? `rgba(239, 230, 210, ${(depth * 0.7).toFixed(2)})`
-            : `rgba(245, 197, 107, ${depth.toFixed(2)})`;
-        } else {
-          ctx.strokeStyle = `rgba(52, 211, 153, ${depth.toFixed(2)})`;
-        }
-        ctx.lineWidth = e.z > 0 ? 1.7 : 1.0;
-        ctx.stroke();
+      // Draw prisms bottom-to-top for clean painter's order
+      for (let i = layers.length - 1; i >= 0; i--) {
+        drawGlassPrism(layers[i], i, scale, cx, cy, ax, ay);
       }
 
-      for (const [vx, vy, vz, vk] of projVerts) {
-        const alpha = Math.max(0.25, Math.min(1, (vz + 1) * 0.52));
-        ctx.fillStyle = juanMode
-          ? `rgba(245, 197, 107, ${alpha})`
-          : vz > 0.2
-          ? `rgba(236, 244, 239, ${alpha})`
-          : `rgba(52, 211, 153, ${alpha})`;
+      // Animated data packets along conduit
+      const speedMult = stressTimer > 0 ? 3.4 : 1;
+      for (const p of packets) {
+        if (!reduceMotion) {
+          p.t += p.speed * p.dir * speedMult;
+          if (p.t > 1) p.t = 0;
+          if (p.t < 0) p.t = 1;
+        }
+        const py = -1.15 + p.t * 2.3;
+        const pt = project(rotate([0, py, 0], ax, ay), scale, cx, cy);
+        ctx.fillStyle = p.gold || stressTimer > 0 ? "#f5c56b" : "#34d399";
         ctx.beginPath();
-        ctx.arc(vx, vy, (juanMode ? 1.8 : 2.2) * vk, 0, Math.PI * 2);
+        ctx.arc(pt[0], pt[1], (stressTimer > 0 ? 3.5 : 2.6) * pt[3], 0, Math.PI * 2);
         ctx.fill();
       }
 
+      // Optional Juan easter egg badge on top prism
       if (juanMode) {
+        const jPt = project(rotate([0, -1.42, 0], ax, ay), scale, cx, cy);
         ctx.save();
         ctx.font = '700 13px "JetBrains Mono", monospace';
         ctx.textAlign = "center";
         ctx.fillStyle = "#f5c56b";
-        ctx.fillText("JUAN.", cx, cy - scale * 0.92);
+        ctx.fillText("🐴 JUAN.", jPt[0], jPt[1]);
         ctx.restore();
       }
 
-      const nodes = juanMode ? juanNodes : normalNodes;
-      ctx.font = '600 10px "JetBrains Mono", monospace';
-      ctx.textBaseline = "middle";
-      for (const n of nodes) {
-        const t = n.phase + angle * n.speed;
-        let p = [Math.cos(t) * n.r, 0, Math.sin(t) * n.r];
-        const c1 = Math.cos(n.inc), s1 = Math.sin(n.inc);
-        p = [p[0], p[1] * c1 - p[2] * s1, p[1] * s1 + p[2] * c1];
-        p = rotatePoint(p, tiltX, tiltY);
-        const [nx, ny, nz, nk] = project(p, scale, cx, cy);
-        const alpha = Math.max(0.25, Math.min(1, (nz + 1.5) * 0.42));
-
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = n.color;
-        ctx.beginPath();
-        ctx.arc(nx, ny, 3.6 * nk, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (nz > -0.35) {
-          ctx.fillStyle = "rgba(236, 244, 239, 0.85)";
-          ctx.fillText(n.label, nx + 7, ny);
+      if (stressTimer > 0) {
+        stressTimer--;
+        if (stressTimer === 0) {
+          updateReadout();
+          showToast("⚡ Friday Rush Stress Test: 1,240 req/s · 0 dropped tickets · VLAN 20 holding!", false);
         }
-        ctx.restore();
       }
 
       if (!reduceMotion) {
-        angle += juanMode ? 0.011 : 0.0085;
+        time += 0.016;
         rafId = requestAnimationFrame(render);
       }
     }
@@ -308,40 +323,63 @@
         const r = host.getBoundingClientRect();
         const nx = (e.clientX - r.left) / r.width - 0.5;
         const ny = (e.clientY - r.top) / r.height - 0.5;
-        targetTiltY = nx * 0.9;
-        targetTiltX = 0.22 + ny * 0.7;
+        targetTiltY = -0.58 + nx * 0.55;
+        targetTiltX = 0.52 + ny * 0.32;
       });
       host.addEventListener("pointerleave", () => {
-        targetTiltX = 0.22;
-        targetTiltY = 0;
+        targetTiltX = 0.52;
+        targetTiltY = -0.58;
       });
+    }
+
+    // Tap/click on canvas to select nearest glass layer
+    canvas.addEventListener("click", (e) => {
+      const r = canvas.getBoundingClientRect();
+      const clickY = e.clientY - r.top;
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      layerScreenCenters.forEach((c, idx) => {
+        const d = Math.abs(c.y - clickY);
+        if (d < bestDist) {
+          bestDist = d;
+          bestIdx = idx;
+        }
+      });
+      selectedIdx = bestIdx;
+      updateReadout();
+      if (reduceMotion) render();
+    });
+
+    function triggerStressTest() {
+      stressTimer = 210;
+      updateReadout();
+      if (reduceMotion) {
+        stressTimer = 0;
+        showToast("⚡ Friday Rush Stress Test: 1,240 req/s · 0 dropped tickets · VLAN 20 holding!", false);
+      }
     }
 
     function setJuanMode(nextState) {
       juanMode = typeof nextState === "boolean" ? nextState : !juanMode;
       const toggleBtn = document.getElementById("hero-juan-toggle");
-      const labelEl = document.getElementById("hero-3d-label");
       if (toggleBtn) {
         toggleBtn.setAttribute("aria-pressed", String(juanMode));
-        toggleBtn.textContent = juanMode ? "🐴 Back to Core" : "🐴 Horsin' Around";
       }
-      if (labelEl) {
-        labelEl.textContent = juanMode ? "Juan. · Balcony Diagnostics" : "Systems & Storefront Core";
-      }
+      updateReadout();
       if (juanMode) {
-        showHorseToast("🐴 Juan mode activated. Nobody knows how that CNAME record got up on the balcony either.");
+        showToast("🐴 Juan mode activated. Nobody knows how that CNAME record got on the roof either.", true);
       } else {
-        showHorseToast("⚡ Back to Systems & Storefront Core. No more horsing around.");
+        showToast("⚡ Back to normal stack diagnostics.", false);
       }
       if (reduceMotion) render();
     }
 
-    const toggleBtn = document.getElementById("hero-juan-toggle");
-    if (toggleBtn) {
-      toggleBtn.addEventListener("click", () => setJuanMode());
-    }
+    const stressBtn = document.getElementById("hero-stress-btn");
+    if (stressBtn) stressBtn.addEventListener("click", triggerStressTest);
 
-    // Keyboard easter egg: type "horse" or "juan" anywhere outside inputs
+    const juanBtn = document.getElementById("hero-juan-toggle");
+    if (juanBtn) juanBtn.addEventListener("click", () => setJuanMode());
+
     let keyBuffer = "";
     document.addEventListener("keydown", (e) => {
       const tag = (e.target && e.target.tagName) || "";
@@ -358,6 +396,7 @@
     window.toggleJuanMode = setJuanMode;
 
     resize();
+    updateReadout();
     window.addEventListener("resize", resize);
     render();
 
