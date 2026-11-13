@@ -347,7 +347,7 @@ window.PORTFOLIO_DATA = {
     },
     {
       q: "Can you actually troubleshoot DNS and SSL issues?",
-      a: "No horsing around with SSL — it's a core part of my day. You can run the exact same style of checks in my live DNS & SSL inspector, or ask Juan-Bot (bottom right) to run one right in chat.",
+      a: "No horsing around with SSL — it's a core part of my day. You can run the exact same style of checks in my live DNS & SSL inspector, or ask Carl (bottom right) to run one right in chat.",
       link: { href: "/tools", label: "Open the live DNS tool" }
     },
     {

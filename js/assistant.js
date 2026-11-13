@@ -1,13 +1,7 @@
 /**
- * JUAN-BOT (TIER 1.5) — INTERCOM FIN-STYLE AI SUPPORT AGENT (js/assistant.js)
- * Connects to /api/chat.php with multi-turn memory and renders rich inline
- * Fin-style support cards for:
- * - escalate_to_jacob (Interactive #JD-XXXX ticket card + /api/escalate.php + mailto/copy)
- * - run_dns_audit (Inline live /api/dns-lookup.php diagnostic card)
- * - evaluate_skill_match (Inline Skill X-Ray scorecard + DOM spotlight)
- * - customize_storefront
- * - navigate_portfolio
- * - toggle_juan_mode
+ * CARL — RELAXED AI SUPPORT AGENT (js/assistant.js)
+ * Clean, minimal UI connected to /api/chat.php with multi-turn memory and
+ * inline cards for DNS/SSL checks, Skill X-Ray, and Escalating to Jacob.
  */
 
 (function () {
@@ -40,46 +34,40 @@
     fab.type = "button";
     fab.id = "ai-assistant-fab";
     fab.className = "ai-fab";
-    fab.setAttribute("aria-label", "Open Juan-Bot AI Support Agent");
+    fab.setAttribute("aria-label", "Chat with Carl");
     fab.innerHTML = `
       <span class="ai-fab-avatar-wrap">
         <img src="/assets/jacob-davis.png" alt="" class="ai-fab-avatar" width="26" height="26" />
         <span class="ai-online-dot" aria-hidden="true"></span>
       </span>
-      <span class="ai-fab-label">Ask Juan-Bot</span>
+      <span class="ai-fab-label">Ask Carl</span>
     `;
 
     const drawer = document.createElement("aside");
     drawer.id = "ai-assistant-drawer";
     drawer.className = "ai-drawer";
-    drawer.setAttribute("aria-label", "Juan-Bot Tier 1.5 Support Desk");
+    drawer.setAttribute("aria-label", "Chat with Carl");
     drawer.innerHTML = `
       <div class="ai-drawer-header">
         <div class="ai-drawer-brand">
           <div class="ai-avatar-wrap">
-            <img src="/assets/jacob-davis.png" alt="Jacob Davis" class="ai-avatar" width="38" height="38" />
+            <img src="/assets/jacob-davis.png" alt="Carl" class="ai-avatar" width="38" height="38" />
             <span class="ai-online-dot" aria-hidden="true"></span>
           </div>
           <div>
-            <div class="ai-drawer-title">Juan-Bot <span class="ai-tier-badge">Tier 1.5</span></div>
-            <div class="ai-drawer-sub">Online · Avg reply &lt; 2s · Escalates to Jacob</div>
+            <div class="ai-drawer-title">Carl</div>
+            <div class="ai-drawer-sub">Online</div>
           </div>
         </div>
         <div class="ai-header-actions">
-          <button type="button" class="btn btn-ghost btn-sm" id="ai-reset-btn" title="New conversation">Reset</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="ai-reset-btn" title="New conversation">Clear</button>
           <button type="button" class="btn btn-secondary btn-sm" id="ai-close-btn">Close</button>
         </div>
       </div>
       <div class="ai-messages" id="ai-messages"></div>
-      <div class="ai-suggestions" id="ai-suggestions">
-        <button type="button" class="ai-chip" data-prompt="Run a live DNS &amp; SSL audit on jacobdavis.tech">🔍 Live DNS Audit</button>
-        <button type="button" class="ai-chip" data-prompt="Evaluate Jacob's skill match for a Tier II Support Engineer role">📊 Skill X-Ray</button>
-        <button type="button" class="ai-chip" data-prompt="Turn on Juan horse mode on the 3D hero!">🐴 Juan Mode</button>
-        <button type="button" class="ai-chip ai-chip--escalate" data-prompt="I want to escalate to Jacob about a role or project">🎫 Escalate to Jacob</button>
-      </div>
       <form class="ai-input-form" id="ai-input-form">
-        <label for="ai-input-field" class="visually-hidden">Ask Juan-Bot a question</label>
-        <input type="text" class="text-input" id="ai-input-field" placeholder="Ask a question, debug DNS, or say 'escalate'..." autocomplete="off" />
+        <label for="ai-input-field" class="visually-hidden">Message Carl</label>
+        <input type="text" class="text-input" id="ai-input-field" placeholder="Message Carl..." autocomplete="off" />
         <button type="submit" class="btn btn-primary btn-sm" id="ai-send-btn">Send</button>
       </form>
     `;
@@ -95,10 +83,7 @@
 
     function renderWelcome() {
       messagesEl.innerHTML = "";
-      appendMessage(
-        "model",
-        "Heyyo! 👋 I'm Juan-Bot (Tier 1.5) — Jacob's Fin-style support agent. Ask about his DoorDash/Toast background, run a live DNS/SSL check right here, troubleshoot a menu JSON or POS issue, or hit 'Escalate to Jacob' to open a handoff ticket."
-      );
+      appendMessage("model", "Heyyo! 👋 I'm Carl. How can I help?");
     }
 
     renderWelcome();
@@ -118,13 +103,6 @@
       chatHistory.length = 0;
       renderWelcome();
       input.focus();
-    });
-
-    drawer.querySelectorAll(".ai-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const prompt = chip.getAttribute("data-prompt");
-        if (prompt) sendMessage(prompt);
-      });
     });
 
     form.addEventListener("submit", (e) => {
@@ -152,7 +130,7 @@
 
     async function sendMessage(text) {
       appendMessage("user", text);
-      const thinkingEl = appendMessage("model", "Checking the runbooks...");
+      const thinkingEl = appendMessage("model", "...");
 
       try {
         const res = await fetch("/api/chat.php", {
@@ -169,7 +147,7 @@
         if (!res.ok || payload.error) {
           thinkingEl.textContent =
             payload.error ||
-            "Live AI endpoint needs PHP hosting (Bluehost). You can still use the Escalation Ticket button below or explore /projects, /tools, and /resume!";
+            "Live chat isn't available right here, but you can still email Jacob at jacobdavissupport@gmail.com or explore the site!";
           if (/escalate|hire|contact|bug|help/i.test(text)) {
             appendCard(
               buildEscalationCard({
@@ -182,7 +160,7 @@
           return;
         }
 
-        const reply = payload.reply || "Done!";
+        const reply = payload.reply || "Got it!";
         thinkingEl.textContent = reply;
         chatHistory.push({ role: "user", text });
         chatHistory.push({ role: "model", text: reply });
@@ -192,7 +170,7 @@
         }
       } catch (_err) {
         thinkingEl.textContent =
-          "Unable to reach /api/chat.php in this environment. You can still open a direct escalation ticket below or email jacobdavissupport@gmail.com!";
+          "Can't reach /api/chat.php in this preview, but you can still reach Jacob at jacobdavissupport@gmail.com!";
         if (/escalate|hire|contact|bug|help/i.test(text)) {
           appendCard(
             buildEscalationCard({
@@ -208,9 +186,9 @@
 
   function buildEscalationCard(args) {
     const ticketId = randomTicketId();
-    const reason = args.reason || "Human Tier 2 Handoff";
+    const reason = args.reason || "Handoff to Jacob";
     const priority = args.priority || "Normal";
-    const summary = args.summary || "Visitor requested direct follow-up from Jacob Davis.";
+    const summary = args.summary || "Visitor requested follow-up from Jacob Davis.";
 
     const card = document.createElement("div");
     card.className = "ai-ticket-card";
@@ -224,7 +202,7 @@
       <div class="ai-ticket-fields">
         <input type="text" class="text-input ai-ticket-name" placeholder="Your name (optional)" aria-label="Your name" />
         <input type="email" class="text-input ai-ticket-email" placeholder="Your email for Jacob's reply" aria-label="Your email" />
-        <textarea class="text-input ai-ticket-notes" rows="2" placeholder="Extra details, role link, or domain..." aria-label="Additional notes"></textarea>
+        <textarea class="text-input ai-ticket-notes" rows="2" placeholder="Extra details..." aria-label="Additional notes"></textarea>
       </div>
       <div class="ai-ticket-actions">
         <button type="button" class="btn btn-primary btn-sm ai-ticket-send">Send to Jacob</button>
@@ -270,7 +248,7 @@
         copyBtn.textContent = "✓ Copied";
         setTimeout(() => (copyBtn.textContent = "Copy"), 2000);
       } catch (_e) {
-        statusEl.textContent = "Copy blocked by browser — use Open Email.";
+        statusEl.textContent = "Copy blocked — use Open Email.";
       }
     });
 
@@ -300,11 +278,11 @@
           return;
         }
         statusEl.textContent = data.delivered
-          ? `✓ Ticket #${ticketId} delivered straight to Jacob's inbox!`
-          : `✓ Ticket #${ticketId} logged — click Open Email or Copy to send directly.`;
-        sendBtn.textContent = data.delivered ? "✓ Escalated" : "Logged ✓";
+          ? `✓ Sent #${ticketId} to Jacob!`
+          : `✓ Logged #${ticketId} — use Open Email or Copy to send directly.`;
+        sendBtn.textContent = data.delivered ? "✓ Sent" : "Logged ✓";
       } catch (_err) {
-        statusEl.textContent = "Offline/preview mode — click Open Email or Copy to send to jacobdavissupport@gmail.com.";
+        statusEl.textContent = "Offline/preview mode — use Open Email or Copy.";
         sendBtn.disabled = false;
         sendBtn.textContent = "Send to Jacob";
       }
@@ -318,10 +296,10 @@
     card.className = "ai-tool-card";
     card.innerHTML = `
       <div class="ai-tool-head">
-        <span class="mono-eyebrow">LIVE DNS &amp; SSL AUDIT</span>
+        <span class="mono-eyebrow">DNS &amp; SSL CHECK</span>
         <span class="ai-tool-domain">${esc(domain)}</span>
       </div>
-      <div class="ai-tool-body">Running authoritative lookup &amp; port 443 TLS check...</div>
+      <div class="ai-tool-body">Checking DNS records &amp; TLS...</div>
       <div class="ai-tool-foot">
         <a href="/tools?domain=${encodeURIComponent(domain)}" class="ai-tool-link">Open full DNS Inspector →</a>
       </div>
@@ -332,7 +310,7 @@
       .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
       .then(({ ok, d }) => {
         if (!ok || d.error) {
-          bodyEl.textContent = d.error || "Live DNS lookup requires PHP hosting on Bluehost.";
+          bodyEl.textContent = d.error || "Live DNS lookup requires PHP hosting.";
           return;
         }
         const recs = d.records || {};
@@ -354,7 +332,7 @@
         `;
       })
       .catch(() => {
-        bodyEl.textContent = "Live DNS check unavailable in local preview. Try it live at /tools!";
+        bodyEl.textContent = "Live DNS check unavailable in local preview. Try it at /tools!";
       });
 
     return card;
@@ -376,7 +354,7 @@
 
     card.innerHTML = `
       <div class="ai-tool-head">
-        <span class="mono-eyebrow">SKILL X-RAY SCORECARD</span>
+        <span class="mono-eyebrow">SKILL X-RAY</span>
         <span class="ai-xray-overall">${esc(args.overallScore || 96)}% Match</span>
       </div>
       <div class="ai-tool-domain">${esc(args.targetRole || "Technical Support Role")}</div>

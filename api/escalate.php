@@ -2,7 +2,7 @@
 /**
  * Jacob Davis Portfolio - Escalation Ticket Delivery Endpoint (/api/escalate.php)
  *
- * Receives structured escalation tickets from Juan-Bot (Tier 1.5) and delivers
+ * Receives structured escalation tickets from Carl and delivers
  * a formatted notification email to Jacob Davis (jacobdavissupport@gmail.com).
  */
 
@@ -182,10 +182,10 @@ $safeSubjectPart = str_replace(["\r", "\n"], ' ', $reason);
 $safeTicketPart = str_replace(["\r", "\n"], '', $ticketId);
 
 $to = 'jacobdavissupport@gmail.com';
-$subject = "[{$safeTicketPart}] [{$priority}] Juan-Bot Escalation: {$safeSubjectPart}";
+$subject = "[{$safeTicketPart}] [{$priority}] Carl Escalation: {$safeSubjectPart}";
 
 $bodyLines = [
-    "Heyyo Jacob! Juan-Bot (Tier 1.5) escalated a ticket from jacobdavis.tech:",
+    "Heyyo Jacob! Carl escalated a ticket from jacobdavis.tech:",
     "",
     "Case ID: {$ticketId}",
     "Priority: {$priority}",
@@ -204,13 +204,13 @@ if ($notes !== '') {
 }
 
 $bodyLines[] = "";
-$bodyLines[] = "Sent from Juan-Bot (Tier 1.5) · jacobdavis.tech";
+$bodyLines[] = "Sent from Carl · jacobdavis.tech";
 $body = implode("\r\n", $bodyLines);
 
 $headers = [
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
-    'From: Juan-Bot Escalations <noreply@jacobdavis.tech>',
+    'From: Carl Escalations <noreply@jacobdavis.tech>',
 ];
 if ($visitorEmail !== '') {
     $safeReply = str_replace(["\r", "\n"], '', $visitorEmail);
