@@ -712,132 +712,169 @@ a.tech-tag:hover {
   color: var(--gold);
 }
 
-/* Hero visual: arched portrait + floating cards */
+/* Hero visual: interactive obsidian diagnostic terminal */
 .hero-visual {
   position: relative;
-  max-width: 440px;
+  max-width: 500px;
   width: 100%;
   margin-left: auto;
 }
 
-.portrait-arch {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: 240px 240px var(--r-xl) var(--r-xl);
-  overflow: hidden;
-  background: linear-gradient(170deg, var(--surface-3), var(--surface));
-  border: 1px solid var(--line-2);
-  box-shadow: var(--shadow-lg);
-}
-
-.portrait-arch::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(6, 10, 8, 0.75));
-}
-
-.portrait-arch--3d {
-  display: block;
-  padding: 0;
-  background:
-    radial-gradient(300px 260px at 50% 45%, rgba(52, 211, 153, 0.14), transparent 70%),
-    radial-gradient(rgba(214, 255, 233, 0.06) 1px, transparent 1px),
-    linear-gradient(170deg, var(--surface-3), var(--surface));
-  background-size: auto, 20px 20px, auto;
-}
-
-.portrait-arch--3d::after {
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 70%, rgba(6, 10, 8, 0.85));
-}
-
-#hero-3d-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  touch-action: pan-y;
-}
-
-.hero-3d-caption {
-  position: relative;
-  z-index: 2;
-  margin-top: 0.75rem;
-  padding: 0.48rem 0.55rem 0.48rem 0.9rem;
-  border-radius: var(--r-pill);
-  background: rgba(13, 21, 18, 0.88);
-  border: 1px solid var(--line-2);
+.hero-terminal {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-2);
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  background: linear-gradient(170deg, rgba(13, 21, 18, 0.96), rgba(6, 10, 8, 0.98));
+  border: 1px solid var(--line-2);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(52, 211, 153, 0.08);
+  overflow: hidden;
 }
 
-.hero-3d-actions {
+.term-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--line);
+}
+
+.term-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.term-dot--r { background: #ef4444; opacity: 0.8; }
+.term-dot--y { background: #f59e0b; opacity: 0.8; }
+.term-dot--g { background: #10b981; opacity: 0.85; }
+
+.term-title {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-3);
+}
+
+.term-status {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  flex-shrink: 0;
-}
-
-.hero-juan-btn {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.32rem 0.62rem;
-  border-radius: var(--r-pill);
-  background: rgba(13, 21, 18, 0.88);
-  border: 1px solid var(--line-2);
-  color: var(--cream);
   font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 600;
-  transition: border-color var(--fast), background var(--fast), color var(--fast), transform var(--fast);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--em);
+  letter-spacing: 0.08em;
 }
 
-.hero-juan-icon {
-  padding: 0.32rem 0.48rem;
+.term-output {
+  padding: 1rem 1.1rem;
+  min-height: 230px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
 }
 
-.hero-juan-btn:hover,
-.hero-juan-btn[aria-pressed="true"] {
-  border-color: var(--gold);
-  background: rgba(245, 197, 107, 0.16);
-  color: var(--gold);
-  transform: translateY(-1px);
+.term-line {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.horse-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 1.4rem;
-  transform: translate(-50%, 18px);
-  z-index: 80;
-  max-width: min(440px, calc(100vw - 2rem));
-  padding: 0.75rem 1.1rem;
-  border-radius: var(--r-pill);
-  background: rgba(13, 21, 18, 0.95);
-  border: 1px solid var(--gold);
+.term-cmd {
   color: var(--cream);
-  font-size: 0.84rem;
   font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--smooth), transform var(--smooth);
+  margin-top: 0.25rem;
 }
 
-.horse-toast.is-emerald {
-  border-color: var(--em);
+.term-out {
+  color: var(--text-2);
 }
 
-.horse-toast.is-visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
+.term-ok {
+  color: var(--em);
+}
+
+.term-warn {
+  color: var(--gold);
+}
+
+.term-gold {
+  color: var(--gold);
+  line-height: 1.3;
+}
+
+.term-muted {
+  color: var(--text-3);
+}
+
+.term-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.term-chip {
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  font-weight: 600;
+  padding: 0.34rem 0.65rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--text-2);
+  transition: border-color var(--fast), color var(--fast), background var(--fast);
+}
+
+.term-chip:hover {
+  border-color: var(--line-em);
+  color: var(--em);
+  background: var(--em-soft);
+}
+
+.term-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.term-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--em);
+  white-space: nowrap;
+}
+
+.term-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.term-input::placeholder {
+  color: var(--text-3);
 }
 
 .hero-float-grid {
@@ -3094,7 +3131,7 @@ details[open] > summary .chev {
   }
   .hero-visual {
     margin: 1rem auto 0;
-    max-width: 380px;
+    max-width: 500px;
   }
   .stats-grid,
   .faq-aside {

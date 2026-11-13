@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/css/styles.css?v=20261113h" />
+  <link rel="stylesheet" href="/css/styles.css?v=20261113i" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -120,39 +120,33 @@
           </div>
         </div>
 
-        <div class="hero-visual reveal" aria-label="Interactive 3D Glass Server Stack">
-          <div class="portrait-ring" aria-hidden="true"></div>
-          <div class="portrait-arch portrait-arch--3d">
-            <canvas id="hero-3d-canvas" aria-label="Interactive 3D Glass Server Stack: DNS, TLS, SQL, POS"></canvas>
-          </div>
-          <div class="hero-3d-caption">
-            <span id="hero-3d-label">DNS EDGE · CNAME verified · 14ms</span>
-            <div class="hero-3d-actions">
-              <button type="button" class="hero-juan-btn" id="hero-stress-btn">⚡ Stress Test</button>
-              <button type="button" class="hero-juan-btn hero-juan-icon" id="hero-juan-toggle" aria-pressed="false" title="Horsin' Around Mode">🐴</button>
-            </div>
-          </div>
-
-          <div class="hero-float-grid">
-            <div class="float-card fc-role">
-              <div class="fc-label"><span class="live-dot" aria-hidden="true"></span>Currently</div>
-              <div class="fc-value">Online Ordering Support Specialist</div>
-              <div class="fc-sub">DoorDash · Jan 2026 – Present</div>
+        <div class="hero-visual reveal" aria-label="Interactive Live Diagnostic Terminal">
+          <div class="hero-terminal" id="hero-terminal">
+            <div class="term-chrome">
+              <div class="term-dots" aria-hidden="true">
+                <span class="term-dot term-dot--r"></span>
+                <span class="term-dot term-dot--y"></span>
+                <span class="term-dot term-dot--g"></span>
+              </div>
+              <span class="term-title">jacob@omaha:~ — zsh</span>
+              <span class="term-status"><span class="live-dot" aria-hidden="true"></span>ONLINE</span>
             </div>
 
-            <div class="float-card fc-checks" aria-label="Daily checks">
-              <div class="fc-label">storefront.health</div>
-              <ul>
-                <li>DNS resolved</li>
-                <li>SSL valid</li>
-                <li>Menu synced</li>
-              </ul>
+            <div class="term-output" id="term-output" aria-live="polite"></div>
+
+            <div class="term-chips" role="group" aria-label="Quick terminal commands">
+              <button type="button" class="term-chip" data-term-cmd="dig jacobdavis.tech">dig jacobdavis.tech</button>
+              <button type="button" class="term-chip" data-term-cmd="ssl jacobdavis.tech">ssl check</button>
+              <button type="button" class="term-chip" data-term-cmd="sql">sql menu.json</button>
+              <button type="button" class="term-chip" data-term-cmd="heyyo">heyyo</button>
+              <button type="button" class="term-chip" data-term-cmd="horse">🐴 horse</button>
+              <button type="button" class="term-chip" data-term-cmd="clear">clear</button>
             </div>
 
-            <div class="float-card fc-mentor">
-              <div class="fc-big">Top CSAT</div>
-              <div class="fc-sub">VOC · NPS · Culture</div>
-            </div>
+            <form class="term-form" id="term-form">
+              <label for="term-input" class="term-prompt">jacob@omaha:~$</label>
+              <input type="text" id="term-input" class="term-input" placeholder="type a command (e.g. help, dig doordash.com)..." autocomplete="off" spellcheck="false" />
+            </form>
           </div>
         </div>
       </div>
@@ -376,9 +370,9 @@
     </div>
   </footer>
 
-  <script src="/data/profile.js?v=20261113h"></script>
-  <script src="/js/app.js?v=20261113h"></script>
-  <script src="/js/hero3d.js?v=20261113h"></script>
-  <script src="/js/assistant.js?v=20261113h"></script>
+  <script src="/data/profile.js?v=20261113i"></script>
+  <script src="/js/app.js?v=20261113i"></script>
+  <script src="/js/hero3d.js?v=20261113i"></script>
+  <script src="/js/assistant.js?v=20261113i"></script>
 </body>
 </html>

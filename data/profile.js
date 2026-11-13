@@ -351,8 +351,8 @@ window.PORTFOLIO_DATA = {
       link: { href: "/tools", label: "Open the live DNS tool" }
     },
     {
-      q: "Wait... what's with the horse memes and 'Juan.'?",
-      a: "A stray CNAME record on a registrar is basically Juan the horse on a balcony — nobody knows how it got up there, but someone's gotta get it down safely. Try clicking the 🐴 button on the 3D hero (or typing 'horse' or 'juan' anywhere on the page) to see for yourself."
+      q: "Wait... what's with the horse memes?",
+      a: "A stray CNAME record on a registrar is basically a horse on a balcony — nobody knows how it got up there, but someone's gotta get it down safely. Try clicking '🐴 horse' in the hero terminal above."
     },
     {
       q: "Do you have hands-on POS and hardware experience?",
