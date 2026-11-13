@@ -126,17 +126,28 @@
           "term-out"
         );
       } else if (cmd === "horse") {
-        appendBlock(
+        const reactions = [
           [
-            "   ,--._",
-            "  (  o  )",
-            "   \\   \\____",
-            "    |       \\   🐴  \"how did this CNAME record",
-            "    |_|---|_|       even get up on the balcony?\"",
-            "  ================="
+            "🐴 [Reaction: Side-Eye Horse]",
+            "  Me watching a registrar overwrite a working CNAME",
+            "  with a default parking page 10 minutes before lunch."
           ],
-          "term-gold"
-        );
+          [
+            "🐴 [Reaction: Awkward Tooth-Grin Horse]",
+            "  Opening an escalated ticket with 'Heyyo!' and a GIF",
+            "  before diving into the Snowflake JSON payload."
+          ],
+          [
+            "🐴 [Reaction: Staring Into Your Soul Horse]",
+            "  Waiting for DNS TTL 86400 to expire on a Friday at 4:55 PM."
+          ],
+          [
+            "🐴 [Reaction: Horse in a Suit]",
+            "  Logging into Culture Committee before department-wide MSO training."
+          ]
+        ];
+        window._horseIdx = ((window._horseIdx || 0) + 1) % reactions.length;
+        appendBlock(reactions[window._horseIdx], "term-gold");
       } else if (cmd === "carl") {
         const fab = document.getElementById("ai-assistant-fab");
         const drawer = document.getElementById("ai-assistant-drawer");
