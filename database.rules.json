@@ -1,0 +1,58 @@
+{
+  "rules": {
+    "sessions": {
+      "$pin": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || data.child('meta/refereeUid').val() === auth.uid)",
+        "meta": {
+          ".write": "auth != null && (!data.exists() || data.child('refereeUid').val() === auth.uid || !data.child('refereeUid').exists())"
+        },
+        "shipState": {
+          ".write": "auth != null"
+        },
+        "stations": {
+          "pilot": {
+            ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
+            "incomingPing": {
+              ".write": "auth != null"
+            }
+          },
+          "command": {
+            ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
+            "incomingPing": {
+              ".write": "auth != null"
+            }
+          },
+          "engineer": {
+            ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
+            "incomingPing": {
+              ".write": "auth != null"
+            }
+          },
+          "gunner": {
+            ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
+            "incomingPing": {
+              ".write": "auth != null"
+            }
+          },
+          "sensors": {
+            ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
+            "secretIntel": {
+              ".read": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || data.parent().child('assignedUid').val() === auth.uid)",
+              ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || data.parent().child('assignedUid').val() === auth.uid)"
+            },
+            "incomingPing": {
+              ".write": "auth != null"
+            }
+          }
+        },
+        "tacticalMap": {
+          ".write": "auth != null && root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid"
+        },
+        "feed": {
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}

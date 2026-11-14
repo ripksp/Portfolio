@@ -1,0 +1,54 @@
+{
+  "armor": {
+    "name": "Salvaged Vacc Suit",
+    "rating": 4,
+    "trait": "Vacuum-sealed; -1 DM to Dexterity checks in tight corridors."
+  },
+  "items": [
+    {
+      "id": "autopistol",
+      "name": "Rimward Autopistol",
+      "category": "WEAPON",
+      "effect": "3D6-3 Damage",
+      "range": "10m / Short",
+      "trait": "Reliable semi-auto sidearm; zero recoil in low-G.",
+      "rollMod": 1
+    },
+    {
+      "id": "laser_carbine",
+      "name": "Surplus Laser Carbine",
+      "category": "WEAPON",
+      "effect": "4D6 Damage",
+      "range": "100m / Long",
+      "trait": "Zero-G compliant; drains power pack on rapid fire.",
+      "rollMod": 2
+    },
+    {
+      "id": "stunner",
+      "name": "Arc Stunner",
+      "category": "WEAPON",
+      "effect": "2D6 Stun",
+      "range": "5m / Close",
+      "trait": "Non-lethal; target must pass END 8+ or drop.",
+      "rollMod": 1
+    },
+    {
+      "id": "medkit",
+      "name": "Field Trauma Medkit",
+      "category": "GEAR",
+      "effect": "Restore 1D6 END",
+      "range": "Touch",
+      "trait": "Stabilizes bleeding & bio-toxin exposure.",
+      "rollMod": 1
+    },
+    {
+      "id": "comms_jammer",
+      "name": "Pocket Comms Scrambler",
+      "category": "GEAR",
+      "effect": "EW +1 DM",
+      "range": "50m Radius",
+      "trait": "Masks local transponder pings for 10 minutes.",
+      "rollMod": 1
+    }
+  ]
+}

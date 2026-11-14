@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SS AEGIS DAWN // BRIDGE VIEWSCREEN</title>
+  <style>
+    :root {
+      --crt-void: #0A0F0A;
+      --crt-surface: #0F180F;
+      --crt-elevated: #142214;
+      --crt-phosphor: #33FF66;
+      --crt-dim: #1D6B32;
+      --crt-text-dim: #7FD996;
+      --crt-amber: #FFB000;
+      --crt-alert: #FF3B30;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--crt-void);
+      color: var(--crt-phosphor);
+      font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", "Courier New", monospace;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Subtle CRT scanlines */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 3px,
+        rgba(0, 0, 0, 0.24) 4px
+      );
+      z-index: 999;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      padding: 14px 18px;
+      gap: 12px;
+      border: 2px solid var(--crt-dim);
+      transition: border-color 0.25s ease;
+    }
+
+    .app-shell.hostile {
+      border-color: var(--crt-alert);
+      box-shadow: inset 0 0 36px rgba(255, 59, 48, 0.16);
+    }
+
+    /* Top Telemetry Bar */
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1.3fr 2fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      background: var(--crt-surface);
+      border: 1px solid var(--crt-dim);
+    }
+
+    .vessel-id h1 {
+      font-size: 1.25rem;
+      letter-spacing: 2px;
+      color: var(--crt-phosphor);
+    }
+
+    .vessel-id .sub {
+      font-size: 0.78rem;
+      color: var(--crt-amber);
+      letter-spacing: 1px;
+    }
+
+    .ship-bars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .bar-box {
+      background: var(--crt-void);
+      border: 1px solid var(--crt-dim);
+      padding: 6px 10px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--crt-text-dim);
+      margin-bottom: 4px;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: #050805;
+      border: 1px solid var(--crt-dim);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--crt-phosphor);
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border: 1px solid var(--crt-phosphor);
+      background: rgba(51, 255, 102, 0.12);
+    }
+
+    .badge.hostile {
+      border-color: var(--crt-alert);
+      color: var(--crt-alert);
+      background: rgba(255, 59, 48, 0.18);
+      animation: pulseAlert 1s infinite alternate;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding: 6px 10px;
+      background: var(--crt-elevated);
+      color: var(--crt-phosphor);
+      border: 1px solid var(--crt-phosphor);
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: rgba(51, 255, 102, 0.22);
+    }
+
+    .btn.amber {
+      color: var(--crt-amber);
+      border-color: var(--crt-amber);
+    }
+
+    /* Main Viewport Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .viewport-panel, .side-panel {
+      background: var(--crt-surface);
+      border: 1px solid var(--crt-dim);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 12px;
+      gap: 10px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      letter-spacing: 1.4px;
+      border-bottom: 1px solid var(--crt-dim);
+      padding-bottom: 6px;
+    }
+
+    .canvas-wrap {
+      flex: 1;
+      position: relative;
+      background: var(--crt-void);
+      border: 1px solid var(--crt-dim);
+      min-height: 0;
+    }
+
+    canvas#tacticalCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .side-section {
+      background: var(--crt-void);
+      border: 1px solid var(--crt-dim);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .side-section.amber {
+      border-color: var(--crt-amber);
+    }
+
+    .side-section.alert {
+      border-color: var(--crt-alert);
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 1.2px;
+      color: var(--crt-text-dim);
+    }
+
+    .uwp-line {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--crt-amber);
+      letter-spacing: 2px;
+    }
+
+    .crit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      font-size: 0.78rem;
+    }
+
+    .crit-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 6px;
+      border: 1px solid var(--crt-dim);
+      background: var(--crt-surface);
+    }
+
+    .crit-item.damaged {
+      border-color: var(--crt-alert);
+      color: var(--crt-alert);
+    }
+
+    .list-scroll {
+      overflow-y: auto;
+      max-height: 170px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    /* Bottom A.R.I.A. Ticker */
+    .aria-ticker {
+      background: var(--crt-surface);
+      border: 1px solid var(--crt-phosphor);
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .aria-ticker.corrupted {
+      border-color: var(--crt-amber);
+    }
+
+    .aria-ticker.sleeper {
+      border-color: var(--crt-alert);
+      background: #1B0909;
+    }
+
+    .aria-tag {
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      padding: 4px 8px;
+      border: 1px solid currentColor;
+    }
+
+    .aria-msg {
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    /* Session Connect Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 10, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+    }
+
+    .modal-backdrop.hidden {
+      display: none;
+    }
+
+    .modal-card {
+      width: min(560px, 92vw);
+      background: var(--crt-surface);
+      border: 2px solid var(--crt-phosphor);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-card label {
+      font-size: 0.78rem;
+      color: var(--crt-text-dim);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .modal-card input, .modal-card textarea {
+      width: 100%;
+      background: var(--crt-void);
+      color: var(--crt-phosphor);
+      border: 1px solid var(--crt-dim);
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    @keyframes pulseAlert {
+      from { opacity: 1; }
+      to { opacity: 0.45; }
+    }
+  </style>
+</head>
+<body>
+  <div id="appShell" class="app-shell">
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div class="vessel-id">
+        <h1>SS AEGIS DAWN</h1>
+        <div class="sub">TRANSPONDER: LUCKY BREAK // SESSION: <span id="pinLabel">AEGS</span></div>
+      </div>
+
+      <div class="ship-bars">
+        <div class="bar-box">
+          <div class="bar-label"><span>HULL INTEGRITY</span><span id="hullText">80/80</span></div>
+          <div class="bar-track"><div id="hullBar" class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="bar-box">
+          <div class="bar-label"><span>REACTOR POWER</span><span id="powerText">12/12</span></div>
+          <div class="bar-track"><div id="powerBar" class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="bar-box">
+          <div class="bar-label"><span>THRUST POOL</span><span id="thrustText">4/4</span></div>
+          <div class="bar-track"><div id="thrustBar" class="bar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <div class="top-controls">
+        <span id="conditionBadge" class="badge">CONDITION GREEN</span>
+        <button id="audioToggleBtn" class="btn amber" type="button">AUDIO: MUTED</button>
+        <button id="configBtn" class="btn" type="button">SESSION</button>
+      </div>
+    </header>
+
+    <!-- MAIN VIEWPORT + TELEMETRY -->
+    <main class="main-grid">
+      <section class="viewport-panel">
+        <div class="panel-header">
+          <span id="viewModeTitle">VIEWPORT // ORBITAL_SCAN</span>
+          <span id="systemClock" style="color: var(--crt-text-dim)">--:--:--</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="tacticalCanvas"></canvas>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-header">
+          <span>TACTICAL TELEMETRY</span>
+          <span id="ariaTierBadge" style="color: var(--crt-amber)">A.R.I.A. T1</span>
+        </div>
+
+        <div class="side-section amber">
+          <div class="section-title">[ SYSTEM / UWP ]</div>
+          <div id="systemNameText" style="font-size: 1rem; font-weight: bold;">VESPERA-4</div>
+          <div id="uwpText" class="uwp-line">C544632-7</div>
+          <div id="contradictionText" style="font-size: 0.82rem; color: var(--crt-amber); line-height: 1.35;">
+            High-output orbital refinery with zero breathable air and rationed water.
+          </div>
+        </div>
+
+        <div class="side-section">
+          <div class="section-title">[ SUBSYSTEM STATUS ]</div>
+          <div id="critGrid" class="crit-grid"></div>
+        </div>
+
+        <div class="side-section" style="flex: 1; min-height: 0;">
+          <div class="section-title">[ CONTACTS &amp; ANOMALIES ]</div>
+          <div id="sideList" class="list-scroll"></div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- BOTTOM A.R.I.A. TICKER -->
+    <footer id="ariaTicker" class="aria-ticker">
+      <div id="ariaTag" class="aria-tag">A.R.I.A.</div>
+      <div id="ariaMsg" class="aria-msg">
+        Heuristic core online. Vespera-4 refinery output contradicts its listed life-support telemetry—try not to breathe anything expensive.
+      </div>
+      <div id="ariaTimestamp" style="font-size: 0.78rem; color: var(--crt-text-dim);">LIVE</div>
+    </footer>
+  </div>
+
+  <!-- SESSION CONNECT MODAL -->
+  <div id="sessionModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 1.5px;">
+        [ BRIDGE VIEWSCREEN // CONNECT ]
+      </div>
+      <div style="font-size: 0.8rem; color: var(--crt-text-dim);">
+        Enter your 4-character Session PIN. Paste your Traveller Firebase Web Config JSON to sync live, or launch Demo Mode for offline/TV layout verification.
+      </div>
+      <div>
+        <label for="pinInput">SESSION PIN (4-CHAR)</label>
+        <input id="pinInput" maxlength="4" value="AEGS" style="text-transform: uppercase; font-size: 1.1rem;" />
+      </div>
+      <div>
+        <label for="firebaseConfigInput">FIREBASE WEB CONFIG JSON (OPTIONAL FOR DEMO)</label>
+        <textarea id="firebaseConfigInput" rows="5" placeholder='{"apiKey":"...","authDomain":"...","databaseURL":"https://...","projectId":"...","appId":"..."}'></textarea>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button id="demoBtn" class="btn amber" type="button">LAUNCH DEMO MODE</button>
+        <button id="connectBtn" class="btn" type="button">CONNECT LIVE RTDB</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    // --- State ---
+    const defaultState = {
+      meta: {
+        viewMode: "ORBITAL_SCAN",
+        hostileContact: false,
+        ariaUnlockTier: 1,
+        ariaCorrupted: false,
+        ariaSleeperTriggered: false
+      },
+      shipState: {
+        hull: { current: 80, max: 80 },
+        power: { available: 12, allocated: { mDrive: 4, weapons: 4, sensors: 4 } },
+        thrustPool: { total: 4, remaining: 4 },
+        crits: { mDrive: 0, powerPlant: 0, sensors: 0, weapons: 0, computer: 0 }
+      },
+      stations: {
+        gunner: { lockedTargetId: null }
+      },
+      tacticalMap: {
+        orbital: {
+          systemName: "Vespera-4",
+          uwp: "C544632-7",
+          contradictionHook: "High-output orbital refinery with zero breathable air and rationed water.",
+          anomalies: [
+            "Unregistered beacon pulsing on 142.8 MHz",
+            "Refinery flare signature exceeds listed TL-7 output"
+          ]
+        },
+        spaceRadar: {
+          contacts: {
+            kren_cutter: { name: "KREN CUSTOMS CUTTER", rangeBand: "MEDIUM", bearingDeg: 42, hostile: false, transponder: "KREN-AUTH-09" },
+            void_barge: { name: "UNMARKED ORE BARGE", rangeBand: "LONG", bearingDeg: 215, hostile: false, transponder: "NO TRANSPONDER" }
+          }
+        },
+        groundZones: {
+          nodes: {
+            airlock: { label: "AIRLOCK 01", xNorm: 0.20, yNorm: 0.50, connectedTo: ["cargo"] },
+            cargo: { label: "CARGO BAY", xNorm: 0.48, yNorm: 0.30, connectedTo: ["airlock", "reactor", "bridge"] },
+            reactor: { label: "REACTOR SPINE", xNorm: 0.52, yNorm: 0.74, connectedTo: ["cargo", "bridge"] },
+            bridge: { label: "AUX BRIDGE", xNorm: 0.82, yNorm: 0.50, connectedTo: ["cargo", "reactor"] }
+          },
+          tokens: {
+            declan: { label: "VANCE", nodeId: "airlock", isHostile: false },
+            kallie: { label: "REYES", nodeId: "cargo", isHostile: false },
+            hostile_1: { label: "SECURITY", nodeId: "bridge", isHostile: true }
+          }
+        }
+      },
+      feed: {}
+    };
+
+    let currentSession = structuredClone(defaultState);
+    let currentPin = "AEGS";
+    let unsubscribeRtdb = null;
+
+    // --- Web Audio Synthesizer (muted until user interaction) ---
+    let audioCtx = null;
+    let audioEnabled = false;
+    let lastAriaId = null;
+
+    function playTone(freq, durationSec, type = "sine", gainVal = 0.05) {
+      if (!audioEnabled || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + durationSec);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + durationSec);
+    }
+
+    function playChime() {
+      playTone(660, 0.14, "sine", 0.04);
+      setTimeout(() => playTone(880, 0.18, "sine", 0.04), 90);
+    }
+
+    function playKlaxon() {
+      playTone(220, 0.28, "sawtooth", 0.05);
+      setTimeout(() => playTone(165, 0.32, "sawtooth", 0.05), 220);
+    }
+
+    const audioBtn = document.getElementById("audioToggleBtn");
+    audioBtn.addEventListener("click", () => {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      audioEnabled = !audioEnabled;
+      audioBtn.textContent = audioEnabled ? "AUDIO: ONLINE" : "AUDIO: MUTED";
+      audioBtn.classList.toggle("amber", !audioEnabled);
+      if (audioEnabled) playChime();
+    });
+
+    // --- DOM Elements ---
+    const appShell = document.getElementById("appShell");
+    const pinLabel = document.getElementById("pinLabel");
+    const hullText = document.getElementById("hullText");
+    const hullBar = document.getElementById("hullBar");
+    const powerText = document.getElementById("powerText");
+    const powerBar = document.getElementById("powerBar");
+    const thrustText = document.getElementById("thrustText");
+    const thrustBar = document.getElementById("thrustBar");
+    const conditionBadge = document.getElementById("conditionBadge");
+    const viewModeTitle = document.getElementById("viewModeTitle");
+    const ariaTierBadge = document.getElementById("ariaTierBadge");
+    const systemNameText = document.getElementById("systemNameText");
+    const uwpText = document.getElementById("uwpText");
+    const contradictionText = document.getElementById("contradictionText");
+    const critGrid = document.getElementById("critGrid");
+    const sideList = document.getElementById("sideList");
+    const ariaTicker = document.getElementById("ariaTicker");
+    const ariaTag = document.getElementById("ariaTag");
+    const ariaMsg = document.getElementById("ariaMsg");
+    const ariaTimestamp = document.getElementById("ariaTimestamp");
+    const systemClock = document.getElementById("systemClock");
+
+    function updateClock() {
+      systemClock.textContent = new Date().toTimeString().slice(0, 8);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- Render UI ---
+    function renderState(data) {
+      currentSession = data;
+      const meta = data.meta || defaultState.meta;
+      const ship = data.shipState || defaultState.shipState;
+      const hull = ship.hull || { current: 80, max: 80 };
+      const power = ship.power || { available: 12, allocated: { mDrive: 4, weapons: 4, sensors: 4 } };
+      const alloc = power.allocated || { mDrive: 4, weapons: 4, sensors: 4 };
+      const totalAlloc = (alloc.mDrive || 0) + (alloc.weapons || 0) + (alloc.sensors || 0);
+      const thrust = ship.thrustPool || { total: 4, remaining: 4 };
+      const crits = ship.crits || {};
+
+      pinLabel.textContent = currentPin;
+      hullText.textContent = `${hull.current}/${hull.max}`;
+      const hullPct = Math.max(0, Math.min(100, (hull.current / Math.max(1, hull.max)) * 100));
+      hullBar.style.width = `${hullPct}%`;
+      hullBar.style.backgroundColor = hull.current <= 0 ? "var(--crt-alert)" : hullPct < 50 ? "var(--crt-amber)" : "var(--crt-phosphor)";
+
+      powerText.textContent = `${totalAlloc}/${power.available}`;
+      powerBar.style.width = `${Math.max(0, Math.min(100, (totalAlloc / Math.max(1, power.available)) * 100))}%`;
+      powerBar.style.backgroundColor = totalAlloc > power.available ? "var(--crt-amber)" : "var(--crt-phosphor)";
+
+      thrustText.textContent = `${thrust.remaining}/${thrust.total}`;
+      thrustBar.style.width = `${Math.max(0, Math.min(100, (thrust.remaining / Math.max(1, thrust.total)) * 100))}%`;
+
+      const hostile = Boolean(meta.hostileContact);
+      appShell.classList.toggle("hostile", hostile);
+      conditionBadge.classList.toggle("hostile", hostile);
+      conditionBadge.textContent = hostile ? "HOSTILE CONTACT" : "CONDITION GREEN";
+
+      const mode = meta.viewMode || "ORBITAL_SCAN";
+      viewModeTitle.textContent = `VIEWPORT // ${mode}`;
+      ariaTierBadge.textContent = `A.R.I.A. T${meta.ariaUnlockTier || 1}`;
+
+      const orbital = data.tacticalMap?.orbital || defaultState.tacticalMap.orbital;
+      systemNameText.textContent = (orbital.systemName || "UNKNOWN").toUpperCase();
+      uwpText.textContent = orbital.uwp || "X000000-0";
+      contradictionText.textContent = orbital.contradictionHook || "";
+
+      // Crits
+      const critEntries = [
+        ["M-DRIVE", crits.mDrive || 0],
+        ["PWR PLANT", crits.powerPlant || 0],
+        ["SENSORS", crits.sensors || 0],
+        ["WEAPONS", crits.weapons || 0],
+        ["COMPUTER", crits.computer || 0]
+      ];
+      critGrid.innerHTML = critEntries.map(([name, lvl]) =>
+        `<div class="crit-item ${lvl > 0 ? "damaged" : ""}"><span>${name}</span><span>LVL ${lvl}</span></div>`
+      ).join("");
+
+      // Side List (Contacts or Anomalies)
+      if (mode === "SPACE_COMBAT") {
+        const contacts = Object.entries(data.tacticalMap?.spaceRadar?.contacts || {});
+        const lockedId = data.stations?.gunner?.lockedTargetId;
+        sideList.innerHTML = contacts.length
+          ? contacts.map(([id, c]) => {
+              const lockTag = id === lockedId ? "<span style='color:var(--crt-alert)'>[LOCK] </span>" : "";
+              return `<div style="margin-bottom:6px;">${lockTag}<strong>${c.name}</strong><br/><span style="color:var(--crt-text-dim)">${c.rangeBand} // ${c.transponder || "UNKNOWN"}</span></div>`;
+            }).join("")
+          : "<div>No radar contacts.</div>";
+      } else {
+        const anomalies = orbital.anomalies || [];
+        sideList.innerHTML = anomalies.length
+          ? anomalies.map(a => `<div style="margin-bottom:4px;">• ${a}</div>`).join("")
+          : "<div>No anomalies logged.</div>";
+      }
+
+      // Latest A.R.I.A. Feed Entry
+      const feedEntries = Object.entries(data.feed || {})
+        .map(([id, entry]) => ({ id, ...entry }))
+        .sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+      const latestAria = feedEntries.find(e => e.type === "ARIA");
+
+      ariaTicker.classList.toggle("corrupted", Boolean(meta.ariaCorrupted));
+      ariaTicker.classList.toggle("sleeper", Boolean(meta.ariaSleeperTriggered));
+
+      if (meta.ariaSleeperTriggered) {
+        ariaTag.textContent = "A.R.I.A. // DIRECTIVE";
+        ariaTag.style.color = "var(--crt-alert)";
+      } else if (meta.ariaCorrupted) {
+        ariaTag.textContent = "0x4F_ERR // CORRUPT";
+        ariaTag.style.color = "var(--crt-amber)";
+      } else {
+        ariaTag.textContent = "A.R.I.A.";
+        ariaTag.style.color = "var(--crt-phosphor)";
+      }
+
+      if (latestAria) {
+        ariaMsg.textContent = latestAria.body;
+        ariaTimestamp.textContent = latestAria.timestampLabel || "LIVE";
+        if (lastAriaId && lastAriaId !== latestAria.id) {
+          if (hostile || meta.ariaSleeperTriggered) playKlaxon();
+          else playChime();
+        }
+        lastAriaId = latestAria.id;
+      }
+    }
+
+    // --- Canvas Tactical Renderer ---
+    const canvas = document.getElementById("tacticalCanvas");
+    const ctx = canvas.getContext("2d");
+    let animTick = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = Math.max(300, Math.floor(rect.width));
+      canvas.height = Math.max(200, Math.floor(rect.height));
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    const BAND_RING = { ADJACENT: 1, CLOSE: 2, SHORT: 3, MEDIUM: 4, LONG: 5, DISTANT: 6 };
+
+    function drawLoop() {
+      animTick += 0.015;
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Subtle tactical grid
+      ctx.strokeStyle = "rgba(29, 107, 50, 0.25)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      const mode = currentSession.meta?.viewMode || "ORBITAL_SCAN";
+      const accent = currentSession.meta?.hostileContact ? "#FF3B30" : "#33FF66";
+
+      if (mode === "ORBITAL_SCAN") {
+        drawOrbital(w, h, accent);
+      } else if (mode === "SPACE_COMBAT") {
+        drawSpaceRadar(w, h, accent);
+      } else {
+        drawGroundZones(w, h);
+      }
+
+      requestAnimationFrame(drawLoop);
+    }
+
+    function drawOrbital(w, h, accent) {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const r = Math.min(w, h) * 0.24;
+
+      // Planet wireframe
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Latitude ellipses
+      ctx.strokeStyle = "rgba(51, 255, 102, 0.35)";
+      ctx.lineWidth = 1;
+      for (const scale of [0.3, 0.65]) {
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, r, r * scale, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Orbit path
+      ctx.strokeStyle = "rgba(255, 176, 0, 0.6)";
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r * 1.7, r * 0.55, -0.18, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Aegis Dawn orbiting ship
+      const sx = cx + Math.cos(animTick) * r * 1.7 * Math.cos(-0.18) - Math.sin(animTick) * r * 0.55 * Math.sin(-0.18);
+      const sy = cy + Math.cos(animTick) * r * 1.7 * Math.sin(-0.18) + Math.sin(animTick) * r * 0.55 * Math.cos(-0.18);
+      ctx.fillStyle = "#33FF66";
+      ctx.beginPath();
+      ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = "12px monospace";
+      ctx.fillText("SS AEGIS DAWN", sx + 10, sy + 4);
+    }
+
+    function drawSpaceRadar(w, h, accent) {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const maxR = Math.min(w, h) * 0.43;
+
+      for (let i = 1; i <= 6; i++) {
+        ctx.strokeStyle = i % 2 === 0 ? "rgba(51, 255, 102, 0.45)" : "rgba(51, 255, 102, 0.22)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, maxR * (i / 6), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Rotating radar sweep
+      ctx.strokeStyle = "rgba(51, 255, 102, 0.5)";
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(animTick * 1.5) * maxR, cy + Math.sin(animTick * 1.5) * maxR);
+      ctx.stroke();
+
+      // Center Aegis Dawn
+      ctx.strokeStyle = "#33FF66";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 11);
+      ctx.lineTo(cx + 9, cy + 9);
+      ctx.lineTo(cx, cy + 4);
+      ctx.lineTo(cx - 9, cy + 9);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Contacts
+      const contacts = Object.entries(currentSession.tacticalMap?.spaceRadar?.contacts || {});
+      const lockedId = currentSession.stations?.gunner?.lockedTargetId;
+      contacts.forEach(([id, c]) => {
+        const ring = BAND_RING[c.rangeBand] || 4;
+        const dist = maxR * (ring / 6);
+        const rad = ((c.bearingDeg || 0) * Math.PI) / 180;
+        const bx = cx + Math.cos(rad) * dist;
+        const by = cy + Math.sin(rad) * dist;
+        const color = c.hostile || currentSession.meta?.hostileContact ? "#FF3B30" : "#FFB000";
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(bx, by, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (id === lockedId) {
+          ctx.strokeStyle = "#FF3B30";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(bx, by, 13, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.font = "12px monospace";
+        ctx.fillText(c.name, bx + 10, by + 4);
+      });
+    }
+
+    function drawGroundZones(w, h) {
+      const nodes = currentSession.tacticalMap?.groundZones?.nodes || {};
+      const tokens = Object.values(currentSession.tacticalMap?.groundZones?.tokens || {});
+
+      // Edges
+      ctx.strokeStyle = "#1D6B32";
+      ctx.lineWidth = 2;
+      Object.values(nodes).forEach(node => {
+        const sx = (node.xNorm || 0.5) * w;
+        const sy = (node.yNorm || 0.5) * h;
+        (node.connectedTo || []).forEach(tid => {
+          const target = nodes[tid];
+          if (!target) return;
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          ctx.lineTo((target.xNorm || 0.5) * w, (target.yNorm || 0.5) * h);
+          ctx.stroke();
+        });
+      });
+
+      // Nodes
+      Object.entries(nodes).forEach(([nodeId, node]) => {
+        const nx = (node.xNorm || 0.5) * w;
+        const ny = (node.yNorm || 0.5) * h;
+        ctx.fillStyle = "#0A0F0A";
+        ctx.strokeStyle = "#33FF66";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(nx, ny, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#7FD996";
+        ctx.font = "12px monospace";
+        ctx.fillText(node.label || nodeId, nx - 32, ny - 28);
+
+        // Tokens in this node
+        const here = tokens.filter(t => t.nodeId === nodeId);
+        here.forEach((tok, idx) => {
+          const tx = nx + (idx - (here.length - 1) / 2) * 26;
+          const ty = ny + 32;
+          ctx.fillStyle = tok.isHostile ? "#FF3B30" : "#FFB000";
+          ctx.beginPath();
+          ctx.arc(tx, ty, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.font = "11px monospace";
+          ctx.fillText(tok.label || "UNIT", tx - 16, ty + 18);
+        });
+      });
+    }
+
+    requestAnimationFrame(drawLoop);
+
+    // --- Session Connect / Demo Controls ---
+    const sessionModal = document.getElementById("sessionModal");
+    const pinInput = document.getElementById("pinInput");
+    const firebaseConfigInput = document.getElementById("firebaseConfigInput");
+    const demoBtn = document.getElementById("demoBtn");
+    const connectBtn = document.getElementById("connectBtn");
+    const configBtn = document.getElementById("configBtn");
+
+    const savedCfg = localStorage.getItem("aegis_firebase_cfg");
+    if (savedCfg) firebaseConfigInput.value = savedCfg;
+    const urlPin = new URLSearchParams(window.location.search).get("pin");
+    if (urlPin) pinInput.value = urlPin.toUpperCase().slice(0, 4);
+
+    configBtn.addEventListener("click", () => sessionModal.classList.remove("hidden"));
+
+    demoBtn.addEventListener("click", () => {
+      currentPin = (pinInput.value || "AEGS").trim().toUpperCase().slice(0, 4) || "AEGS";
+      sessionModal.classList.add("hidden");
+      renderState(defaultState);
+    });
+
+    connectBtn.addEventListener("click", async () => {
+      currentPin = (pinInput.value || "AEGS").trim().toUpperCase().slice(0, 4) || "AEGS";
+      const rawCfg = firebaseConfigInput.value.trim();
+      if (!rawCfg) {
+        alert("Paste your Firebase Web Config JSON or click LAUNCH DEMO MODE.");
+        return;
+      }
+      try {
+        const cfg = JSON.parse(rawCfg);
+        localStorage.setItem("aegis_firebase_cfg", rawCfg);
+        const app = initializeApp(cfg);
+        const auth = getAuth(app);
+        await signInAnonymously(auth);
+        const db = getDatabase(app);
+        if (unsubscribeRtdb) unsubscribeRtdb();
+        const sessionRef = ref(db, `sessions/${currentPin}`);
+        unsubscribeRtdb = onValue(sessionRef, (snapshot) => {
+          if (snapshot.exists()) {
+            renderState(snapshot.val());
+          }
+        });
+        sessionModal.classList.add("hidden");
+      } catch (err) {
+        alert("Firebase connection error: " + err.message);
+      }
+    });
+
+    // Render initial background state behind modal
+    renderState(defaultState);
+  </script>
+</body>
+</html>

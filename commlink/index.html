@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SS AEGIS DAWN // COMMLINK DEPLOYMENT</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0A0F0A;
+      color: #33FF66;
+      font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 3px,
+        rgba(0, 0, 0, 0.22) 4px
+      );
+    }
+    .card {
+      width: min(620px, 100%);
+      background: #0F180F;
+      border: 2px solid #33FF66;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .sub {
+      color: #FFB000;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+    .desc {
+      color: #7FD996;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      padding: 14px 16px;
+      font-weight: bold;
+      letter-spacing: 1.2px;
+      border: 1px solid #33FF66;
+      background: rgba(51, 255, 102, 0.16);
+      color: #33FF66;
+    }
+    .btn:hover {
+      background: rgba(51, 255, 102, 0.28);
+    }
+    .btn.amber {
+      border-color: #FFB000;
+      background: rgba(255, 176, 0, 0.14);
+      color: #FFB000;
+    }
+    .btn.amber:hover {
+      background: rgba(255, 176, 0, 0.25);
+    }
+    .notes {
+      border-top: 1px solid #1D6B32;
+      padding-top: 12px;
+      font-size: 0.78rem;
+      color: #7FD996;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div>
+      <h1>SS AEGIS DAWN // COMMLINK</h1>
+      <div class="sub">TRANSPONDER: LUCKY BREAK • THE RIMWARD VERGE</div>
+    </div>
+
+    <p class="desc">
+      Tactical bridge commlink for Android phones &amp; Samsung Galaxy Z Fold 8 Ultra, paired with the Xbox Microsoft Edge Bridge Viewscreen.
+    </p>
+
+    <a class="btn" href="./AegisDawnCommlink.apk" download="AegisDawnCommlink.apk">
+      [ DOWNLOAD ANDROID COMMLINK (.APK) ]
+    </a>
+
+    <a class="btn amber" href="./bridge-viewscreen.html">
+      [ LAUNCH XBOX BRIDGE VIEWSCREEN ]
+    </a>
+
+    <div class="notes">
+      <div><strong>ANDROID INSTALL:</strong> Download the APK above and open it to install (allow "Install unknown apps" for your browser if prompted).</div>
+      <div style="margin-top: 6px;"><strong>XBOX EDGE TV:</strong> Open <code>jacobdavis.tech/commlink/bridge-viewscreen.html</code>, enter your 4-character Session PIN (default <code>AEGS</code>), and press Full Screen.</div>
+    </div>
+  </main>
+</body>
+</html>
