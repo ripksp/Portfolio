@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/css/styles.css?v=20261113j" />
+  <link rel="stylesheet" href="/css/styles.css?v=20261114a" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -70,6 +70,7 @@
         <a href="#story" class="nav-link" data-spy="story">Story</a>
         <a href="#work" class="nav-link" data-spy="work">Work</a>
         <a href="#experience" class="nav-link" data-spy="experience">Experience</a>
+        <a href="#toolkit" class="nav-link" data-spy="toolkit">Toolkit</a>
         <a href="#faq" class="nav-link" data-spy="faq">FAQ</a>
         <a href="/tools" class="nav-link">DNS Tool</a>
       </nav>
@@ -88,8 +89,8 @@
     <a href="#story">Story</a>
     <a href="#work">Work</a>
     <a href="#experience">Experience</a>
+    <a href="#toolkit">Toolkit</a>
     <a href="#faq">FAQ</a>
-    <a href="/projects">Projects</a>
     <a href="/tools">DNS Tool</a>
     <a href="/resume" class="btn btn-secondary">Open Living Resume</a>
   </nav>
@@ -109,7 +110,7 @@
           </p>
 
           <div class="hero-cta-row reveal">
-            <a href="#work" class="btn btn-primary btn-lg">See my work <span class="arrow" aria-hidden="true">→</span></a>
+            <a href="#work" class="btn btn-primary btn-lg">See case studies <span class="arrow" aria-hidden="true">→</span></a>
             <a href="/resume" class="btn btn-secondary btn-lg" id="hero-open-resume-btn">View resume</a>
           </div>
 
@@ -148,6 +149,19 @@
               <input type="text" id="term-input" class="term-input" placeholder="type a command (e.g. help, dig doordash.com)..." autocomplete="off" spellcheck="false" />
             </form>
           </div>
+
+          <div class="hero-float-grid">
+            <div class="float-card fc-role">
+              <span class="fc-label"><span class="live-dot" aria-hidden="true"></span>ACTIVE IN PROD · JAN 2026 – PRESENT</span>
+              <div class="fc-value">Online Ordering Support @ DoorDash</div>
+              <div class="fc-sub">DNS &amp; SSL · Snowflake SQL · White-Label Apps</div>
+            </div>
+            <div class="float-card fc-mentor">
+              <span class="fc-label">TRACK RECORD</span>
+              <div class="fc-big">Top CSAT</div>
+              <div class="fc-sub">VOC · NPS · Scribe SOPs</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -172,8 +186,15 @@
               <!-- Rendered from data/profile.js -->
             </div>
           </div>
-          <div class="stats-grid reveal" id="hero-metrics-grid">
-            <!-- Rendered from data/profile.js -->
+          <div class="story-aside">
+            <div class="stats-grid" id="hero-metrics-grid">
+              <!-- Rendered from data/profile.js -->
+            </div>
+            <div class="story-callout reveal">
+              <span class="mono-eyebrow">How I work</span>
+              <h3>Calm on the ticket, relentless in the logs.</h3>
+              <p>Whether it's a conflicting apex A-record breaking an SSL renewal or an unescaped JSON modifier hanging a payment gateway, I isolate the exact failure point and document a repeatable Scribe SOP so the whole team moves faster next time.</p>
+            </div>
           </div>
         </div>
 
@@ -184,27 +205,23 @@
     </section>
 
     <!-- SIGNATURE WORK ("house favorites") -->
-    <section class="section" id="work">
+    <section class="section section--tinted" id="work">
       <div class="container">
         <div class="menu-head">
           <div class="section-head reveal">
             <span class="script-eyebrow">house favorites</span>
-            <h2 class="section-title">Signature <em>work</em></h2>
-            <p class="section-sub">Real escalations I've isolated and fixed, plus the systems projects I've designed around restaurant ordering pain points.</p>
+            <h2 class="section-title">Production <em>case studies</em></h2>
+            <p class="section-sub">Real escalations I've isolated and fixed across custom domains, payment gateway webhooks, and restaurant POS networks. Click any card to step through the incident, diagnosis, and fix.</p>
           </div>
-          <div class="menu-filters reveal" role="group" aria-label="Filter work">
+          <div class="menu-filters reveal" id="work-filters" role="group" aria-label="Filter work" hidden>
             <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
             <button type="button" class="filter-chip" data-filter="case" aria-pressed="false">Case studies</button>
-            <button type="button" class="filter-chip" data-filter="project" aria-pressed="false">Systems projects</button>
+            <button type="button" class="filter-chip" data-filter="project" aria-pressed="false">Projects</button>
           </div>
         </div>
 
         <div class="menu-grid" id="work-grid">
           <!-- Rendered from data/profile.js -->
-        </div>
-
-        <div class="menu-more reveal">
-          <a href="/projects" class="btn btn-secondary">Explore full project breakdowns <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
@@ -231,7 +248,7 @@
     </dialog>
 
     <!-- LIVE WORKBENCH -->
-    <section class="section" id="workbench">
+    <section class="section section--band" id="workbench">
       <div class="container">
         <div class="workbench reveal">
           <div>
@@ -257,11 +274,22 @@
 
     <!-- EXPERIENCE -->
     <section class="section" id="experience">
-      <div class="container">
-        <div class="section-head reveal">
+      <div class="container experience-layout">
+        <div class="experience-aside reveal">
           <span class="script-eyebrow">the journey</span>
           <h2 class="section-title">Where I've <em>worked</em></h2>
           <p class="section-sub">Eight-plus years moving from broadband and payments into POS, kiosks, and restaurant online ordering — each role a little closer to the systems underneath.</p>
+          <div class="exp-summary-card">
+            <span class="mono-eyebrow">Career progression</span>
+            <ul class="exp-mini-track">
+              <li><span>2026–Now</span><strong>DoorDash</strong> · Online Ordering Support</li>
+              <li><span>2024–2025</span><strong>365 Retail Markets</strong> · Kiosk &amp; API Support</li>
+              <li><span>2021–2024</span><strong>Toast, Inc.</strong> · Tier II POS Engineer</li>
+              <li><span>2019–2021</span><strong>PayPal</strong> · Customer Operations</li>
+              <li><span>2017–2019</span><strong>Cox</strong> · Broadband Tech Support</li>
+            </ul>
+            <a href="/resume" class="btn btn-secondary btn-sm">Open Living Resume <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
         </div>
         <ol class="timeline" id="experience-list">
           <!-- Rendered from data/profile.js -->
@@ -270,7 +298,7 @@
     </section>
 
     <!-- RECOGNITION -->
-    <section class="section" id="recognition">
+    <section class="section section--tinted" id="recognition">
       <div class="container">
         <div class="section-head center reveal">
           <span class="script-eyebrow">word from the table</span>
@@ -289,6 +317,7 @@
         <div class="section-head reveal">
           <span class="script-eyebrow">tools of the trade</span>
           <h2 class="section-title">What's in the <em>kitchen</em></h2>
+          <p class="section-sub">The query consoles, diagnostic utilities, networking protocols, and documentation workflows I use every week.</p>
         </div>
         <div class="toolkit-grid" id="stack-grid">
           <!-- Rendered from data/profile.js -->
@@ -297,7 +326,7 @@
     </section>
 
     <!-- FAQ -->
-    <section class="section" id="faq">
+    <section class="section section--tinted" id="faq">
       <div class="container faq-layout">
         <div class="faq-aside reveal">
           <span class="script-eyebrow">good to know</span>
@@ -312,7 +341,7 @@
     </section>
 
     <!-- CONTACT -->
-    <section class="section" id="contact">
+    <section class="section section--band" id="contact">
       <div class="container">
         <div class="cta-card reveal">
           <span class="script-eyebrow">pull up a chair</span>
@@ -341,7 +370,7 @@
           <h4>Explore</h4>
           <ul>
             <li><a href="#story">Story</a></li>
-            <li><a href="#work">Work</a></li>
+            <li><a href="#work">Case Studies</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
@@ -350,8 +379,8 @@
           <h4>Pages</h4>
           <ul>
             <li><a href="/resume">Living Resume</a></li>
-            <li><a href="/projects">Projects</a></li>
             <li><a href="/tools">DNS &amp; SSL Tool</a></li>
+            <li><a href="/projects">Projects</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -370,9 +399,9 @@
     </div>
   </footer>
 
-  <script src="/data/profile.js?v=20261113j"></script>
-  <script src="/js/app.js?v=20261113j"></script>
-  <script src="/js/hero3d.js?v=20261113j"></script>
-  <script src="/js/assistant.js?v=20261113j"></script>
+  <script src="/data/profile.js?v=20261114a"></script>
+  <script src="/js/app.js?v=20261114a"></script>
+  <script src="/js/hero3d.js?v=20261114a"></script>
+  <script src="/js/assistant.js?v=20261114a"></script>
 </body>
 </html>

@@ -393,15 +393,14 @@
         const target = args.section || args.target || "";
         const map = {
           hero: "/#top",
+          story: "/#story",
+          work: "/#work",
           experience: "/#experience",
           projects: "/projects",
           skills: "/#toolkit",
           resume: "/resume",
           tools: "/tools",
-          contact: "/#contact",
-          tab_orderflow: "/projects#orderflow",
-          tab_omniorder: "/projects#omniorder",
-          tab_brandsync: "/projects#brandsync"
+          contact: "/#contact"
         };
         const dest = map[target];
         if (dest) {
@@ -439,15 +438,6 @@
           firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
         } else if (appendMessage && args.summary) {
           appendMessage("model", args.summary);
-        }
-      } else if (name === "customize_storefront") {
-        const brand = args.brandName || "Custom Storefront";
-        const accent = args.primaryColor || args.themeColor || "#10b981";
-        if (typeof window.applyBrandSyncSandbox === "function") {
-          window.applyBrandSyncSandbox({ brandName: brand, primaryColor: accent, ...args });
-        } else {
-          sessionStorage.setItem("brandsync_pending", JSON.stringify(args));
-          window.location.href = "/projects#brandsync";
         }
       }
     });

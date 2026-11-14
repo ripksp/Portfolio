@@ -83,11 +83,11 @@
     if (!grid || !Array.isArray(scenarios)) return;
 
     grid.innerHTML = scenarios
-      .map((sc) => {
+      .map((sc, idx) => {
         const sev = String(sc.severity || "").toLowerCase();
         const sevClass = sev === "critical" ? "critical" : sev === "medium" ? "medium" : "";
         return `
-        <article class="scenario-card" id="${escapeHtml(sc.id)}">
+        <article class="scenario-card reveal" id="${escapeHtml(sc.id)}" data-stagger="${(idx % 4) + 1}">
           <div class="scenario-head">
             <span class="mono-eyebrow">${escapeHtml(sc.category)}</span>
             <span class="sev ${sevClass}">${escapeHtml(sc.severity)}</span>
@@ -99,6 +99,10 @@
         </article>`;
       })
       .join("");
+
+    if (window.JD && typeof window.JD.observeReveals === "function") {
+      window.JD.observeReveals(grid);
+    }
   }
 
   function initTools() {

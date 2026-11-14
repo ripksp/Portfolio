@@ -17,9 +17,16 @@
 
     if (!outputEl || !formEl || !inputEl) return;
 
+    let bootTimers = [];
+
+    function clearBootTimers() {
+      bootTimers.forEach((t) => clearTimeout(t));
+      bootTimers = [];
+    }
+
     function appendLine(text, cls) {
       const line = document.createElement("div");
-      line.className = cls ? `term-line ${cls}` : "term-line";
+      line.className = cls ? `term-line term-line--enter ${cls}` : "term-line term-line--enter";
       line.textContent = text;
       outputEl.appendChild(line);
       outputEl.scrollTop = outputEl.scrollHeight;
@@ -27,20 +34,52 @@
     }
 
     function appendBlock(lines, cls) {
-      lines.forEach((l) => appendLine(l, cls));
+      lines.forEach((l, i) => {
+        if (i === 0) {
+          appendLine(l, cls);
+        } else {
+          const timer = setTimeout(() => appendLine(l, cls), i * 55);
+          bootTimers.push(timer);
+        }
+      });
     }
 
-    function renderBoot() {
+    function renderBoot(immediate) {
+      clearBootTimers();
       outputEl.innerHTML = "";
-      appendLine("jacob@omaha:~$ whoami", "term-cmd");
-      appendLine("Jacob Davis · Online Ordering Support Specialist @ DoorDash", "term-out");
-      appendLine("jacob@omaha:~$ status --check", "term-cmd");
-      appendLine("✓ DNS resolved   ✓ SSL valid   ✓ Menu synced   ✓ Top CSAT", "term-ok");
-      appendLine("Heyyo! 👋 Click a command below or type 'help' to run live diagnostics.", "term-muted");
+      const reduced =
+        immediate ||
+        (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+      const steps = [
+        { delay: 0, text: "jacob@omaha:~$ whoami", cls: "term-cmd" },
+        { delay: 130, text: "Jacob Davis · Online Ordering Support Specialist @ DoorDash", cls: "term-out" },
+        { delay: 300, text: "jacob@omaha:~$ status --check", cls: "term-cmd" },
+        { delay: 470, text: "✓ DNS resolved   ✓ SSL valid   ✓ Menu synced   ✓ Top CSAT", cls: "term-ok" },
+        {
+          delay: 640,
+          text: "Heyyo! 👋 Click a command chip below or type 'help' to run live diagnostics.",
+          cls: "term-muted"
+        }
+      ];
+
+      if (reduced) {
+        steps.forEach((s) => appendLine(s.text, s.cls));
+        return;
+      }
+
+      steps.forEach((s) => {
+        const timer = setTimeout(() => appendLine(s.text, s.cls), s.delay);
+        bootTimers.push(timer);
+      });
     }
 
     async function runDnsCommand(mode, rawDomain) {
-      const domain = (rawDomain || "jacobdavis.tech").replace(/^https?:\/\//i, "").split("/")[0].trim() || "jacobdavis.tech";
+      const domain =
+        (rawDomain || "jacobdavis.tech")
+          .replace(/^https?:\/\//i, "")
+          .split("/")[0]
+          .trim() || "jacobdavis.tech";
       const pending = appendLine(`Querying /api/dns-lookup.php for ${domain}...`, "term-muted");
 
       try {
@@ -48,7 +87,7 @@
         const data = await res.json();
         if (!res.ok || data.error) {
           pending.textContent = `⚠ ${data.error || "Live lookup requires PHP hosting (Bluehost)."}`;
-          pending.className = "term-line term-warn";
+          pending.className = "term-line term-line--enter term-warn";
           return;
         }
 
@@ -58,7 +97,10 @@
 
         if (mode === "ssl") {
           appendLine(`TLS Handshake (${domain}:443):`, "term-ok");
-          appendLine(`  Status : ${ssl.valid ? "✓ Valid" : "✕ Invalid / Not Found"}`, ssl.valid ? "term-out" : "term-warn");
+          appendLine(
+            `  Status : ${ssl.valid ? "✓ Valid" : "✕ Invalid / Not Found"}`,
+            ssl.valid ? "term-out" : "term-warn"
+          );
           if (ssl.issuer) appendLine(`  Issuer : ${ssl.issuer}`, "term-out");
           if (ssl.validTo) appendLine(`  Expires: ${ssl.validTo}`, "term-out");
         } else {
@@ -72,7 +114,7 @@
         }
       } catch (_err) {
         pending.textContent = "⚠ Live lookup unavailable in local preview — works live on jacobdavis.tech/tools!";
-        pending.className = "term-line term-warn";
+        pending.className = "term-line term-line--enter term-warn";
       }
     }
 
@@ -80,12 +122,13 @@
       const trimmed = raw.trim();
       if (!trimmed) return;
 
+      clearBootTimers();
       const parts = trimmed.split(/\s+/);
       const cmd = parts[0].toLowerCase();
       const arg = parts.slice(1).join(" ");
 
       if (cmd === "clear" || cmd === "cls") {
-        renderBoot();
+        renderBoot(true);
         return;
       }
 
@@ -165,7 +208,10 @@
     chips.forEach((chip) => {
       chip.addEventListener("click", () => {
         const cmd = chip.getAttribute("data-term-cmd");
-        if (cmd) runCommand(cmd);
+        if (!cmd) return;
+        chip.classList.add("is-active");
+        setTimeout(() => chip.classList.remove("is-active"), 260);
+        runCommand(cmd);
       });
     });
 
@@ -176,7 +222,7 @@
       runCommand(val);
     });
 
-    renderBoot();
+    renderBoot(false);
   }
 
   if (document.readyState === "loading") {

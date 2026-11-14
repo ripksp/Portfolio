@@ -49,8 +49,8 @@
     if (!el) return;
     el.innerHTML = data.hero.metrics
       .map(
-        (m) => `
-        <div class="stat-tile">
+        (m, idx) => `
+        <div class="stat-tile reveal" data-stagger="${(idx % 4) + 1}">
           <div class="stat-value">${escapeHtml(m.value)}</div>
           <div class="stat-label">${escapeHtml(m.label)}</div>
           <div class="stat-detail">${escapeHtml(m.detail)}</div>
@@ -71,10 +71,10 @@
     const el = $("#pillars-grid");
     if (!el) return;
     el.innerHTML = data.pillars
-      .map((p) => {
+      .map((p, idx) => {
         const num = String(p.code || "").split("//")[0].trim();
         return `
-        <article class="pillar-card reveal" id="${escapeHtml(p.id)}">
+        <article class="pillar-card reveal" id="${escapeHtml(p.id)}" data-stagger="${(idx % 4) + 1}">
           <span class="pillar-num">${escapeHtml(num)}</span>
           <h3 class="pillar-title">${escapeHtml(p.title)}</h3>
           <p class="pillar-desc">${escapeHtml(p.description)}</p>
@@ -87,20 +87,17 @@
   const CARD_ART = {
     "case-dns": { glyph: "DNS", code: "order  CNAME  edge\napex   A      ✕ loop\nTLS    1.3    ✓" },
     "case-api": { glyph: "API", code: "POST /authorize\n→ 504 timeout\n→ 200 OK  ✓" },
-    "case-network": { glyph: "VLAN", code: "VLAN 20  POS_PROD\nDHCP     .20–.39\nGuest →  VLAN 99" },
-    orderflow: { glyph: "ESC/POS", code: "queue  idem_9f2a\nretry  2  ✓\nprint  TM-T88VI" },
-    omniorder: { glyph: "KDS", code: "hmac   sha256 ✓\nschema canonical-v1\n86'd   → 3 targets" },
-    brandsync: { glyph: "SSL", code: "cname  verified ✓\nacme   issued\ntheme  #10b981" }
+    "case-network": { glyph: "VLAN", code: "VLAN 20  POS_PROD\nDHCP     .20–.39\nGuest →  VLAN 99" }
   };
 
   function renderWork() {
     const grid = $("#work-grid");
     if (!grid) return;
 
-    const caseCards = data.caseStudies.map((cs, idx) => {
+    const caseCards = (data.caseStudies || []).map((cs, idx) => {
       const art = CARD_ART[cs.id] || { glyph: "FIX", code: "" };
       return `
-      <article class="menu-card kind-case reveal" id="${escapeHtml(cs.id)}" data-kind="case">
+      <article class="menu-card kind-case reveal" id="${escapeHtml(cs.id)}" data-kind="case" data-stagger="${(idx % 3) + 1}">
         <div class="menu-art" aria-hidden="true">
           <span class="menu-badge">Case study</span>
           <span class="menu-art-code">${escapeHtml(art.code)}</span>
@@ -114,18 +111,19 @@
           <p class="menu-desc">${escapeHtml(cs.problem)}</p>
           <div class="menu-foot">
             <span class="menu-impact">${escapeHtml(cs.category)}</span>
-            <span class="menu-cta" aria-hidden="true">Incident → Fix <span>→</span></span>
+            <span class="menu-cta" aria-hidden="true">Incident → Fix <span class="arrow">→</span></span>
           </div>
         </div>
       </article>`;
     });
 
-    const projectCards = data.projects.map((p) => {
+    const projectList = Array.isArray(data.projects) ? data.projects : [];
+    const projectCards = projectList.map((p, idx) => {
       const art = CARD_ART[p.id] || { glyph: "SYS", code: "" };
       return `
-      <article class="menu-card kind-project reveal" id="${escapeHtml(p.sandboxId || p.id)}" data-kind="project">
+      <article class="menu-card kind-project reveal" id="${escapeHtml(p.sandboxId || p.id)}" data-kind="project" data-stagger="${(idx % 3) + 1}">
         <div class="menu-art" aria-hidden="true">
-          <span class="menu-badge">System</span>
+          <span class="menu-badge">Project</span>
           <span class="menu-art-code">${escapeHtml(art.code)}</span>
           <span class="menu-art-glyph">${escapeHtml(art.glyph)}<span>.</span></span>
         </div>
@@ -136,12 +134,17 @@
           </h3>
           <p class="menu-desc">${escapeHtml(p.challenge)}</p>
           <div class="menu-foot">
-            <span class="menu-impact">${escapeHtml(p.badge)}</span>
-            <span class="menu-cta" aria-hidden="true">Breakdown <span>→</span></span>
+            <span class="menu-impact">${escapeHtml(p.badge || "")}</span>
+            <span class="menu-cta" aria-hidden="true">Breakdown <span class="arrow">→</span></span>
           </div>
         </div>
       </article>`;
     });
+
+    const filtersWrap = $("#work-filters");
+    if (filtersWrap) {
+      filtersWrap.hidden = projectList.length === 0;
+    }
 
     grid.innerHTML = caseCards.concat(projectCards).join("");
     setupWorkFilters();
@@ -178,7 +181,12 @@
 
     function selectStage(stage) {
       tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.stage === stage)));
-      if (current) panelEl.textContent = current[stage] || "";
+      if (current) {
+        panelEl.classList.remove("is-animating");
+        void panelEl.offsetWidth;
+        panelEl.textContent = current[stage] || "";
+        panelEl.classList.add("is-animating");
+      }
     }
 
     tabs.forEach((tab, i) => {
@@ -220,8 +228,8 @@
     if (!list) return;
     list.innerHTML = data.experience
       .map(
-        (exp) => `
-        <li class="role reveal${exp.current ? " is-current" : ""}" id="${escapeHtml(exp.id)}">
+        (exp, idx) => `
+        <li class="role reveal${exp.current ? " is-current" : ""}" id="${escapeHtml(exp.id)}" data-stagger="${(idx % 5) + 1}">
           <span class="role-dot" aria-hidden="true"></span>
           <details${exp.current ? " open" : ""}>
             <summary>
@@ -247,8 +255,8 @@
     if (!grid) return;
     grid.innerHTML = data.recognitionAndCommunity
       .map(
-        (r) => `
-        <article class="review-card reveal" id="${escapeHtml(r.id)}">
+        (r, idx) => `
+        <article class="review-card reveal" id="${escapeHtml(r.id)}" data-stagger="${(idx % 4) + 1}">
           <div class="review-type">${escapeHtml(r.type)}</div>
           <h3 class="review-title">${escapeHtml(r.title)}</h3>
           <p class="review-desc">${escapeHtml(r.description)}</p>
@@ -263,8 +271,9 @@
     if (!grid) return;
     grid.innerHTML = data.skillsCategories
       .map(
-        (cat) => `
-        <div class="toolkit-col reveal">
+        (cat, idx) => `
+        <div class="toolkit-col reveal" data-stagger="${(idx % 4) + 1}">
+          <div class="toolkit-num">0${idx + 1} // STACK</div>
           <h3>${escapeHtml(cat.category)}</h3>
           <ul>${cat.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
         </div>`
@@ -278,7 +287,7 @@
     list.innerHTML = data.faq
       .map(
         (f, idx) => `
-        <details class="faq-item reveal" name="faq"${idx === 0 ? " open" : ""}>
+        <details class="faq-item reveal" name="faq" data-stagger="${(idx % 4) + 1}"${idx === 0 ? " open" : ""}>
           <summary>${escapeHtml(f.q)}<span class="chev" aria-hidden="true">▾</span></summary>
           <div class="faq-answer">
             <p>${escapeHtml(f.a)}</p>
@@ -430,24 +439,33 @@
     });
   }
 
-  function setupReveal() {
-    const items = $$(".reveal");
+  let revealObserver = null;
+
+  function observeReveals(root = document) {
+    const items = $$(".reveal:not(.is-visible)", root);
+    if (!items.length) return;
     if (!("IntersectionObserver" in window)) {
       items.forEach((el) => el.classList.add("is-visible"));
       return;
     }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
-    );
-    items.forEach((el) => io.observe(el));
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -6% 0px", threshold: 0.04 }
+      );
+    }
+    items.forEach((el) => revealObserver.observe(el));
+  }
+
+  function setupReveal() {
+    observeReveals(document);
   }
 
   function setupEmailCopy() {
@@ -513,6 +531,6 @@
     init();
   }
 
-  // Expose escapeHtml for page scripts (projects/tools/stellar)
-  window.JD = Object.assign(window.JD || {}, { escapeHtml });
+  // Expose helpers for page scripts (projects/tools/stellar)
+  window.JD = Object.assign(window.JD || {}, { escapeHtml, observeReveals });
 })();
