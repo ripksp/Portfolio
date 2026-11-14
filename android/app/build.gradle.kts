@@ -9,7 +9,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "tech.jacobdavis.aegisdawn"
+        applicationId = "tech.jakedavis.aegisdawn"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

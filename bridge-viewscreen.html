@@ -881,8 +881,16 @@
     const connectBtn = document.getElementById("connectBtn");
     const configBtn = document.getElementById("configBtn");
 
+    const defaultTravellerCfg = JSON.stringify({
+      apiKey: "AIzaSyBqFzQg12OcCg_GDCThzjZHf1t6ddjwo5g",
+      authDomain: "traveller-5a0bc.firebaseapp.com",
+      databaseURL: "https://traveller-5a0bc-default-rtdb.firebaseio.com",
+      projectId: "traveller-5a0bc",
+      storageBucket: "traveller-5a0bc.firebasestorage.app",
+      appId: "1:692954545353:android:40959c48a975e2f3e1e118"
+    });
     const savedCfg = localStorage.getItem("aegis_firebase_cfg");
-    if (savedCfg) firebaseConfigInput.value = savedCfg;
+    firebaseConfigInput.value = savedCfg || defaultTravellerCfg;
     const urlPin = new URLSearchParams(window.location.search).get("pin");
     if (urlPin) pinInput.value = urlPin.toUpperCase().slice(0, 4);
 

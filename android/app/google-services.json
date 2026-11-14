@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "692954545353",
+    "project_id": "traveller-5a0bc",
+    "storage_bucket": "traveller-5a0bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692954545353:android:40959c48a975e2f3e1e118",
+        "android_client_info": {
+          "package_name": "tech.jakedavis.aegisdawn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqFzQg12OcCg_GDCThzjZHf1t6ddjwo5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,7 +23,13 @@ class AegisApplication : Application() {
 
         val firebaseApps = runCatching { FirebaseApp.getApps(this) }.getOrDefault(emptyList())
         sessionRepository = if (firebaseApps.isNotEmpty()) {
-            val db = FirebaseDatabase.getInstance().apply {
+            val app = firebaseApps.first()
+            val dbUrl = app.options.databaseUrl
+            val db = if (dbUrl.isNullOrBlank()) {
+                FirebaseDatabase.getInstance("https://traveller-5a0bc-default-rtdb.firebaseio.com")
+            } else {
+                FirebaseDatabase.getInstance()
+            }.apply {
                 runCatching { setPersistenceEnabled(true) }
             }
             ShipCombatRepository(
