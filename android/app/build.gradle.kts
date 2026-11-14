@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "tech.jakedavis.aegisdawn"
+    namespace = "tech.jacobdavis.aegisdawn"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "tech.jakedavis.aegisdawn"
+        applicationId = "tech.jacobdavis.aegisdawn"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
