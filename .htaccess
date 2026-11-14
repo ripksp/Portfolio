@@ -38,6 +38,9 @@ RewriteRule ^resume/?$ resume/index.html [L]
 
 # Route /stellar and /stellar/ to stellar/index.html cleanly
 RewriteRule ^stellar/?$ stellar/index.html [L]
+
+# Route /commlink and /commlink/ to commlink/index.html cleanly
+RewriteRule ^commlink/?$ commlink/index.html [L]
 </IfModule>
 
 # Deny direct browser access to sensitive config, env, markdown, scripts, JSON, lockfiles, YAML, logs, and git metadata

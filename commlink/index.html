@@ -4,330 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SS AEGIS DAWN // COMMLINK TERMINAL</title>
-  <style>
-    :root {
-      --crt-void: #070b07;
-      --crt-surface: rgba(13, 22, 13, 0.9);
-      --crt-elevated: rgba(20, 36, 20, 0.95);
-      --crt-phosphor: #33ff66;
-      --crt-dim: #1d6b32;
-      --crt-text-dim: #7fd996;
-      --crt-amber: #ffb000;
-      --crt-alert: #ff3b30;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--crt-void);
-      color: var(--crt-phosphor);
-      font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", "Courier New", monospace;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-      line-height: 1.5;
-    }
-
-    /* Animated subtle starfield + radar grid canvas */
-    #bgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.45;
-    }
-
-    /* CRT Scanlines & Vignette */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 50;
-      background:
-        radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
-        repeating-linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0) 0px,
-          rgba(0, 0, 0, 0) 3px,
-          rgba(0, 0, 0, 0.24) 4px
-        );
-    }
-
-    .container {
-      position: relative;
-      z-index: 10;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 28px 18px 42px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Top Status Bar */
-    .status-strip {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 14px;
-      background: var(--crt-surface);
-      border: 1px solid var(--crt-dim);
-      font-size: 0.78rem;
-      letter-spacing: 1px;
-    }
-
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pulse-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--crt-phosphor);
-      box-shadow: 0 0 10px var(--crt-phosphor);
-      animation: pulse 1.6s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
-    }
-
-    .back-link {
-      color: var(--crt-text-dim);
-      text-decoration: none;
-      border: 1px solid var(--crt-dim);
-      padding: 3px 8px;
-      transition: all 0.2s ease;
-    }
-    .back-link:hover {
-      color: var(--crt-phosphor);
-      border-color: var(--crt-phosphor);
-      background: rgba(51, 255, 102, 0.12);
-    }
-
-    /* Hero Terminal Panel */
-    .hero {
-      background: var(--crt-surface);
-      border: 1px solid var(--crt-phosphor);
-      box-shadow: 0 0 28px rgba(51, 255, 102, 0.12);
-      padding: 26px 24px;
-      position: relative;
-    }
-
-    .hero::before, .hero::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-color: var(--crt-amber);
-      border-style: solid;
-    }
-    .hero::before { top: -2px; left: -2px; border-width: 2px 0 0 2px; }
-    .hero::after { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
-
-    .eyebrow {
-      font-size: 0.78rem;
-      color: var(--crt-amber);
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-    }
-
-    h1 {
-      font-size: clamp(1.6rem, 4vw, 2.35rem);
-      letter-spacing: 2.5px;
-      text-shadow: 0 0 14px rgba(51, 255, 102, 0.35);
-      margin-bottom: 10px;
-    }
-
-    .lead {
-      color: var(--crt-text-dim);
-      font-size: 0.92rem;
-      max-width: 72ch;
-    }
-
-    .aria-quote {
-      margin-top: 16px;
-      padding: 10px 14px;
-      background: rgba(7, 11, 7, 0.85);
-      border-left: 3px solid var(--crt-amber);
-      font-size: 0.82rem;
-      color: var(--crt-amber);
-    }
-
-    /* 2-Column Action Cards */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--crt-surface);
-      border: 1px solid var(--crt-dim);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 14px;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .card:hover {
-      border-color: var(--crt-phosphor);
-      transform: translateY(-2px);
-    }
-
-    .card.amber-card:hover {
-      border-color: var(--crt-amber);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid var(--crt-dim);
-      padding-bottom: 8px;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-    }
-
-    .tag {
-      font-size: 0.7rem;
-      padding: 2px 7px;
-      border: 1px solid currentColor;
-      letter-spacing: 1px;
-    }
-
-    .card-body {
-      font-size: 0.84rem;
-      color: var(--crt-text-dim);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .pill {
-      font-size: 0.72rem;
-      padding: 3px 8px;
-      background: rgba(51, 255, 102, 0.08);
-      border: 1px solid var(--crt-dim);
-      color: var(--crt-phosphor);
-    }
-
-    .pin-launcher {
-      display: flex;
-      gap: 8px;
-      align-items: stretch;
-    }
-
-    .pin-input {
-      width: 96px;
-      background: var(--crt-void);
-      border: 1px solid var(--crt-amber);
-      color: var(--crt-amber);
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-align: center;
-      text-transform: uppercase;
-      padding: 10px 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      text-decoration: none;
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      padding: 12px 16px;
-      border: 1px solid var(--crt-phosphor);
-      background: rgba(51, 255, 102, 0.16);
-      color: var(--crt-phosphor);
-      cursor: pointer;
-      transition: all 0.18s ease;
-      width: 100%;
-    }
-
-    .btn:hover {
-      background: rgba(51, 255, 102, 0.3);
-      box-shadow: 0 0 16px rgba(51, 255, 102, 0.25);
-    }
-
-    .btn.amber {
-      border-color: var(--crt-amber);
-      background: rgba(255, 176, 0, 0.14);
-      color: var(--crt-amber);
-    }
-
-    .btn.amber:hover {
-      background: rgba(255, 176, 0, 0.28);
-      box-shadow: 0 0 16px rgba(255, 176, 0, 0.25);
-    }
-
-    /* 3-Step Onboarding Strip */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .step-box {
-      background: var(--crt-surface);
-      border: 1px solid var(--crt-dim);
-      padding: 14px;
-      font-size: 0.8rem;
-    }
-
-    .step-num {
-      color: var(--crt-amber);
-      font-weight: 700;
-      margin-bottom: 4px;
-      letter-spacing: 1px;
-    }
-
-    .step-box p {
-      color: var(--crt-text-dim);
-      font-size: 0.78rem;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.74rem;
-      color: var(--crt-dim);
-      padding-top: 6px;
-    }
-  </style>
+  <link rel="stylesheet" href="./commlink.css" />
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
 
   <main class="container">
-    <!-- Top Status Strip -->
     <div class="status-strip">
       <div class="status-left">
         <span class="pulse-dot"></span>
@@ -336,13 +18,12 @@
       <a class="back-link" href="/">[ &lt;- JACOBDAVIS.TECH ]</a>
     </div>
 
-    <!-- Hero -->
     <section class="hero">
       <div class="eyebrow">MONGOOSE TRAVELLER 2E • TACTICAL TELEMETRY SUITE</div>
       <h1>SS AEGIS DAWN // COMMLINK</h1>
       <p class="lead">
         Real-time bridge commlink and public TV viewscreen for the salvaged free trader
-        <strong style="color:#FFB000;">SS Aegis Dawn</strong> (transponder alias: <em>Lucky Break</em>).
+        <strong>SS Aegis Dawn</strong> (transponder alias: <em>Lucky Break</em>).
         Permissive, story-first tabletop tooling with zero turn locks.
       </p>
       <div class="aria-quote">
@@ -350,19 +31,17 @@
       </div>
     </section>
 
-    <!-- Primary Deployment Cards -->
     <section class="cards-grid">
-      <!-- Android APK Card -->
       <article class="card">
         <div>
           <div class="card-header">
             <span class="card-title">ANDROID COMMLINK</span>
             <span class="tag">APK • ~18 MB</span>
           </div>
-          <div class="card-body" style="margin-top: 12px;">
+          <div class="card-body">
             <p>
               Install on your phone for your personal 3-tab station console
-              (<strong style="color:#33FF66;">BRIDGE / LOADOUT / FEED</strong>), or unfold on a tablet / Z Fold for the dual-pane Referee Command Deck.
+              (<strong class="green">BRIDGE / LOADOUT / FEED</strong>), or unfold on a tablet / Z Fold for the dual-pane Referee Command Deck.
             </p>
             <div class="pill-row">
               <span class="pill">PILOT</span>
@@ -370,7 +49,7 @@
               <span class="pill">ENGINEER</span>
               <span class="pill">GUNNER</span>
               <span class="pill">SENSORS</span>
-              <span class="pill" style="border-color:#FFB000;color:#FFB000;">REFEREE</span>
+              <span class="pill ref-pill">REFEREE</span>
             </div>
           </div>
         </div>
@@ -379,22 +58,21 @@
         </a>
       </article>
 
-      <!-- Xbox Bridge Viewscreen Card -->
       <article class="card amber-card">
         <div>
           <div class="card-header">
-            <span class="card-title" style="color:#FFB000;">BRIDGE VIEWSCREEN</span>
-            <span class="tag" style="color:#FFB000;">XBOX EDGE / TV</span>
+            <span class="card-title amber-text">BRIDGE VIEWSCREEN</span>
+            <span class="tag amber-text">XBOX EDGE / TV</span>
           </div>
-          <div class="card-body" style="margin-top: 12px;">
+          <div class="card-body">
             <p>
               Read-only 16:9 tactical monitor for the living room TV. Displays live Orbital Scans,
               Space Combat Range Bands, Ground Zone tokens, and A.R.I.A. alerts.
             </p>
-            <div style="font-size:0.74rem;color:#FFB000;">ENTER 4-CHAR SESSION PIN TO LAUNCH:</div>
+            <div class="pin-prompt">ENTER 4-CHAR SESSION PIN TO LAUNCH:</div>
             <div class="pin-launcher">
               <input id="pinField" class="pin-input" type="text" maxlength="4" value="AEGS" aria-label="Session PIN" />
-              <button class="btn amber" type="button" onclick="launchViewscreen()">
+              <button id="launchViewscreenBtn" class="btn amber" type="button">
                 [ LAUNCH VIEWSCREEN ]
               </button>
             </div>
@@ -403,7 +81,6 @@
       </article>
     </section>
 
-    <!-- 3-Step Crew Setup -->
     <section class="steps-grid">
       <div class="step-box">
         <div class="step-num">01 // INSTALL COMMLINK</div>
@@ -424,71 +101,6 @@
     </footer>
   </main>
 
-  <script>
-    function launchViewscreen() {
-      const pin = (document.getElementById("pinField").value || "AEGS")
-        .trim()
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, "")
-        .slice(0, 4) || "AEGS";
-      window.location.href = `./bridge-viewscreen.html?pin=${encodeURIComponent(pin)}`;
-    }
-
-    // Subtle animated starfield + radar ring background
-    const canvas = document.getElementById("bgCanvas");
-    const ctx = canvas.getContext("2d");
-    const stars = Array.from({ length: 55 }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      r: Math.random() * 1.4 + 0.4,
-      s: Math.random() * 0.0003 + 0.0001
-    }));
-    let angle = 0;
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
-    function draw() {
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-
-      // Subtle grid
-      ctx.strokeStyle = "rgba(29, 107, 50, 0.16)";
-      ctx.lineWidth = 1;
-      for (let x = 0; x < w; x += 64) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      }
-      for (let y = 0; y < h; y += 64) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-      }
-
-      // Drifting stars
-      ctx.fillStyle = "rgba(51, 255, 102, 0.45)";
-      stars.forEach(st => {
-        st.y = (st.y + st.s) % 1;
-        ctx.beginPath();
-        ctx.arc(st.x * w, st.y * h, st.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      // Faint radar sweep in background
-      angle += 0.008;
-      const cx = w * 0.82, cy = h * 0.25, mr = Math.min(w, h) * 0.35;
-      ctx.strokeStyle = "rgba(51, 255, 102, 0.12)";
-      ctx.beginPath(); ctx.arc(cx, cy, mr, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy, mr * 0.6, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(angle) * mr, cy + Math.sin(angle) * mr);
-      ctx.stroke();
-
-      requestAnimationFrame(draw);
-    }
-    requestAnimationFrame(draw);
-  </script>
+  <script src="./commlink.js"></script>
 </body>
 </html>
