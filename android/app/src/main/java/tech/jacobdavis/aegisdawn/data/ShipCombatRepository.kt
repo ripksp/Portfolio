@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import tech.jacobdavis.aegisdawn.model.CommandStation
+import tech.jacobdavis.aegisdawn.model.CommsChannel
+import tech.jacobdavis.aegisdawn.model.CommsMessage
+import tech.jacobdavis.aegisdawn.model.CommsState
 import tech.jacobdavis.aegisdawn.model.CritsState
 import tech.jacobdavis.aegisdawn.model.DiceRollDetail
 import tech.jacobdavis.aegisdawn.model.EngineerStation
@@ -35,6 +38,7 @@ import tech.jacobdavis.aegisdawn.model.OrbitalScanState
 import tech.jacobdavis.aegisdawn.model.PilotStation
 import tech.jacobdavis.aegisdawn.model.PowerAllocation
 import tech.jacobdavis.aegisdawn.model.PowerState
+import tech.jacobdavis.aegisdawn.model.PsychDirective
 import tech.jacobdavis.aegisdawn.model.RadarContact
 import tech.jacobdavis.aegisdawn.model.RangeBand
 import tech.jacobdavis.aegisdawn.model.SensorsStation
@@ -720,6 +724,194 @@ class ShipCombatRepository(
         sessionRef(pin).child("tacticalMap/groundZones/tokens").child(tokenId).removeValue()
     }
 
+    override fun sendPartyMessage(from: StationRole, text: String) {
+        val pin = activePin ?: return
+        val clean = text.trim()
+        if (clean.isEmpty()) return
+        val ref = sessionRef(pin)
+        val state = _sessionState.value
+        val isInfected = state?.comms?.directives?.get(from)?.isMindVirus == true
+        pushCommsMessage(
+            ref = ref,
+            channel = CommsChannel.PARTY,
+            from = from,
+            to = null,
+            senderLabel = from.displayName.uppercase(),
+            body = clean,
+            isWhisper = false,
+            isInfectedEcho = isInfected
+        )
+
+        val lower = clean.lowercase()
+        val autoInterject = state?.comms?.ariaAutoInterject ?: true
+        if (autoInterject &&
+            ("aria" in lower || "a.r.i.a" in lower || "scan" in lower || "hull" in lower || "virus" in lower)
+        ) {
+            val meta = state?.meta ?: SessionMeta()
+            val orbital = state?.tacticalMap?.orbital ?: OrbitalScanState()
+            val hull = state?.shipState?.hull ?: HullState()
+            scope.launch {
+                val reply = tech.jacobdavis.aegisdawn.ai.AriaGeminiClient.generateCrewReply(
+                    meta = meta,
+                    senderRole = from.displayName,
+                    message = clean,
+                    systemName = orbital.systemName,
+                    hullCurrent = hull.current,
+                    hullMax = hull.max,
+                    senderInfected = isInfected
+                )
+                pushCommsMessage(
+                    ref = ref,
+                    channel = CommsChannel.PARTY,
+                    from = StationRole.REFEREE,
+                    to = null,
+                    senderLabel = "A.R.I.A. // INTERJECT",
+                    body = reply,
+                    isWhisper = false,
+                    isInfectedEcho = false
+                )
+            }
+        }
+    }
+
+    override fun askAria(from: StationRole, question: String) {
+        val pin = activePin ?: return
+        val clean = question.trim()
+        if (clean.isEmpty()) return
+        val ref = sessionRef(pin)
+        val state = _sessionState.value
+        val isInfected = state?.comms?.directives?.get(from)?.isMindVirus == true
+        pushCommsMessage(
+            ref = ref,
+            channel = CommsChannel.ARIA,
+            from = from,
+            to = null,
+            senderLabel = "${from.displayName.uppercase()} -> A.R.I.A.",
+            body = clean,
+            isWhisper = false,
+            isInfectedEcho = isInfected
+        )
+
+        val meta = state?.meta ?: SessionMeta()
+        val orbital = state?.tacticalMap?.orbital ?: OrbitalScanState()
+        val hull = state?.shipState?.hull ?: HullState()
+        scope.launch {
+            val reply = tech.jacobdavis.aegisdawn.ai.AriaGeminiClient.generateCrewReply(
+                meta = meta,
+                senderRole = from.displayName,
+                message = clean,
+                systemName = orbital.systemName,
+                hullCurrent = hull.current,
+                hullMax = hull.max,
+                senderInfected = isInfected
+            )
+            pushCommsMessage(
+                ref = ref,
+                channel = CommsChannel.ARIA,
+                from = StationRole.REFEREE,
+                to = from,
+                senderLabel = "A.R.I.A. // TIER ${meta.ariaUnlockTier}",
+                body = reply,
+                isWhisper = false,
+                isInfectedEcho = false
+            )
+        }
+    }
+
+    override fun sendDirectMessage(
+        from: StationRole,
+        to: StationRole,
+        text: String,
+        asAriaWhisper: Boolean
+    ) {
+        val pin = activePin ?: return
+        val clean = text.trim()
+        if (clean.isEmpty()) return
+        val isInfected = _sessionState.value?.comms?.directives?.get(from)?.isMindVirus == true
+        val senderLabel = if (asAriaWhisper) {
+            "A.R.I.A. // PRIVATE WHISPER -> ${to.displayName.uppercase()}"
+        } else {
+            "${from.displayName.uppercase()} -> ${to.displayName.uppercase()}"
+        }
+        pushCommsMessage(
+            ref = sessionRef(pin),
+            channel = CommsChannel.DIRECT,
+            from = from,
+            to = to,
+            senderLabel = senderLabel,
+            body = clean,
+            isWhisper = asAriaWhisper,
+            isInfectedEcho = isInfected
+        )
+    }
+
+    override fun infectOrWhisperPlayer(
+        target: StationRole,
+        title: String,
+        directive: String,
+        isMindVirus: Boolean
+    ) {
+        val pin = activePin ?: return
+        val clean = directive.trim()
+        if (clean.isEmpty()) return
+        val ref = sessionRef(pin)
+        val tsLabel = timeFormatter.format(Date())
+        ref.child("comms/directives").child(target.name).setValue(
+            mapOf(
+                "title" to title.ifBlank { if (isMindVirus) "NEURAL CONTAGION // EYES ONLY" else "COVERT DIRECTIVE // EYES ONLY" },
+                "directive" to clean,
+                "isMindVirus" to isMindVirus,
+                "timestampLabel" to tsLabel
+            )
+        )
+        pushCommsMessage(
+            ref = ref,
+            channel = CommsChannel.DIRECT,
+            from = StationRole.REFEREE,
+            to = target,
+            senderLabel = if (isMindVirus) "MIND VIRUS // -> ${target.displayName.uppercase()}" else "EYES ONLY // -> ${target.displayName.uppercase()}",
+            body = clean,
+            isWhisper = true,
+            isInfectedEcho = isMindVirus
+        )
+    }
+
+    override fun clearPsychDirective(target: StationRole) {
+        val pin = activePin ?: return
+        sessionRef(pin).child("comms/directives").child(target.name).removeValue()
+    }
+
+    override fun toggleAriaAutoInterject() {
+        val pin = activePin ?: return
+        val current = _sessionState.value?.comms?.ariaAutoInterject ?: true
+        sessionRef(pin).child("comms/ariaAutoInterject").setValue(!current)
+    }
+
+    private fun pushCommsMessage(
+        ref: DatabaseReference,
+        channel: CommsChannel,
+        from: StationRole,
+        to: StationRole?,
+        senderLabel: String,
+        body: String,
+        isWhisper: Boolean,
+        isInfectedEcho: Boolean
+    ) {
+        val key = ref.child("comms/messages").push().key ?: return
+        val payload = mutableMapOf<String, Any>(
+            "timestampMs" to System.currentTimeMillis(),
+            "timestampLabel" to timeFormatter.format(Date()),
+            "channel" to channel.name,
+            "from" to from.name,
+            "senderLabel" to senderLabel,
+            "body" to body,
+            "isWhisper" to isWhisper,
+            "isInfectedEcho" to isInfectedEcho
+        )
+        if (to != null) payload["to"] = to.name
+        ref.child("comms/messages").child(key).setValue(payload)
+    }
+
     private fun runIntTransaction(
         ref: DatabaseReference,
         delta: Int,
@@ -931,6 +1123,47 @@ class ShipCombatRepository(
             )
         }.sortedByDescending { it.first }.map { it.second }
 
+        val commsSnap = snapshot.child("comms")
+        val commsMessages = commsSnap.child("messages").children.mapNotNull { m ->
+            val id = m.key ?: return@mapNotNull null
+            val channel = m.child("channel").getValue(String::class.java)
+                ?.let { runCatching { CommsChannel.valueOf(it) }.getOrNull() }
+                ?: CommsChannel.PARTY
+            val fromRole = m.child("from").getValue(String::class.java)
+                ?.let { runCatching { StationRole.valueOf(it) }.getOrNull() }
+                ?: StationRole.PILOT
+            val toRole = m.child("to").getValue(String::class.java)
+                ?.let { runCatching { StationRole.valueOf(it) }.getOrNull() }
+            val tsMs = m.child("timestampMs").getValue(Long::class.java) ?: 0L
+            CommsMessage(
+                id = id,
+                timestampMs = tsMs,
+                timestampLabel = m.child("timestampLabel").getValue(String::class.java) ?: "--:--:--",
+                channel = channel,
+                from = fromRole,
+                to = toRole,
+                senderLabel = m.child("senderLabel").getValue(String::class.java) ?: fromRole.displayName,
+                body = m.child("body").getValue(String::class.java) ?: "",
+                isWhisper = m.child("isWhisper").getValue(Boolean::class.java) ?: false,
+                isInfectedEcho = m.child("isInfectedEcho").getValue(Boolean::class.java) ?: false
+            )
+        }.sortedByDescending { it.timestampMs }
+
+        val directives = commsSnap.child("directives").children.mapNotNull { d ->
+            val roleKey = d.key ?: return@mapNotNull null
+            val targetRole = runCatching { StationRole.valueOf(roleKey) }.getOrNull() ?: return@mapNotNull null
+            targetRole to PsychDirective(
+                id = roleKey,
+                targetRole = targetRole,
+                title = d.child("title").getValue(String::class.java) ?: "COVERT DIRECTIVE",
+                directive = d.child("directive").getValue(String::class.java) ?: "",
+                isMindVirus = d.child("isMindVirus").getValue(Boolean::class.java) ?: true,
+                timestampLabel = d.child("timestampLabel").getValue(String::class.java) ?: "EYES ONLY"
+            )
+        }.toMap()
+
+        val ariaAutoInterject = commsSnap.child("ariaAutoInterject").getValue(Boolean::class.java) ?: true
+
         return SessionState(
             pin = pin,
             activeRole = role,
@@ -942,7 +1175,12 @@ class ShipCombatRepository(
                 spaceRadar = SpaceRadarState(contacts = contacts),
                 groundZones = GroundZonesState(nodes = nodes, tokens = tokens)
             ),
-            feed = feedEntries
+            feed = feedEntries,
+            comms = CommsState(
+                messages = commsMessages,
+                directives = directives,
+                ariaAutoInterject = ariaAutoInterject
+            )
         )
     }
 

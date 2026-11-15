@@ -53,21 +53,8 @@
           ".write": "auth != null"
         },
         "comms": {
-          ".read": "auth != null && root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid",
-          "party": {
-            ".read": "auth != null",
-            ".write": "auth != null"
-          },
-          "aria": {
-            ".read": "auth != null",
-            ".write": "auth != null"
-          },
-          "dms": {
-            "$threadId": {
-              ".read": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || $threadId.contains(auth.uid))",
-              ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || $threadId.contains(auth.uid))"
-            }
-          }
+          ".read": "auth != null",
+          ".write": "auth != null"
         }
       }
     }

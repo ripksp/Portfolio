@@ -148,4 +148,44 @@ class MockSessionRepositoryTest {
         repo.removeGroundToken(added.id)
         assertNull(repo.sessionState.value!!.tacticalMap.groundZones.tokens[added.id])
     }
+
+    @Test
+    fun `party comms and aria auto interject append comms messages`() {
+        val repo = MockSessionRepository()
+        repo.connect("AEGS", StationRole.PILOT)
+
+        repo.sendPartyMessage(StationRole.PILOT, "Aria, what is our hull integrity?")
+        val messages = repo.sessionState.value!!.comms.messages
+        // Should contain the player's party message + A.R.I.A.'s auto-interjection
+        assertTrue(messages.any { it.from == StationRole.PILOT && it.body.contains("hull integrity") })
+        assertTrue(messages.any { it.senderLabel.contains("A.R.I.A.") })
+    }
+
+    @Test
+    fun `mind virus injector sets active directive for target role and whispers covertly`() {
+        val repo = MockSessionRepository()
+        repo.connect("AEGS", StationRole.REFEREE)
+
+        repo.infectOrWhisperPlayer(
+            target = StationRole.ENGINEER,
+            title = "STAGE-1 CHIMERA NEURO-PARASITE",
+            directive = "Lock out the auxiliary coolant valves.",
+            isMindVirus = true
+        )
+
+        val afterInfect = repo.sessionState.value!!
+        val directive = afterInfect.comms.directives[StationRole.ENGINEER]
+        assertNotNull(directive)
+        assertTrue(directive!!.isMindVirus)
+        assertEquals("STAGE-1 CHIMERA NEURO-PARASITE", directive.title)
+
+        // When the infected Engineer sends a message, it carries the isInfectedEcho flag for Referee wiretap
+        repo.sendDirectMessage(StationRole.ENGINEER, StationRole.PILOT, "Everything is fine in the reactor room.")
+        val dm = repo.sessionState.value!!.comms.messages.first { it.from == StationRole.ENGINEER }
+        assertTrue(dm.isInfectedEcho)
+
+        // Clearing the directive removes the active infection
+        repo.clearPsychDirective(StationRole.ENGINEER)
+        assertNull(repo.sessionState.value!!.comms.directives[StationRole.ENGINEER])
+    }
 }

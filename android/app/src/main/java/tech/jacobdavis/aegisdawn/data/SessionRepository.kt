@@ -50,4 +50,11 @@ interface SessionRepository {
     fun loadGroundZonePreset(preset: GroundZonePreset)
     fun addGroundToken(label: String, isHostile: Boolean)
     fun removeGroundToken(tokenId: String)
+
+    fun sendPartyMessage(from: StationRole, text: String)
+    fun askAria(from: StationRole, question: String)
+    fun sendDirectMessage(from: StationRole, to: StationRole, text: String, asAriaWhisper: Boolean = false)
+    fun infectOrWhisperPlayer(target: StationRole, title: String, directive: String, isMindVirus: Boolean = true)
+    fun clearPsychDirective(target: StationRole)
+    fun toggleAriaAutoInterject()
 }

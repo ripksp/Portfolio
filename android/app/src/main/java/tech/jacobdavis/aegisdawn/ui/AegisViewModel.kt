@@ -78,4 +78,28 @@ class AegisViewModel(
     fun addGroundToken(label: String, isHostile: Boolean) = repository.addGroundToken(label, isHostile)
 
     fun removeGroundToken(tokenId: String) = repository.removeGroundToken(tokenId)
+
+    fun sendPartyMessage(from: StationRole, text: String) =
+        repository.sendPartyMessage(from, text)
+
+    fun askAria(from: StationRole, question: String) =
+        repository.askAria(from, question)
+
+    fun sendDirectMessage(
+        from: StationRole,
+        to: StationRole,
+        text: String,
+        asAriaWhisper: Boolean = false
+    ) = repository.sendDirectMessage(from, to, text, asAriaWhisper)
+
+    fun infectOrWhisperPlayer(
+        target: StationRole,
+        title: String,
+        directive: String,
+        isMindVirus: Boolean = true
+    ) = repository.infectOrWhisperPlayer(target, title, directive, isMindVirus)
+
+    fun clearPsychDirective(target: StationRole) = repository.clearPsychDirective(target)
+
+    fun toggleAriaAutoInterject() = repository.toggleAriaAutoInterject()
 }

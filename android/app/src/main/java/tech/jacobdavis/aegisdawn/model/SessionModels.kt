@@ -196,6 +196,41 @@ enum class FeedEntryType {
     PING
 }
 
+enum class CommsChannel(val label: String) {
+    TELEMETRY("TELEMETRY"),
+    PARTY("PARTY"),
+    ARIA("A.R.I.A."),
+    DIRECT("DIRECT / DM")
+}
+
+data class CommsMessage(
+    val id: String,
+    val timestampMs: Long,
+    val timestampLabel: String,
+    val channel: CommsChannel,
+    val from: StationRole,
+    val to: StationRole? = null,
+    val senderLabel: String,
+    val body: String,
+    val isWhisper: Boolean = false,
+    val isInfectedEcho: Boolean = false
+)
+
+data class PsychDirective(
+    val id: String,
+    val targetRole: StationRole,
+    val title: String,
+    val directive: String,
+    val isMindVirus: Boolean = true,
+    val timestampLabel: String = "EYES ONLY"
+)
+
+data class CommsState(
+    val messages: List<CommsMessage> = emptyList(),
+    val directives: Map<StationRole, PsychDirective> = emptyMap(),
+    val ariaAutoInterject: Boolean = true
+)
+
 data class DiceRollDetail(
     val die1: Int,
     val die2: Int,
@@ -223,5 +258,6 @@ data class SessionState(
     val shipState: ShipState = ShipState(),
     val stations: StationsState = StationsState(),
     val tacticalMap: TacticalMapState = TacticalMapState(),
-    val feed: List<FeedEntry> = emptyList()
+    val feed: List<FeedEntry> = emptyList(),
+    val comms: CommsState = CommsState()
 )

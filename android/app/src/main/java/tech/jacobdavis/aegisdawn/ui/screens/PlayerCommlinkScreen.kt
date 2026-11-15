@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import tech.jacobdavis.aegisdawn.model.CommlinkTab
+import tech.jacobdavis.aegisdawn.model.CommsChannel
+import tech.jacobdavis.aegisdawn.model.CommsMessage
 import tech.jacobdavis.aegisdawn.model.FeedEntry
 import tech.jacobdavis.aegisdawn.model.FeedEntryType
 import tech.jacobdavis.aegisdawn.model.SessionState
@@ -515,58 +519,287 @@ private fun LoadoutPlaceholderTab() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FeedTabContent(
     session: SessionState,
     viewModel: AegisViewModel
 ) {
+    var activeChannel by remember { mutableStateOf(CommsChannel.TELEMETRY) }
     var selectedMod by remember { mutableIntStateOf(0) }
+    var messageInput by remember { mutableStateOf("") }
+    val defaultPartner = remember(session.activeRole) {
+        StationRole.entries.firstOrNull { it != session.activeRole } ?: StationRole.REFEREE
+    }
+    var dmPartner by remember { mutableStateOf(defaultPartner) }
+
+    val myDirective = session.comms.directives[session.activeRole]
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            items(session.feed, key = { it.id }) { entry ->
-                FeedEntryCard(entry)
-            }
-        }
-
-        // Quick 2D6 Dice Roller Bar (Permissive, no freeform AI chat)
-        CrtTerminalBox(title = "QUICK 2D6 CHECK") {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically
+        // Covert Mind-Virus / Eyes-Only Directive Banner (visible ONLY on this player's Commlink)
+        if (myDirective != null) {
+            CrtTerminalBox(
+                title = if (myDirective.isMindVirus) "BIO-NEURAL ANOMALY // ${myDirective.title}" else myDirective.title,
+                borderColor = if (myDirective.isMindVirus) CrtAlert else CrtAmber
             ) {
-                listOf(-1, 0, 1, 2).forEach { dm ->
-                    val label = if (dm > 0) "+$dm" else "$dm"
-                    CrtButton(
-                        text = label,
-                        onClick = { selectedMod = dm },
-                        accentColor = if (selectedMod == dm) CrtAmber else CrtPhosphorDim,
-                        filled = selectedMod == dm
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                CrtButton(
-                    text = "ROLL 2D6",
-                    onClick = {
-                        viewModel.roll2d6(
-                            sender = session.activeRole.code,
-                            label = "${session.activeRole.displayName.uppercase()} CHECK",
-                            modifier = selectedMod
-                        )
-                    },
-                    filled = true
+                Text(
+                    text = myDirective.directive,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (myDirective.isMindVirus) CrtAlert else CrtAmber
                 )
             }
         }
+
+        // 4 Sub-Channel Switcher inside [ FEED ]
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            CommsChannel.entries.forEach { ch ->
+                val selected = ch == activeChannel
+                val accent = when (ch) {
+                    CommsChannel.DIRECT -> CrtAmber
+                    CommsChannel.ARIA -> CrtPhosphor
+                    else -> CrtPhosphor
+                }
+                CrtButton(
+                    text = ch.label,
+                    onClick = { activeChannel = ch },
+                    accentColor = if (selected) accent else CrtPhosphorDim,
+                    filled = selected,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        when (activeChannel) {
+            CommsChannel.TELEMETRY -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(session.feed, key = { it.id }) { entry ->
+                        FeedEntryCard(entry)
+                    }
+                }
+
+                CrtTerminalBox(title = "QUICK 2D6 CHECK") {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        listOf(-1, 0, 1, 2).forEach { dm ->
+                            val label = if (dm > 0) "+$dm" else "$dm"
+                            CrtButton(
+                                text = label,
+                                onClick = { selectedMod = dm },
+                                accentColor = if (selectedMod == dm) CrtAmber else CrtPhosphorDim,
+                                filled = selectedMod == dm
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        CrtButton(
+                            text = "ROLL 2D6",
+                            onClick = {
+                                viewModel.roll2d6(
+                                    sender = session.activeRole.code,
+                                    label = "${session.activeRole.displayName.uppercase()} CHECK",
+                                    modifier = selectedMod
+                                )
+                            },
+                            filled = true
+                        )
+                    }
+                }
+            }
+
+            CommsChannel.PARTY -> {
+                val partyMsgs = session.comms.messages.filter { it.channel == CommsChannel.PARTY }
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(partyMsgs, key = { it.id }) { msg ->
+                        CommsMessageCard(msg, isRefereeSnoop = false)
+                    }
+                }
+                CommsComposerBar(
+                    value = messageInput,
+                    onValueChange = { messageInput = it },
+                    placeholder = "Broadcast to Party (mention 'Aria' for AI)...",
+                    buttonLabel = "SEND",
+                    onSend = {
+                        viewModel.sendPartyMessage(session.activeRole, messageInput)
+                        messageInput = ""
+                    }
+                )
+            }
+
+            CommsChannel.ARIA -> {
+                val ariaMsgs = session.comms.messages.filter { it.channel == CommsChannel.ARIA }
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(ariaMsgs, key = { it.id }) { msg ->
+                        CommsMessageCard(msg, isRefereeSnoop = false)
+                    }
+                }
+                CommsComposerBar(
+                    value = messageInput,
+                    onValueChange = { messageInput = it },
+                    placeholder = "Ask A.R.I.A. Heuristic Core...",
+                    buttonLabel = "QUERY",
+                    onSend = {
+                        viewModel.askAria(session.activeRole, messageInput)
+                        messageInput = ""
+                    }
+                )
+            }
+
+            CommsChannel.DIRECT -> {
+                // Target recipient selector
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    StationRole.entries
+                        .filter { it != session.activeRole }
+                        .forEach { target ->
+                            val selected = target == dmPartner
+                            CrtButton(
+                                text = "TO: ${target.code}",
+                                onClick = { dmPartner = target },
+                                accentColor = if (selected) CrtAmber else CrtPhosphorDim,
+                                filled = selected
+                            )
+                        }
+                }
+
+                val myDms = session.comms.messages.filter { msg ->
+                    msg.channel == CommsChannel.DIRECT &&
+                        ((msg.from == session.activeRole && msg.to == dmPartner) ||
+                            (msg.from == dmPartner && msg.to == session.activeRole) ||
+                            (msg.isWhisper && msg.to == session.activeRole))
+                }
+
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(myDms, key = { it.id }) { msg ->
+                        CommsMessageCard(msg, isRefereeSnoop = false)
+                    }
+                }
+
+                CommsComposerBar(
+                    value = messageInput,
+                    onValueChange = { messageInput = it },
+                    placeholder = "Encrypted DM to ${dmPartner.displayName}...",
+                    buttonLabel = "DM ${dmPartner.code}",
+                    accentColor = CrtAmber,
+                    onSend = {
+                        viewModel.sendDirectMessage(session.activeRole, dmPartner, messageInput)
+                        messageInput = ""
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CommsComposerBar(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    buttonLabel: String,
+    accentColor: Color = CrtPhosphor,
+    onSend: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            singleLine = true,
+            placeholder = { Text(placeholder, color = CrtPhosphorDim) },
+            textStyle = MaterialTheme.typography.bodyMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = accentColor,
+                unfocusedBorderColor = CrtPhosphorDim,
+                focusedTextColor = CrtPhosphor,
+                unfocusedTextColor = CrtPhosphor,
+                cursorColor = accentColor,
+                focusedContainerColor = CrtVoid,
+                unfocusedContainerColor = CrtVoid
+            ),
+            modifier = Modifier.weight(1f)
+        )
+        CrtButton(
+            text = buttonLabel,
+            onClick = onSend,
+            accentColor = accentColor,
+            filled = true
+        )
+    }
+}
+
+@Composable
+fun CommsMessageCard(
+    msg: CommsMessage,
+    isRefereeSnoop: Boolean
+) {
+    val accent = when {
+        msg.isInfectedEcho && (isRefereeSnoop || msg.isWhisper) -> CrtAlert
+        msg.isWhisper -> CrtAmber
+        msg.channel == CommsChannel.DIRECT -> CrtAmber
+        msg.senderLabel.startsWith("A.R.I.A.") -> CrtPhosphor
+        else -> CrtTextDim
+    }
+    CrtTerminalBox(
+        borderColor = accent.copy(alpha = 0.75f),
+        backgroundColor = CrtSurface
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = buildString {
+                    append("[${msg.senderLabel}]")
+                    if (isRefereeSnoop && msg.isInfectedEcho) append(" [INFECTED BIO-ECHO]")
+                },
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                color = accent
+            )
+            Text(
+                text = msg.timestampLabel,
+                style = MaterialTheme.typography.labelSmall,
+                color = CrtTextDim
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = msg.body,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (msg.isWhisper || msg.isInfectedEcho) accent else CrtPhosphor
+        )
     }
 }
 

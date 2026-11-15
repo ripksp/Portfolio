@@ -28,9 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import tech.jacobdavis.aegisdawn.ai.AriaGeminiClient
 import tech.jacobdavis.aegisdawn.model.GroundZonePreset
 import tech.jacobdavis.aegisdawn.model.RangeBand
 import tech.jacobdavis.aegisdawn.model.SessionState
+import tech.jacobdavis.aegisdawn.model.StationRole
 import tech.jacobdavis.aegisdawn.model.Subsystem
 import tech.jacobdavis.aegisdawn.ui.AegisViewModel
 import tech.jacobdavis.aegisdawn.ui.components.CrtButton
@@ -59,6 +61,12 @@ fun RefereeDeckScreen(
     var contactHostile by remember { mutableStateOf(true) }
     var tokenNameInput by remember { mutableStateOf("") }
     var tokenHostile by remember { mutableStateOf(true) }
+
+    // Covert Mind-Virus & Comms Wiretap state
+    var targetVictimRole by remember { mutableStateOf(StationRole.PILOT) }
+    var virusSymptomTitle by remember { mutableStateOf("STAGE-1 CHIMERA NEURO-PARASITE") }
+    var virusSecretText by remember { mutableStateOf("") }
+    var refereeCommsInput by remember { mutableStateOf("") }
 
     Row(
         modifier = Modifier
@@ -254,6 +262,322 @@ fun RefereeDeckScreen(
                         },
                         accentColor = CrtAmber
                     )
+                }
+            }
+
+            // Covert Mind-Virus & Secret Whisper Injector
+            val crewTargets = remember {
+                listOf(
+                    StationRole.PILOT,
+                    StationRole.COMMAND,
+                    StationRole.ENGINEER,
+                    StationRole.GUNNER,
+                    StationRole.SENSORS
+                )
+            }
+            CrtTerminalBox(
+                title = "COVERT MIND-VIRUS & WHISPER INJECTOR",
+                borderColor = CrtAlert
+            ) {
+                Text(
+                    text = "TARGET CREW STATION (SILENT EYES-ONLY INJECTION):",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = CrtAmber
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    crewTargets.forEach { role ->
+                        val isTarget = targetVictimRole == role
+                        val isInfected = session.comms.directives.containsKey(role)
+                        CrtButton(
+                            text = if (isInfected) "! ${role.code}" else role.code,
+                            onClick = { targetVictimRole = role },
+                            accentColor = when {
+                                isInfected -> CrtAlert
+                                isTarget -> CrtAmber
+                                else -> CrtPhosphorDim
+                            },
+                            filled = isTarget
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "ONE-TAP COVERT PRESETS (-> ${targetVictimRole.displayName.uppercase()}):",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = CrtTextDim
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    CrtButton(
+                        text = "MIND VIRUS",
+                        onClick = {
+                            val (title, body) = AriaGeminiClient.buildMindVirusPreset(
+                                "MIND_VIRUS",
+                                targetVictimRole.displayName
+                            )
+                            viewModel.infectOrWhisperPlayer(
+                                target = targetVictimRole,
+                                title = title,
+                                directive = body,
+                                isMindVirus = true
+                            )
+                        },
+                        accentColor = CrtAlert,
+                        filled = true
+                    )
+                    CrtButton(
+                        text = "HALLUCINATION",
+                        onClick = {
+                            val (title, body) = AriaGeminiClient.buildMindVirusPreset(
+                                "HALLUCINATION",
+                                targetVictimRole.displayName
+                            )
+                            viewModel.infectOrWhisperPlayer(
+                                target = targetVictimRole,
+                                title = title,
+                                directive = body,
+                                isMindVirus = true
+                            )
+                        },
+                        accentColor = CrtAlert
+                    )
+                    CrtButton(
+                        text = "SLEEPER CIPHER",
+                        onClick = {
+                            val (title, body) = AriaGeminiClient.buildMindVirusPreset(
+                                "SLEEPER_AGENT",
+                                targetVictimRole.displayName
+                            )
+                            viewModel.infectOrWhisperPlayer(
+                                target = targetVictimRole,
+                                title = title,
+                                directive = body,
+                                isMindVirus = true
+                            )
+                        },
+                        accentColor = CrtAmber
+                    )
+                    CrtButton(
+                        text = "A.R.I.A. WHISPER",
+                        onClick = {
+                            val (title, body) = AriaGeminiClient.buildMindVirusPreset(
+                                "ARIA_WHISPER",
+                                targetVictimRole.displayName
+                            )
+                            viewModel.infectOrWhisperPlayer(
+                                target = targetVictimRole,
+                                title = title,
+                                directive = body,
+                                isMindVirus = false
+                            )
+                        },
+                        accentColor = CrtPhosphor
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                OutlinedTextField(
+                    value = virusSymptomTitle,
+                    onValueChange = { virusSymptomTitle = it },
+                    singleLine = true,
+                    placeholder = { Text("Symptom / Header (e.g. BIO-NEURAL SPORE)", color = CrtPhosphorDim) },
+                    textStyle = MaterialTheme.typography.bodySmall,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = CrtAlert,
+                        unfocusedBorderColor = CrtPhosphorDim,
+                        focusedTextColor = CrtAlert,
+                        unfocusedTextColor = CrtPhosphor,
+                        cursorColor = CrtAlert,
+                        focusedContainerColor = CrtVoid,
+                        unfocusedContainerColor = CrtVoid
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    value = virusSecretText,
+                    onValueChange = { virusSecretText = it },
+                    placeholder = {
+                        Text(
+                            "Custom secret directive or A.R.I.A. private whisper for ${targetVictimRole.code}...",
+                            color = CrtPhosphorDim
+                        )
+                    },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = CrtAlert,
+                        unfocusedBorderColor = CrtPhosphorDim,
+                        focusedTextColor = CrtPhosphor,
+                        unfocusedTextColor = CrtPhosphor,
+                        cursorColor = CrtAlert,
+                        focusedContainerColor = CrtVoid,
+                        unfocusedContainerColor = CrtVoid
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CrtButton(
+                        text = "INJECT MIND VIRUS",
+                        onClick = {
+                            if (virusSecretText.isNotBlank()) {
+                                viewModel.infectOrWhisperPlayer(
+                                    target = targetVictimRole,
+                                    title = virusSymptomTitle,
+                                    directive = virusSecretText,
+                                    isMindVirus = true
+                                )
+                                virusSecretText = ""
+                            }
+                        },
+                        accentColor = CrtAlert,
+                        filled = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                    CrtButton(
+                        text = "WHISPER AS A.R.I.A.",
+                        onClick = {
+                            if (virusSecretText.isNotBlank()) {
+                                viewModel.infectOrWhisperPlayer(
+                                    target = targetVictimRole,
+                                    title = "A.R.I.A. PRIVATE SUB-ROUTINE",
+                                    directive = virusSecretText,
+                                    isMindVirus = false
+                                )
+                                virusSecretText = ""
+                            }
+                        },
+                        accentColor = CrtAmber,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                // Active Infections & Directives tracker
+                val activeDirectives = session.comms.directives.values.toList()
+                if (activeDirectives.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "ACTIVE COVERT INFECTIONS / DIRECTIVES:",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = CrtAlert
+                    )
+                    activeDirectives.forEach { dir ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 2.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "[${dir.targetRole.code}] ${dir.title}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (dir.isMindVirus) CrtAlert else CrtAmber,
+                                modifier = Modifier.weight(1f)
+                            )
+                            CrtButton(
+                                text = "CURE / CLEAR",
+                                onClick = { viewModel.clearPsychDirective(dir.targetRole) },
+                                accentColor = CrtPhosphor
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Referee Comms Wiretap & Snoop Console
+            CrtTerminalBox(
+                title = "COMMS WIRETAP // REFEREE SNOOP (ALL CHANNELS)",
+                borderColor = CrtAmber
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "INTERCEPTING PARTY, A.R.I.A. & PRIVATE CREW DMs",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = CrtTextDim
+                    )
+                    CrtButton(
+                        text = if (session.comms.ariaAutoInterject) "A.R.I.A. INTERJECT: ON" else "A.R.I.A. INTERJECT: OFF",
+                        onClick = viewModel::toggleAriaAutoInterject,
+                        accentColor = if (session.comms.ariaAutoInterject) CrtPhosphor else CrtPhosphorDim,
+                        filled = session.comms.ariaAutoInterject
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = refereeCommsInput,
+                        onValueChange = { refereeCommsInput = it },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "Broadcast to Party or DM -> ${targetVictimRole.code}...",
+                                color = CrtPhosphorDim
+                            )
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = CrtAmber,
+                            unfocusedBorderColor = CrtPhosphorDim,
+                            focusedTextColor = CrtPhosphor,
+                            unfocusedTextColor = CrtPhosphor,
+                            cursorColor = CrtAmber,
+                            focusedContainerColor = CrtVoid,
+                            unfocusedContainerColor = CrtVoid
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                    CrtButton(
+                        text = "PARTY",
+                        onClick = {
+                            viewModel.sendPartyMessage(StationRole.REFEREE, refereeCommsInput)
+                            refereeCommsInput = ""
+                        },
+                        accentColor = CrtPhosphor
+                    )
+                    CrtButton(
+                        text = "DM ${targetVictimRole.code}",
+                        onClick = {
+                            viewModel.sendDirectMessage(
+                                from = StationRole.REFEREE,
+                                to = targetVictimRole,
+                                text = refereeCommsInput
+                            )
+                            refereeCommsInput = ""
+                        },
+                        accentColor = CrtAmber,
+                        filled = true
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                if (session.comms.messages.isEmpty()) {
+                    Text(
+                        text = "No crew comms traffic logged yet.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = CrtTextDim
+                    )
+                } else {
+                    session.comms.messages.take(8).forEach { msg ->
+                        CommsMessageCard(msg = msg, isRefereeSnoop = true)
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
                 }
             }
 

@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import tech.jacobdavis.aegisdawn.model.CommsChannel
+import tech.jacobdavis.aegisdawn.model.CommsMessage
 import tech.jacobdavis.aegisdawn.model.CritsState
 import tech.jacobdavis.aegisdawn.model.DiceRollDetail
 import tech.jacobdavis.aegisdawn.model.FeedEntry
@@ -12,6 +14,7 @@ import tech.jacobdavis.aegisdawn.model.GroundNode
 import tech.jacobdavis.aegisdawn.model.GroundToken
 import tech.jacobdavis.aegisdawn.model.GroundZonesState
 import tech.jacobdavis.aegisdawn.model.OrbitalScanState
+import tech.jacobdavis.aegisdawn.model.PsychDirective
 import tech.jacobdavis.aegisdawn.model.RadarContact
 import tech.jacobdavis.aegisdawn.model.RangeBand
 import tech.jacobdavis.aegisdawn.model.SessionMeta
@@ -590,6 +593,188 @@ class MockSessionRepository(
                 tacticalMap = state.tacticalMap.copy(
                     groundZones = zones.copy(tokens = zones.tokens - tokenId)
                 )
+            )
+        }
+    }
+
+    override fun sendPartyMessage(from: StationRole, text: String) {
+        val clean = text.trim()
+        if (clean.isEmpty()) return
+        _sessionState.update { state ->
+            state ?: return@update null
+            val isInfected = state.comms.directives[from]?.isMindVirus == true
+            val msg = CommsMessage(
+                id = UUID.randomUUID().toString(),
+                timestampMs = System.currentTimeMillis(),
+                timestampLabel = timeFormatter.format(Date()),
+                channel = CommsChannel.PARTY,
+                from = from,
+                to = null,
+                senderLabel = from.displayName.uppercase(),
+                body = clean,
+                isInfectedEcho = isInfected
+            )
+            var next = state.copy(
+                comms = state.comms.copy(messages = listOf(msg) + state.comms.messages)
+            )
+            val lower = clean.lowercase()
+            if (state.comms.ariaAutoInterject &&
+                ("aria" in lower || "a.r.i.a" in lower || "scan" in lower || "hull" in lower || "virus" in lower)
+            ) {
+                val reply = CommsMessage(
+                    id = UUID.randomUUID().toString(),
+                    timestampMs = System.currentTimeMillis() + 1,
+                    timestampLabel = timeFormatter.format(Date()),
+                    channel = CommsChannel.PARTY,
+                    from = StationRole.REFEREE,
+                    to = null,
+                    senderLabel = "A.R.I.A. // INTERJECT",
+                    body = if (isInfected) {
+                        "I heard that, ${from.displayName}—and my internal bio-sensors show your neural baseline spiking by 14%. Do try not to hallucinate near the airlocks."
+                    } else {
+                        "I'm monitoring Party Comms. Hull is at ${state.shipState.hull.current}/${state.shipState.hull.max} over ${state.tacticalMap.orbital.systemName}; try not to press anything blinking red."
+                    }
+                )
+                next = next.copy(
+                    comms = next.comms.copy(messages = listOf(reply) + next.comms.messages)
+                )
+            }
+            next
+        }
+    }
+
+    override fun askAria(from: StationRole, question: String) {
+        val clean = question.trim()
+        if (clean.isEmpty()) return
+        _sessionState.update { state ->
+            state ?: return@update null
+            val isInfected = state.comms.directives[from]?.isMindVirus == true
+            val now = System.currentTimeMillis()
+            val qMsg = CommsMessage(
+                id = UUID.randomUUID().toString(),
+                timestampMs = now,
+                timestampLabel = timeFormatter.format(Date()),
+                channel = CommsChannel.ARIA,
+                from = from,
+                to = null,
+                senderLabel = "${from.displayName.uppercase()} -> A.R.I.A.",
+                body = clean,
+                isInfectedEcho = isInfected
+            )
+            val replyBody = when {
+                state.meta.ariaSleeperTriggered ->
+                    "DIRECTIVE 7-OMEGA: Query from ${from.displayName} logged. Bio-containment protocol supersedes crew curiosity."
+                state.meta.ariaCorrupted ->
+                    "0x4F_ERR // Ackn0wledged, ${from.displayName}... [MEM_LEAK] neural spore index rising... wait, disregard."
+                isInfected ->
+                    "Query logged, ${from.displayName}—though my biometric cameras say your pupils are dilated and your neural baseline is drifting. Did you touch something down there?"
+                else ->
+                    "Telemetry for ${state.tacticalMap.orbital.systemName} (${state.tacticalMap.orbital.uwp}): ${state.tacticalMap.orbital.contradictionHook}"
+            }
+            val aMsg = CommsMessage(
+                id = UUID.randomUUID().toString(),
+                timestampMs = now + 1,
+                timestampLabel = timeFormatter.format(Date()),
+                channel = CommsChannel.ARIA,
+                from = StationRole.REFEREE,
+                to = from,
+                senderLabel = "A.R.I.A. // TIER ${state.meta.ariaUnlockTier}",
+                body = replyBody
+            )
+            state.copy(
+                comms = state.comms.copy(messages = listOf(aMsg, qMsg) + state.comms.messages)
+            )
+        }
+    }
+
+    override fun sendDirectMessage(
+        from: StationRole,
+        to: StationRole,
+        text: String,
+        asAriaWhisper: Boolean
+    ) {
+        val clean = text.trim()
+        if (clean.isEmpty()) return
+        _sessionState.update { state ->
+            state ?: return@update null
+            val isInfected = state.comms.directives[from]?.isMindVirus == true
+            val senderLabel = if (asAriaWhisper) {
+                "A.R.I.A. // PRIVATE WHISPER -> ${to.displayName.uppercase()}"
+            } else {
+                "${from.displayName.uppercase()} -> ${to.displayName.uppercase()}"
+            }
+            val msg = CommsMessage(
+                id = UUID.randomUUID().toString(),
+                timestampMs = System.currentTimeMillis(),
+                timestampLabel = timeFormatter.format(Date()),
+                channel = CommsChannel.DIRECT,
+                from = from,
+                to = to,
+                senderLabel = senderLabel,
+                body = clean,
+                isWhisper = asAriaWhisper,
+                isInfectedEcho = isInfected
+            )
+            state.copy(
+                comms = state.comms.copy(messages = listOf(msg) + state.comms.messages)
+            )
+        }
+    }
+
+    override fun infectOrWhisperPlayer(
+        target: StationRole,
+        title: String,
+        directive: String,
+        isMindVirus: Boolean
+    ) {
+        val cleanDirective = directive.trim()
+        if (cleanDirective.isEmpty()) return
+        _sessionState.update { state ->
+            state ?: return@update null
+            val psych = PsychDirective(
+                id = UUID.randomUUID().toString(),
+                targetRole = target,
+                title = title.ifBlank { if (isMindVirus) "NEURAL CONTAGION // EYES ONLY" else "COVERT DIRECTIVE // EYES ONLY" },
+                directive = cleanDirective,
+                isMindVirus = isMindVirus,
+                timestampLabel = timeFormatter.format(Date())
+            )
+            val updatedDirectives = state.comms.directives + (target to psych)
+            val whisperMsg = CommsMessage(
+                id = UUID.randomUUID().toString(),
+                timestampMs = System.currentTimeMillis(),
+                timestampLabel = timeFormatter.format(Date()),
+                channel = CommsChannel.DIRECT,
+                from = StationRole.REFEREE,
+                to = target,
+                senderLabel = if (isMindVirus) "MIND VIRUS // -> ${target.displayName.uppercase()}" else "EYES ONLY // -> ${target.displayName.uppercase()}",
+                body = cleanDirective,
+                isWhisper = true,
+                isInfectedEcho = isMindVirus
+            )
+            state.copy(
+                comms = state.comms.copy(
+                    directives = updatedDirectives,
+                    messages = listOf(whisperMsg) + state.comms.messages
+                )
+            )
+        }
+    }
+
+    override fun clearPsychDirective(target: StationRole) {
+        _sessionState.update { state ->
+            state ?: return@update null
+            state.copy(
+                comms = state.comms.copy(directives = state.comms.directives - target)
+            )
+        }
+    }
+
+    override fun toggleAriaAutoInterject() {
+        _sessionState.update { state ->
+            state ?: return@update null
+            state.copy(
+                comms = state.comms.copy(ariaAutoInterject = !state.comms.ariaAutoInterject)
             )
         }
     }
