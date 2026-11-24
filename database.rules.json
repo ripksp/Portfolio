@@ -13,48 +13,66 @@
         "stations": {
           "pilot": {
             ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
-            "incomingPing": {
-              ".write": "auth != null"
-            }
+            "incomingPing": { ".write": "auth != null" }
           },
           "command": {
             ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
-            "incomingPing": {
-              ".write": "auth != null"
-            }
+            "incomingPing": { ".write": "auth != null" }
           },
           "engineer": {
             ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
-            "incomingPing": {
-              ".write": "auth != null"
-            }
+            "incomingPing": { ".write": "auth != null" }
           },
           "gunner": {
             ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
-            "incomingPing": {
-              ".write": "auth != null"
-            }
+            "incomingPing": { ".write": "auth != null" }
           },
           "sensors": {
             ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || !data.child('assignedUid').exists() || data.child('assignedUid').val() === auth.uid)",
-            "secretIntel": {
-              ".read": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || data.parent().child('assignedUid').val() === auth.uid)",
-              ".write": "auth != null && (root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid || data.parent().child('assignedUid').val() === auth.uid)"
-            },
-            "incomingPing": {
-              ".write": "auth != null"
-            }
+            "incomingPing": { ".write": "auth != null" }
           }
         },
         "tacticalMap": {
           ".write": "auth != null && root.child('sessions/' + $pin + '/meta/refereeUid').val() === auth.uid"
         },
-        "feed": {
-          ".write": "auth != null"
-        },
-        "comms": {
+        "feed": { ".write": "auth != null" },
+        "comms": { ".read": "auth != null", ".write": "auth != null" }
+      }
+    },
+    "campaigns": {
+      "$cid": {
+        "meta": {
           ".read": "auth != null",
-          ".write": "auth != null"
+          ".write": "auth != null && (!data.exists() || data.child('refereeUid').val() === auth.uid)"
+        },
+        "members": {
+          ".read": "auth != null && (root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid || data.child(auth.uid).exists())",
+          "$uid": {
+            ".read": "auth != null && (auth.uid === $uid || root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid)",
+            ".write": "auth != null && (auth.uid === $uid || root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid)"
+          }
+        },
+        "public": {
+          ".read": "auth != null && (root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid || root.child('campaigns/' + $cid + '/members/' + auth.uid).exists())",
+          ".write": "auth != null && (root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid || root.child('campaigns/' + $cid + '/members/' + auth.uid).exists())"
+        },
+        "private": {
+          ".read": "auth != null && root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid",
+          "$uid": {
+            ".read": "auth != null && (auth.uid === $uid || root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid)",
+            ".write": "auth != null && (auth.uid === $uid || root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid)"
+          }
+        },
+        "dmThreads": {
+          ".read": "auth != null && root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid",
+          "$threadId": {
+            ".read": "auth != null && (root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid || data.child('participants/' + auth.uid).val() === true)",
+            ".write": "auth != null && (root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid || data.child('participants/' + auth.uid).val() === true || (!data.exists() && newData.child('participants/' + auth.uid).val() === true))"
+          }
+        },
+        "refereeOnly": {
+          ".read": "auth != null && root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid",
+          ".write": "auth != null && root.child('campaigns/' + $cid + '/meta/refereeUid').val() === auth.uid"
         }
       }
     }

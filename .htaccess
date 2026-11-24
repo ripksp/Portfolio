@@ -13,6 +13,7 @@ ErrorDocument 404 /404.html
     AddType application/vnd.android.package-archive .apk
     AddType application/pdf .pdf
     AddType font/woff2 .woff2
+    AddType application/manifest+json .webmanifest
 </IfModule>
 
 <IfModule mod_rewrite.c>
@@ -20,7 +21,7 @@ RewriteEngine On
 RewriteBase /
 
 # Block direct HTTP access to non-public directories, dotfiles, config files, and Playwright artifacts
-RewriteRule (?:^|/)(?:\.git[^/]*|\.env[^/]*|\.ht[^/]*|\.agents|\.github|tests|e2e|node_modules|scripts|playwright[^/]*|test-results|blob-report|config(?:\.example)?\.php)(?:/|$) - [F,L,NC]
+RewriteRule (?:^|/)(?:\.git[^/]*|\.env[^/]*|\.ht[^/]*|\.agents|\.github|tests|e2e|node_modules|scripts|web-app|android|playwright[^/]*|test-results|blob-report|config(?:\.example)?\.php)(?:/|$) - [F,L,NC]
 
 # Force HTTPS behind Cloudflare / reverse proxies without redirect loops
 RewriteCond %{HTTPS} off
@@ -41,6 +42,9 @@ RewriteRule ^stellar/?$ stellar/index.html [L]
 
 # Route /commlink and /commlink/ to commlink/index.html cleanly
 RewriteRule ^commlink/?$ commlink/index.html [L]
+
+# Route /aegis and /aegis/ to aegis/index.html cleanly
+RewriteRule ^aegis/?$ aegis/index.html [L]
 </IfModule>
 
 # Deny direct browser access to sensitive config, env, markdown, scripts, JSON, lockfiles, YAML, logs, and git metadata

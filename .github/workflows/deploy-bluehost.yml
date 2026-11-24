@@ -51,6 +51,10 @@ jobs:
             **/node_modules/**
             .agents/**
             **/.agents/**
+            web-app/**
+            android/**
+            firebase.json
+            database.rules.json
             *.py
             **/*.py
             .DS_Store
